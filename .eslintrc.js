@@ -6,7 +6,7 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
-  ignorePatterns: ['.github'],
+  ignorePatterns: ['.github', 'server/migrations'],
   root: true,
   env: {
     node: true,
