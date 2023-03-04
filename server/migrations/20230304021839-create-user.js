@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      discordUserId: {
+      discord_user_id: {
         type: Sequelize.STRING,
         allowNull: false,
       },

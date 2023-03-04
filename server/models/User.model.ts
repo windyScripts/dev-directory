@@ -7,7 +7,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // when creating an instance of the model (such as using Model.create()).
   declare id: CreationOptional<number>;
   declare email: string;
-  declare discordUserId: string;
+  declare discord_user_id: string;
 }
 
 User.init({
@@ -20,7 +20,7 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  discordUserId: {
+  discord_user_id: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
