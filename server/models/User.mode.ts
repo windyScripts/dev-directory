@@ -1,6 +1,4 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from 'sequelize';
-
-import Db from 'server/lib/db';
+import { Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 
 // order of InferAttributes & InferCreationAttributes is important.
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -8,8 +6,9 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // when creating an instance of the model (such as using Model.create()).
   declare id: CreationOptional<number>;
   declare email: string;
-  declare discord_user_id: string;
+  declare discordUserId: string;
 }
+
 
 User.init({
   id: {
@@ -17,18 +16,6 @@ User.init({
     autoIncrement: true,
     primaryKey: true,
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  discord_user_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-}, {
-  sequelize: Db.sequelize,
-  tableName: 'users',
-});
+}, { sequelize });
 
 export default User;

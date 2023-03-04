@@ -1,12 +1,13 @@
 import { Sequelize } from 'sequelize';
+
 import log from './log';
 
-const dbString = process.env.DB_STRING
+const dbString = process.env.DB_STRING;
 
 // Database object modeling mongoDB data
 export class Database {
   dbName: string;
-  sequelize = new Sequelize(dbString)
+  sequelize = new Sequelize(dbString);
 
   constructor(dbName = 'postgres') {
     this.dbName = dbName;
