@@ -5,7 +5,6 @@ Discussion can be found on the [Discord Thread](https://discord.com/channels/735
 
 # Developing
 
-// PROOF READ BEFORE COMMITING
 ## Prerequisites
 
 1. Git
