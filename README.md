@@ -28,7 +28,7 @@ Discussion can be found on the [Discord Thread](https://discord.com/channels/735
    ```
    > If you're NOT using Docker, be sure to start your Postgres server.
 4. In a new terminal, run the command `npm ci` to install all the necessary packages for the project.
-5. Copy `.env.example` to `.env` and configure it for your local environment.
+5. Copy `.env.sample` to `.env` and configure it for your local environment.
 6. If it's your first time setting it up, run migrations:
 ```bash
 npx sequelize-cli db:migrate
