@@ -27,13 +27,17 @@ Discussion can be found on the [Discord Thread](https://discord.com/channels/735
    npm run docker:deps
    ```
    > If you're NOT using Docker, be sure to start your Postgres server.
-4. In a new terminal, run the command `npm ci` to install all the necessary packages for the project.
-5. Copy `.env.sample` to `.env` and configure it for your local environment.
-6. If it's your first time setting it up, run migrations:
+4. Ensure you are on Node v18.14.0. If you are using NVM, you can run the following to automatically use the correct version.
+   ```bash
+   nvm use
+   ```
+5. In a new terminal, run the command `npm ci` to install all the necessary packages for the project.
+6. Copy `.env.sample` to `.env` and configure it for your local environment.
+7. If it's your first time setting it up, run migrations:
 ```bash
 npx sequelize-cli db:migrate
 ```
-7. Run `npm run dev` to start the development server.
+8. Run `npm run dev` to start the development server.
 
 That's it! You're now ready to start working on the project.
 
