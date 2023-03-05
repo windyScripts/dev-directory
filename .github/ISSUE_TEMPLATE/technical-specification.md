@@ -17,7 +17,7 @@ Define the scope of the project, including what it will and will not include. Li
 Define the data model of the project, including the database schema and relationships between data entities. Describe how the data will be stored, accessed, and updated.
 
 **User Stories:**
-List the ways the user will interact with the project. e.g. "User will be able to edit events."
+List the ways the user will interact with the project. e.g. "User will be able to edit their profile."
 
 **Features:**
 List and describe each feature of the project, including the user story, acceptance criteria, and technical implementation details.
@@ -30,6 +30,9 @@ Describe the security features and requirements of the project, including authen
 
 **Testing:**
 Describe the testing approach and strategy for the project, including unit tests, integration tests, and end-to-end tests. Describe how the tests will be automated and integrated into the development process.
+
+**Open Questions:**
+Use this space to ask any questions of which you're not sure of the answer, whether it be a technical question or an implementation detail.
 
 **Deployment:**
 Describe any special considerations needed when deploying the project. For example, if there are breaking schema changes, how do we migrate existing data?
