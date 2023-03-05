@@ -2,7 +2,7 @@
 name: Technical Specification
 about: High level architecture for new systems/features
 title: ''
-labels: ''
+labels: tech spec
 assignees: ''
 
 ---
