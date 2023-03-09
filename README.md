@@ -33,9 +33,13 @@ Discussion can be found on the [Discord Thread](https://discord.com/channels/735
 5. In a new terminal, run the command `npm ci` to install all the necessary packages for the project.
 6. Copy `.env.sample` to `.env` and configure it for your local environment.
 7. If it's your first time setting it up, run migrations:
+
 ```bash
 npx sequelize-cli db:migrate
 ```
+
+If you get the error: 'password authentication failed for user "postgres"' while using docker, check to see if postgres is already installed on your computer. If it is, it may interfere with our default docker configuration. If you are familiar with port mapping, you can change the port postgres is using. Otherwise, uninstalling postgres will solve the error.
+
 8. Run `npm run dev` to start the development server.
 
 That's it! You're now ready to start working on the project.
@@ -44,7 +48,7 @@ That's it! You're now ready to start working on the project.
 
 ## Migrations
 
-When making changes to a model's properties or the database schema, you'll need to create a migration.  You can do so via the Sequelize CLI (replace `name-of-migration`):
+When making changes to a model's properties or the database schema, you'll need to create a migration. You can do so via the Sequelize CLI (replace `name-of-migration`):
 
 ```bash
 npx sequelize-cli migration:generate --name name-of-migration
@@ -53,11 +57,13 @@ npx sequelize-cli migration:generate --name name-of-migration
 Edit the migration - see more detailed docs [here](https://sequelize.org/docs/v6/other-topics/migrations/#migration-skeleton)
 
 To run migrations:
+
 ```bash
 npx sequelize-cli db:migrate
 ```
 
 To rollback the last-run migration:
+
 ```bash
 npx sequelize-cli db:migrate:undo
 ```
