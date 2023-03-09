@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const Index: React.FC = () => {
+const AuthRedirect: React.FC = () => {
   const router = useRouter();
 
   const useAuthCode = async (code: string) => {
@@ -22,4 +22,4 @@ const Index: React.FC = () => {
   );
 };
 
-export default Index;
+export default AuthRedirect;
