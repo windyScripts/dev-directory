@@ -4,7 +4,7 @@ import { RequestHandler } from 'express';
 import { BadRequestError, InternalServerError } from 'express-response-errors';
 import jwt from 'jsonwebtoken';
 
-import { getDiscordUserAndGuilds, upsertUser } from 'server/lib/auth';
+import { createAuthToken, getDiscordUserAndGuilds, upsertUser } from 'server/lib/auth';
 import log from 'server/lib/log';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
@@ -36,10 +36,7 @@ export const login: RequestHandler<void, void, { code: string }> = async (req, r
   }
 
   const user = await upsertUser(discordUser)
-
-  const payload = { id: user.id };
-
-  const token = jwt.sign(payload, env.AUTH_SECRET, { expiresIn: '7d' });
+  const token = createAuthToken(user)
 
   res.cookie(AUTH_COOKIE_NAME, token, { secure: env.isProd });
   res.sendStatus(200);

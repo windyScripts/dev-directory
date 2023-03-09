@@ -9,7 +9,7 @@ Discussion can be found on the [Discord Thread](https://discord.com/channels/735
 
 Message Tim on Discord if you want to be added as a collaborator.
 
-Branch names should be `#issuenumber-shortname` e.g. `#2-discord-auth` or `#4-profile-schema`.
+Branch names should be `#issuenumber-shortname` e.g. `#2-discord-auth` or `#4-profile-schema`.  If the branch is not associated with an issue, use your initials instead e.g. `tc-fix-profiles`.
 
 ## Prerequisites
 

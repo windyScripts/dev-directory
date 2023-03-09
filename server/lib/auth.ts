@@ -5,10 +5,23 @@ import jwt from 'jsonwebtoken';
 import { User } from 'server/models';
 import { execSync } from 'child_process';
 
+const env = cleanEnv(process.env, {
+  DISCORD_CLIENT_ID: str(),
+  DISCORD_CLIENT_SECRET: str(),
+  DISCORD_REDIRECT_URI: str(),
+  AUTH_SECRET: str(),
+})
+
+export function createAuthToken(user: User) {
+  const payload = { user_id: user.id }
+  const token = jwt.sign(payload, env.AUTH_SECRET, { expiresIn: '7d' });
+  return token
+}
+
 export function validateToken(token: string) {
   let valid;
   try {
-    valid = !!jwt.verify(token, process.env.AUTH_SECRET);
+    valid = !!jwt.verify(token, env.AUTH_SECRET);
   } catch (err) {
     valid = false;
   }
@@ -20,12 +33,12 @@ export async function getDiscordUserAndGuilds(authCode: string) {
   const oauth = new DiscordOauth2();
 
   const { access_token } = await oauth.tokenRequest({
-    clientId: process.env.DISCORD_CLIENT_ID,
-    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    clientId: env.DISCORD_CLIENT_ID,
+    clientSecret: env.DISCORD_CLIENT_SECRET,
     code: authCode,
     scope: 'identify email guild',
     grantType: 'authorization_code',
-    redirectUri: process.env.REDIRECT_URI,
+    redirectUri: env.DISCORD_REDIRECT_URI,
   });
 
   const [user, guilds] = await Promise.all([

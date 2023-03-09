@@ -69,7 +69,7 @@ describe('auth router', () => {
       // the cookie payload will contain extra things, so we just
       // want to make sure that it contains the same fields as user
       // using expect.objectContaining
-      expect(cookiePayload).toEqual(expect.objectContaining({ id: createdUser.id }));
+      expect(cookiePayload).toEqual(expect.objectContaining({ user_id: createdUser.id }));
     });
 
     it('should not re-create a user, but update their email if it has changed', async () => {

@@ -9,6 +9,7 @@ import { Umzug, SequelizeStorage } from 'umzug';
 import { execSync } from 'child_process';
 import { cleanEnv, str } from 'envalid';
 import { Sequelize } from 'sequelize';
+import { User } from 'server/models';
 
 const env = cleanEnv(process.env, {
   DB_NAME: str(),
@@ -17,6 +18,7 @@ const env = cleanEnv(process.env, {
 
 class TestServer extends Server {
   umzug: Umzug
+  loggedInUser: User | null = null;
 
   async init() {
     this.db = new Database(env.DB_NAME);
@@ -45,6 +47,7 @@ class TestServer extends Server {
     await this.runMigrations()
 
     this.setMiddleware();
+    this.setFakeAuth();
     this.setApiRoutes();
     this.setErrorHandlers();
 
@@ -70,6 +73,23 @@ class TestServer extends Server {
 
   get exec() {
     return supertest(this.app);
+  }
+
+  setFakeAuth() {
+    this.app.use((req, res, next) => {
+      if (this.loggedInUser) {
+        req.user = this.loggedInUser
+      }
+      next()
+    })
+  }
+
+  login(user: User) {
+    this.loggedInUser = user;
+  }
+
+  logout() {
+    this.loggedInUser = null
   }
 
   async destroy() {

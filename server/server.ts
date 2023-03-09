@@ -10,6 +10,7 @@ import Db, { Database } from './lib/db';
 import log from './lib/log';
 import { prepareNextApp } from './lib/next';
 import { cleanEnv, num } from 'envalid';
+import { attachUser } from './middleware/auth';
 
 const env = cleanEnv(process.env, {
   PORT: num({ default: 3000 })
@@ -27,6 +28,7 @@ class Server {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(attachUser)
   }
 
   setApiRoutes() {
