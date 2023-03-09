@@ -12,7 +12,7 @@ const env = cleanEnv(process.env, {
   DISCORD_GUILD_ID: str()
 })
 
-function mockDiscord(user: Partial<OAuth.User>, isValid = false ) {
+function mockDiscord(user: Partial<OAuth.User>, isValid = true ) {
   return jest.spyOn(authLib, 'getDiscordUserAndGuilds').mockResolvedValueOnce({
     user: user as OAuth.User,
     guilds: [
@@ -96,6 +96,18 @@ describe('auth router', () => {
       const userWithNewEmail = await User.findOne({ where: { email: newEmail }})
       expect(userWithOldEmail).toBe(null)
       expect(userWithNewEmail.discord_user_id).toBe(id)
+    });
+
+    it('should error if the discord user is not a part of 100devs', async () => {
+      mockDiscord({
+        id: String(Math.random()),
+        email: randEmail(),
+      }, false)
+
+      const res = await server.exec.post('/api/auth/login')
+        .send({ code: 'some_valid_code' });
+
+      expect(res.status).toBe(400);
     });
   });
 });

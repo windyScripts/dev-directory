@@ -1,6 +1,6 @@
 import { Server as HttpServer } from 'http';
 import { parse } from 'url';
-
+import { responseErrorHandler } from 'express-response-errors'
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { NextServer } from 'next/dist/server/next';
@@ -33,6 +33,10 @@ class Server {
     this.app.use('/api', apiRouter);
   }
 
+  setErrorHandlers() {
+    this.app.use(responseErrorHandler);
+  }
+
   setNextRoutes() {
     const nextHandler = this.nextApp.getRequestHandler();
     this.app.get('*', (req, res) => {
@@ -51,6 +55,7 @@ class Server {
     this.setMiddleware();
     this.setApiRoutes();
     this.setNextRoutes();
+    this.setErrorHandlers();
   }
 
   start() {

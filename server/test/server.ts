@@ -27,8 +27,6 @@ class TestServer extends Server {
         resolve: ({ name, path, context }) => {
           const migration = require(path)
           return {
-              // adjust the parameters Umzug will
-              // pass to migration methods when called
               name,
               up: async () => migration.up(context, Sequelize),
               down: async () => migration.down(context, Sequelize),
@@ -48,6 +46,7 @@ class TestServer extends Server {
 
     this.setMiddleware();
     this.setApiRoutes();
+    this.setErrorHandlers();
 
     const port = await getPort();
     this.server = this.app.listen(port);
@@ -75,7 +74,7 @@ class TestServer extends Server {
 
   async destroy() {
     await this.revertMigrations();
-    // close db connection
+    await this.db.sequelize.close()
     if (this.server) {
       return new Promise<void>((resolve) => {
         this.server.close(() => resolve());
