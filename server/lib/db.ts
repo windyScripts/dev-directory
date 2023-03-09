@@ -1,16 +1,34 @@
+import 'dotenv-flow/config'
+import { cleanEnv, str, num, bool } from 'envalid';
 import { Sequelize } from 'sequelize';
 
 import log from './log';
 
-const dbString = process.env.DB_STRING;
+const env = cleanEnv(process.env, {
+  DB_HOST: str(),
+  DB_NAME: str(),
+  DB_USER: str(),
+  DB_PASSWORD: str(),
+  DB_PORT: num(),
+  DB_LOGGING: bool({ default: false })
+})
 
 // Database object modeling mongoDB data
 export class Database {
   dbName: string;
-  sequelize = new Sequelize(dbString);
+  sequelize: Sequelize;
 
-  constructor(dbName = 'postgres') {
-    this.dbName = dbName;
+  constructor(database = env.DB_NAME) {
+    this.dbName = database;
+    this.sequelize = new Sequelize({
+      port: env.DB_PORT,
+      username: env.DB_USER,
+      password: env.DB_PASSWORD,
+      host: env.DB_HOST,
+      database: database,
+      dialect: 'postgres',
+      logging: env.DB_LOGGING,
+    })
   }
 
   // Connect to the postgres db

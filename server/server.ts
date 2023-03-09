@@ -9,12 +9,16 @@ import apiRouter from './api';
 import Db, { Database } from './lib/db';
 import log from './lib/log';
 import { prepareNextApp } from './lib/next';
+import { cleanEnv, num } from 'envalid';
 
+const env = cleanEnv(process.env, {
+  PORT: num({ default: 3000 })
+})
 
 // Express + Next Server object
 class Server {
   app = express();
-  port = Number(process.env.PORT) || 3000;
+  port = env.PORT;
   nextApp: NextServer;
   db: Database;
   server: HttpServer;

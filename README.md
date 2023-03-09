@@ -5,6 +5,12 @@ Discussion can be found on the [Discord Thread](https://discord.com/channels/735
 
 # Developing
 
+## Git Conventions
+
+Message Tim on Discord if you want to be added as a collaborator.
+
+Branch names should be `#issuenumber-shortname` e.g. `#2-discord-auth` or `#4-profile-schema`.
+
 ## Prerequisites
 
 1. Git
