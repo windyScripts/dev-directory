@@ -1,23 +1,24 @@
 import { Button } from '@mui/material';
-import absoluteUrl from 'next-absolute-url'
 import axios, { RawAxiosRequestConfig } from 'axios';
-import { getDiscordOauthUrl } from 'client/lib/oauth';
 import { NextPage } from 'next';
+import absoluteUrl from 'next-absolute-url';
 import React from 'react';
+
+import { getDiscordOauthUrl } from 'client/lib/oauth';
 
 interface Props {
   isAuthed: boolean;
 }
 
 const Index: NextPage<Props> = (props) => {
-  const [loggedOut, setLoggedOut] = React.useState(false)
+  const [loggedOut, setLoggedOut] = React.useState(false);
 
   const onLogout = async () => {
-    await axios.post('/api/auth/logout')
-    setLoggedOut(true)
-  }
+    await axios.post('/api/auth/logout');
+    setLoggedOut(true);
+  };
 
-  const isAuthed = props.isAuthed && !loggedOut
+  const isAuthed = props.isAuthed && !loggedOut;
 
   return (
     <div>
@@ -46,20 +47,20 @@ const Index: NextPage<Props> = (props) => {
 };
 
 Index.getInitialProps = async ({ req }) => {
-  const { origin } = absoluteUrl(req)
+  const { origin } = absoluteUrl(req);
   try {
     const config: RawAxiosRequestConfig = req ? {
       withCredentials: true,
       headers: {
-        cookie: req.headers.cookie
-      }
-    } : {}
-    const res = await axios.get(`${origin}/api/users/`, config)
-    return { isAuthed: true }
+        cookie: req.headers.cookie,
+      },
+    } : {};
+    await axios.get(`${origin}/api/users/`, config);
+    return { isAuthed: true };
   } catch (err) {
     // an error likely means a 401 was thrown
-    return { isAuthed: false }
+    return { isAuthed: false };
   }
-}
+};
 
 export default Index;

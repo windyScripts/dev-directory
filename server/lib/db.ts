@@ -1,4 +1,4 @@
-import 'dotenv-flow/config'
+import 'dotenv-flow/config';
 import { cleanEnv, str, num, bool } from 'envalid';
 import { Sequelize } from 'sequelize';
 
@@ -10,8 +10,8 @@ const env = cleanEnv(process.env, {
   DB_USER: str(),
   DB_PASSWORD: str(),
   DB_PORT: num(),
-  DB_LOGGING: bool({ default: false })
-})
+  DB_LOGGING: bool({ default: false }),
+});
 
 // Database object modeling mongoDB data
 export class Database {
@@ -28,7 +28,7 @@ export class Database {
       database: database,
       dialect: 'postgres',
       logging: env.DB_LOGGING,
-    })
+    });
   }
 
   // Connect to the postgres db

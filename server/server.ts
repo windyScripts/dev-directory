@@ -1,20 +1,21 @@
 import { Server as HttpServer } from 'http';
 import { parse } from 'url';
-import { responseErrorHandler } from 'express-response-errors'
+
 import cookieParser from 'cookie-parser';
+import { cleanEnv, num } from 'envalid';
 import express from 'express';
+import { responseErrorHandler } from 'express-response-errors';
 import { NextServer } from 'next/dist/server/next';
 
 import apiRouter from './api';
 import Db, { Database } from './lib/db';
 import log from './lib/log';
 import { prepareNextApp } from './lib/next';
-import { cleanEnv, num } from 'envalid';
 import { attachUser } from './middleware/auth';
 
 const env = cleanEnv(process.env, {
-  PORT: num({ default: 3000 })
-})
+  PORT: num({ default: 3000 }),
+});
 
 // Express + Next Server object
 class Server {
@@ -28,7 +29,7 @@ class Server {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
-    this.app.use(attachUser)
+    this.app.use(attachUser);
   }
 
   setApiRoutes() {

@@ -1,4 +1,5 @@
 import { AsyncRouter } from 'express-async-router';
+
 import { requireUser } from 'server/middleware/auth';
 
 import { getCurrentUser } from './users.controller';

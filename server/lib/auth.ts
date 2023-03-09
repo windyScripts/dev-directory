@@ -1,21 +1,20 @@
-import OAuth from 'discord-oauth2';
 import DiscordOauth2 from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
 import jwt from 'jsonwebtoken';
+
 import { User } from 'server/models';
-import { execSync } from 'child_process';
 
 const env = cleanEnv(process.env, {
   DISCORD_CLIENT_ID: str(),
   DISCORD_CLIENT_SECRET: str(),
   DISCORD_REDIRECT_URI: str(),
   AUTH_SECRET: str(),
-})
+});
 
 export function createAuthToken(user: User) {
-  const payload = { user_id: user.id }
+  const payload = { user_id: user.id };
   const token = jwt.sign(payload, env.AUTH_SECRET, { expiresIn: '7d' });
-  return token
+  return token;
 }
 
 export function validateToken(token: string) {
@@ -49,11 +48,11 @@ export async function getDiscordUserAndGuilds(authCode: string) {
   return { user, guilds };
 }
 
-export async function upsertUser(user: OAuth.User) {
+export async function upsertUser(user: DiscordOauth2.User) {
   const result = await User.upsert({
     discord_user_id: user.id,
     email: user.email,
-  })
+  });
 
-  return result[0]
+  return result[0];
 }

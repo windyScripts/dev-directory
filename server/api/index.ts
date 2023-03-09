@@ -1,7 +1,7 @@
 import { AsyncRouter } from 'express-async-router';
 
-import userRouter from './users';
 import authRouter from './auth';
+import userRouter from './users';
 
 const apiRouter = AsyncRouter();
 
