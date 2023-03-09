@@ -9,8 +9,8 @@ export const attachUser: RequestHandler = async (req, res, next) => {
   const token = req.cookies[AUTH_COOKIE_NAME]
   if (validateToken(token)) {
     const payload = jwt.decode(token) as jwt.JwtPayload
-    if (payload.id) {
-      const user = await User.findByPk(payload.id)
+    if (payload.user_id) {
+      const user = await User.findByPk(payload.user_id)
       req.user = user;
     }
   }

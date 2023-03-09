@@ -2,7 +2,6 @@ import OAuth from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
 import { RequestHandler } from 'express';
 import { BadRequestError, InternalServerError } from 'express-response-errors';
-import jwt from 'jsonwebtoken';
 
 import { createAuthToken, getDiscordUserAndGuilds, upsertUser } from 'server/lib/auth';
 import log from 'server/lib/log';
@@ -41,3 +40,8 @@ export const login: RequestHandler<void, void, { code: string }> = async (req, r
   res.cookie(AUTH_COOKIE_NAME, token, { secure: env.isProd });
   res.sendStatus(200);
 };
+
+export const logout: RequestHandler = async (req, res) => {
+  res.clearCookie(AUTH_COOKIE_NAME)
+  res.sendStatus(200);
+}
