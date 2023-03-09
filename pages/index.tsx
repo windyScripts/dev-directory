@@ -11,14 +11,12 @@ interface Props {
 }
 
 const Index: NextPage<Props> = (props) => {
-  const [loggedOut, setLoggedOut] = React.useState(false);
+  const [isAuthed, setIsAuthed] = React.useState(props.isAuthed);
 
   const onLogout = async () => {
     await axios.post('/api/auth/logout');
-    setLoggedOut(true);
+    setIsAuthed(false);
   };
-
-  const isAuthed = props.isAuthed && !loggedOut;
 
   return (
     <div>
