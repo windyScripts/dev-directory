@@ -40,6 +40,14 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['server/migrations/*.js'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 0,
+      },
+    },
+  ],
   settings: {
     'import/resolver': {
       typescript: true,
