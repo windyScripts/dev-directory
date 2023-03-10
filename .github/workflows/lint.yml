@@ -7,6 +7,8 @@ on:
     branches:
       - main
   pull_request:
+    paths-ignore:
+      - '.github/**'
     branches:
       - main
 
