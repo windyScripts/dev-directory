@@ -13,6 +13,10 @@ assignees: ''
 - [ ] Dev QOL change
 - [ ] Other?
 
+**Related Issues**
+Project: 
+Depends on: 
+
 **Description**
 Describe the task/bug to be done.
 
