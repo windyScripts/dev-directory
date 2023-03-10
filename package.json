@@ -10,7 +10,7 @@
     "docker:deps": "docker-compose up",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
-    "test:server": "cross-env NODE_ENV=test npx jest ./server",
+    "test:server": "cross-env NODE_ENV=test npx jest --runInBand ./server",
     "test:watch": "cross-env NODE_ENV=test npx jest --watch",
     "test": "cross-env NODE_ENV=test npx jest",
     "ts:exec": "ts-node -r tsconfig-paths/register --project ./tsconfig.json --transpile-only",
