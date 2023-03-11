@@ -4,15 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "rm -rf dist && ttsc && next build",
     "dev:server": "cross-env NODE_ENV=development npm run ts:exec server/index.ts",
     "dev": "nodemon",
     "docker:db": "docker-compose exec pg psql -U postgres -d dev-directory",
     "docker:deps": "docker-compose up",
+    "jest": "cross-env NODE_ENV=test npx jest --runInBand",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
-    "test:server": "cross-env NODE_ENV=test npx jest --runInBand ./server",
-    "test:watch": "cross-env NODE_ENV=test npx jest --watch",
-    "test": "cross-env NODE_ENV=test npx jest",
+    "migrate": "npm run sequelize-cli db:migrate",
+    "migrate:undo": "npm run sequelize-cli db:migrate:undo",
+    "sequelize-cli": "cross-env NODE_ENV=development sequelize-cli",
+    "start": "cross-env NODE_ENV=production node dist/server/index",
+    "test:server": "npm run jest -- ./server",
+    "test:watch": "npm run jest -- --watch",
+    "test": "npm run jest",
     "ts:exec": "ts-node -r tsconfig-paths/register --project ./tsconfig.json --transpile-only",
     "ts:check": "npx tsc --noEmit"
   },
@@ -81,6 +87,11 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
-    "tsconfig-paths-jest": "0.0.1"
+    "tsconfig-paths-jest": "0.0.1",
+    "ttypescript": "^1.5.15",
+    "typescript-transform-paths": "^3.4.6"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
