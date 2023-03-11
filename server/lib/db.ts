@@ -15,9 +15,9 @@ const env = cleanEnv(process.env, {
 
 const dialectOptions = env.isProd ? {
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
   },
-} : undefined
+} : undefined;
 
 // Database object modeling mongoDB data
 export class Database {
