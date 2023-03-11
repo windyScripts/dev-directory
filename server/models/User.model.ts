@@ -9,6 +9,12 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
   declare email: string;
   declare discord_user_id: string;
+  declare discord_name: string;
+  declare bio: string;
+  declare twitter_url: string;
+  declare linkedin_url: string;
+  declare github_username: string;
+  declare website: string;
 }
 
 User.init({
@@ -25,6 +31,35 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+  },
+  discord_name: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+  },
+  bio: {
+    type: DataTypes.STRING(1000),
+    allowNull: false,
+    defaultValue: '',
+  },
+  twitter_url: {
+    type: DataTypes.STRING(200),
+    allowNull: false,
+    defaultValue: '',
+  },
+  linkedin_url: {
+    type: DataTypes.STRING(200),
+    allowNull: false,
+    defaultValue: '',
+  },
+  github_username: {
+    type: DataTypes.STRING(200),
+    allowNull: false,
+    defaultValue: '',
+  },
+  website: {
+    type: DataTypes.STRING(500),
+    allowNull: false,
+    defaultValue: '',
   },
 }, {
   sequelize: Db.sequelize,
