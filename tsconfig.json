@@ -19,7 +19,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "noEmit": true,
+    "noEmit": false,
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -29,7 +29,10 @@
       "server/*": ["server/*"],
       "client/*": ["client/*"],
       "shared/*": ["shared/*"]
-    }
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ]
   },
   "include": [
     "server/**/*",

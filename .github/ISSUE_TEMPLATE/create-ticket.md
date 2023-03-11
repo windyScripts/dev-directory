@@ -7,12 +7,6 @@ assignees: ''
 
 ---
 
-**This ticket is a...**
-- [ ] Bug
-- [ ] New feature
-- [ ] Dev QOL change
-- [ ] Other?
-
 **Related Issues**
 Project: 
 Depends on: 
