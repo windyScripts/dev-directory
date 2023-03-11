@@ -17,6 +17,7 @@ Please remove all except for everything applicable, and then remove this line.
 - Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - This change requires a documentation update
 - This change requires an update to testing
+- Change to documentation or GitHub flows
 
 # Checklist:
 
