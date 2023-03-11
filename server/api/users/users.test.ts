@@ -1,4 +1,4 @@
-import { randEmail, randNumber } from '@ngneat/falso';
+import { randEmail, randNumber, randUserName } from '@ngneat/falso';
 
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
@@ -24,6 +24,7 @@ describe('auth router', () => {
     it('should return specific fields for the logged-in user', async () => {
       const user = await User.create({
         discord_user_id: randNumber().toString(),
+        discord_name: randUserName(),
         email: randEmail(),
       });
 
@@ -34,6 +35,7 @@ describe('auth router', () => {
       expect(res.body).toEqual({
         id: user.id,
         discord_user_id: user.discord_user_id,
+        discord_name: user.discord_name,
       });
     });
   });

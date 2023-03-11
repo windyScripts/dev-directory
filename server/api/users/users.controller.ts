@@ -10,6 +10,7 @@ export const getCurrentUser: RequestHandler<void, ClientUser>  = (req, res) => {
   const filteredUser = _.pick(req.user!, [
     'id',
     'discord_user_id',
+    'discord_name',
   ]);
 
   res.json(filteredUser);

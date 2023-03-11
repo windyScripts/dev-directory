@@ -49,6 +49,7 @@ export async function getDiscordUserAndGuilds(authCode: string) {
 }
 
 export async function upsertUser(user: DiscordOauth2.User) {
+  console.log(user);
   const result = await User.upsert({
     discord_user_id: user.id,
     discord_name: user.username,
