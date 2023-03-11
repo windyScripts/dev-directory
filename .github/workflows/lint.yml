@@ -8,7 +8,8 @@ on:
       - main
   pull_request:
     paths-ignore:
-      - ".github/**"
+      - ".github/**.md"
+      - "./github/CODEOWNERS"
     branches:
       - main
 
