@@ -8,7 +8,7 @@ on:
       - main
   pull_request:
     paths-ignore:
-      - '.github/**'
+      - ".github/**"
     branches:
       - main
 
@@ -37,8 +37,13 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
-      
-      # - name: Run Server Tests
-      #   run: npm run test:server
-      #   env:
-      #     DB_STRING: ${{ secrets.DB_STRING }}
+
+      - name: Start Container
+        run: docker-compose up -d
+
+      - name: Run Tests
+        run: npm run test
+
+      - name: Stop Container
+        if: always()
+        run: docker-compose down
