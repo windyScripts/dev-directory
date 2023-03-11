@@ -11,11 +11,11 @@ const env = cleanEnv(process.env, {
   DB_PASSWORD: str(),
 });
 
-const dialectOptions = env.isProd ? {
-  ssl: {
-    rejectUnauthorized: false
-  },
-} : undefined
+// const dialectOptions = env.isProd ? {
+//   ssl: {
+//     rejectUnauthorized: false
+//   },
+// } : undefined
 
 const creds = {
   username: env.DB_USER,
@@ -24,7 +24,8 @@ const creds = {
   database: env.DB_NAME,
   port: env.DB_PORT,
   dialect: 'postgresql',
-  dialectOptions,
+  ssl: env.isProd,
+  // dialectOptions,
 };
 
 module.exports = {
