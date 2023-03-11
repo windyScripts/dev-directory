@@ -5,7 +5,6 @@ import { Sequelize } from 'sequelize';
 import log from './log';
 
 const env = cleanEnv(process.env, {
-  DATABASE_URL: str({ default: '' }),
   DB_HOST: str(),
   DB_NAME: str(),
   DB_USER: str(),
@@ -14,15 +13,11 @@ const env = cleanEnv(process.env, {
   DB_LOGGING: bool({ default: false }),
 });
 
-if (!env.DATABASE_URL && env.isProd) {
-  throw new Error('DATABASE_URL is required in production');
-}
-
-// const dialectOptions = env.isProd ? {
-//   ssl: {
-//     rejectUnauthorized: false
-//   },
-// } : undefined
+const dialectOptions = env.isProd ? {
+  ssl: {
+    rejectUnauthorized: false
+  },
+} : undefined
 
 // Database object modeling mongoDB data
 export class Database {
@@ -32,25 +27,16 @@ export class Database {
   constructor(database = env.DB_NAME) {
     this.dbName = database;
 
-    if (env.isProd) {
-      this.sequelize = new Sequelize(
-        `${env.DATABASE_URL}?sslmode=require`,
-        {
-          ssl: true,
-          logging: false,
-        },
-      );
-    } else {
-      this.sequelize = new Sequelize({
-        port: env.DB_PORT,
-        username: env.DB_USER,
-        password: env.DB_PASSWORD,
-        host: env.DB_HOST,
-        database: database,
-        dialect: 'postgres',
-        logging: env.DB_LOGGING,
-      });
-    }
+    this.sequelize = new Sequelize({
+      port: env.DB_PORT,
+      username: env.DB_USER,
+      password: env.DB_PASSWORD,
+      host: env.DB_HOST,
+      database: database,
+      dialectOptions,
+      dialect: 'postgres',
+      logging: env.DB_LOGGING,
+    });
   }
 
   // Connect to the postgres db
