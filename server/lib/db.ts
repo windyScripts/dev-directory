@@ -13,6 +13,12 @@ const env = cleanEnv(process.env, {
   DB_LOGGING: bool({ default: false }),
 });
 
+const dialectOptions = env.isProd ? {
+  ssl: {
+    rejectUnauthorized: false
+  },
+} : undefined
+
 // Database object modeling mongoDB data
 export class Database {
   dbName: string;
@@ -27,6 +33,7 @@ export class Database {
       host: env.DB_HOST,
       database: database,
       dialect: 'postgres',
+      dialectOptions,
       logging: env.DB_LOGGING,
     });
   }
