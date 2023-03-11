@@ -8,6 +8,7 @@ import supertest from 'supertest';
 import { Umzug, SequelizeStorage } from 'umzug';
 
 import { Database } from 'server/lib/db';
+import log from 'server/lib/log';
 import { User } from 'server/models';
 import Server from 'server/server';
 
@@ -59,8 +60,9 @@ class TestServer extends Server {
   }
 
   createDb() {
+    log(env.DB_NAME);
     try {
-      execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${env.DB_NAME}`, { stdio: 'ignore' });
+      execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${env.DB_NAME}`);
     } catch (err) {
       // this will fail if the db already exists, which will be all the time after the first time it's run
     }

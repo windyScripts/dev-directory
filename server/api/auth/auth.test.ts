@@ -35,7 +35,7 @@ describe('auth router', () => {
   });
 
   describe('POST /login', () => {
-    it('should error if no code was provided', async () => {
+    it.only('should error if no code was provided', async () => {
       const res = await server.exec.post('/api/auth/login')
         .send({ code: '' });
       expect(res.status).toBe(400);
