@@ -65,13 +65,13 @@ Edit the migration - see more detailed docs [here](https://sequelize.org/docs/v6
 To run migrations:
 
 ```bash
-npm run sequelize-cli db:migrate
+npm run migrate
 ```
 
 To rollback the last-run migration:
 
 ```bash
-npm run sequelize-cli db:migrate:undo
+npm run migrate:undo
 ```
 
 ```bash
