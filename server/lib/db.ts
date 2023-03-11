@@ -13,6 +13,12 @@ const env = cleanEnv(process.env, {
   DB_LOGGING: bool({ default: false }),
 });
 
+const dialectOptions = env.isProd ? {
+  ssl: {
+    rejectUnauthorized: false,
+  },
+} : undefined;
+
 // Database object modeling mongoDB data
 export class Database {
   dbName: string;
@@ -20,12 +26,14 @@ export class Database {
 
   constructor(database = env.DB_NAME) {
     this.dbName = database;
+
     this.sequelize = new Sequelize({
       port: env.DB_PORT,
       username: env.DB_USER,
       password: env.DB_PASSWORD,
       host: env.DB_HOST,
       database: database,
+      dialectOptions,
       dialect: 'postgres',
       logging: env.DB_LOGGING,
     });
