@@ -16,7 +16,7 @@
     "migrate": "npm run sequelize-cli db:migrate",
     "migrate:undo": "npm run sequelize-cli db:migrate:undo",
     "sequelize-cli": "cross-env NODE_ENV=development sequelize-cli",
-    "start": "NODE_ENV=production node dist/server/index",
+    "start": "node dist/server/index",
     "test:server": "npm run jest -- ./server",
     "test:watch": "npm run jest -- --watch",
     "test": "npm run jest",
