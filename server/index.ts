@@ -9,8 +9,8 @@ async function run() {
     await server.init();
     await server.start();
   } catch (err) {
-    log('failed to start', err)
-    throw err
+    log('failed to start', err);
+    throw err;
   }
 }
 
