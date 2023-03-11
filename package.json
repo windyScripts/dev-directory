@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "rm -rf dist && ttsc && next build",
     "dev:server": "cross-env NODE_ENV=development npm run ts:exec server/index.ts",
     "dev": "nodemon",
     "docker:db": "docker-compose exec pg psql -U postgres -d dev-directory",
@@ -85,6 +86,8 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
-    "tsconfig-paths-jest": "0.0.1"
+    "tsconfig-paths-jest": "0.0.1",
+    "ttypescript": "^1.5.15",
+    "typescript-transform-paths": "^3.4.6"
   }
 }
