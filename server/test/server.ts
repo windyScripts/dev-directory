@@ -60,7 +60,7 @@ class TestServer extends Server {
 
   createDb() {
     try {
-      execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${env.DB_NAME}`);
+      execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${env.DB_NAME}`, { stdio: 'ignore' });
     } catch (err) {
       // this will fail if the db already exists, which will be all the time after the first time it's run
     }
