@@ -1,6 +1,7 @@
-const { cleanEnv, str } = require("envalid")
-
-require("dotenv-flow").config()
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { cleanEnv, str } = require('envalid');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv-flow').config();
 
 const env = cleanEnv(process.env, {
   DB_PORT: str(),
@@ -8,7 +9,7 @@ const env = cleanEnv(process.env, {
   DB_HOST: str(),
   DB_NAME: str(),
   DB_PASSWORD: str(),
-})
+});
 
 const creds = {
   username: env.DB_USER,
@@ -16,11 +17,11 @@ const creds = {
   host: env.DB_HOST,
   database: env.DB_NAME,
   port: env.DB_PORT,
-  dialect: "postgresql",
-}
+  dialect: 'postgresql',
+};
 
 module.exports = {
-  "development": creds,
-  "test": creds,
-  "production": creds,
-}
+  development: creds,
+  test: creds,
+  production: creds,
+};
