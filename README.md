@@ -41,7 +41,7 @@ Branch names should be `#issuenumber-shortname` e.g. `#2-discord-auth` or `#4-pr
 7. If it's your first time setting it up, run migrations:
 
 ```bash
-npx sequelize-cli db:migrate
+npm run sequelize-cli db:migrate
 ```
 
 If you get the error: 'password authentication failed for user "postgres"' while using docker, check to see if postgres is already installed on your computer. If it is, it may interfere with our default docker configuration. If you are familiar with port mapping, you can change the port postgres is using. Otherwise, uninstalling postgres will solve the error.
@@ -57,7 +57,7 @@ That's it! You're now ready to start working on the project.
 When making changes to a model's properties or the database schema, you'll need to create a migration. You can do so via the Sequelize CLI (replace `name-of-migration`):
 
 ```bash
-npx sequelize-cli migration:generate --name name-of-migration
+npm run sequelize-cli migration:generate --name name-of-migration
 ```
 
 Edit the migration - see more detailed docs [here](https://sequelize.org/docs/v6/other-topics/migrations/#migration-skeleton)
@@ -65,13 +65,13 @@ Edit the migration - see more detailed docs [here](https://sequelize.org/docs/v6
 To run migrations:
 
 ```bash
-npx sequelize-cli db:migrate
+npm run sequelize-cli db:migrate
 ```
 
 To rollback the last-run migration:
 
 ```bash
-npx sequelize-cli db:migrate:undo
+npm run sequelize-cli db:migrate:undo
 ```
 
 ```bash

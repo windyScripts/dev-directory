@@ -1,0 +1,26 @@
+const { cleanEnv, str } = require("envalid")
+
+require("dotenv-flow").config()
+
+const env = cleanEnv(process.env, {
+  DB_PORT: str(),
+  DB_USER: str(),
+  DB_HOST: str(),
+  DB_NAME: str(),
+  DB_PASSWORD: str(),
+})
+
+const creds = {
+  username: env.DB_USER,
+  password: env.DB_PASSWORD,
+  host: env.DB_HOST,
+  database: env.DB_NAME,
+  port: env.DB_PORT,
+  dialect: "postgresql",
+}
+
+module.exports = {
+  "development": creds,
+  "test": creds,
+  "production": creds,
+}
