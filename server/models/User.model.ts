@@ -11,7 +11,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare discord_user_id: string;
   declare discord_name: string;
   declare bio: string;
-  declare twitter_url: string;
+  declare twitter_username: string;
   declare linkedin_url: string;
   declare github_username: string;
   declare website: string;
@@ -41,7 +41,7 @@ User.init({
     allowNull: false,
     defaultValue: '',
   },
-  twitter_url: {
+  twitter_username: {
     type: DataTypes.STRING(200),
     allowNull: false,
     defaultValue: '',
