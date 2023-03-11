@@ -9,7 +9,7 @@
     "dev": "nodemon",
     "docker:db": "docker-compose exec pg psql -U postgres -d dev-directory",
     "docker:deps": "docker-compose up",
-    "heroku-postbuild": "npm run migrate",
+    "heroku-postbuild": "npx sequelize-cli db:migrate",
     "jest": "cross-env NODE_ENV=test npx jest --runInBand",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
