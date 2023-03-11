@@ -36,12 +36,12 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     return [
-      await queryInterface.removeColumn("users", "discord_name"),
-      await queryInterface.removeColumn("users", "bio"),
-      await queryInterface.removeColumn("users", "twitter_username"),
-      await queryInterface.removeColumn("users", "linkedin_url"),
-      await queryInterface.removeColumn("users", "github_username"),
       await queryInterface.removeColumn("users", "website"),
+      await queryInterface.removeColumn("users", "github_username"),
+      await queryInterface.removeColumn("users", "linkedin_url"),
+      await queryInterface.removeColumn("users", "twitter_username"),
+      await queryInterface.removeColumn("users", "bio"),
+      await queryInterface.removeColumn("users", "discord_name"),
     ];
   },
 };
