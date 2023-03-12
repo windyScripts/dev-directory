@@ -1,4 +1,4 @@
-import { randEmail } from '@ngneat/falso';
+import { randEmail, randUserName } from '@ngneat/falso';
 import DiscordOauth2 from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
 import jwt from 'jsonwebtoken';
@@ -47,6 +47,7 @@ describe('auth router', () => {
       const getInfoSpy = mockDiscord({
         id,
         email: randEmail(),
+        username: randUserName(),
       });
 
       const code = 'some_valid_code';
@@ -75,17 +76,20 @@ describe('auth router', () => {
 
     it('should not re-create a user, but update their email if it has changed', async () => {
       const id = String(Math.random());
+      const name = randUserName();
       const oldEmail = randEmail();
       const newEmail = randEmail();
 
       await User.create({
         discord_user_id: id,
+        discord_name: name,
         email: oldEmail,
       });
 
       mockDiscord({
         id,
         email: newEmail,
+        username: name,
       });
 
       const res = await server.exec.post('/api/auth/login')
