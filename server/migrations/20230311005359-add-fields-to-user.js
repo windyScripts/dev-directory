@@ -6,6 +6,7 @@ module.exports = {
     await queryInterface.addColumn("users", "discord_name", {
       type: Sequelize.STRING(100),
       allowNull: false,
+      defaultValue: "",
     });
     await queryInterface.addColumn("users", "bio", {
       type: Sequelize.STRING(1000),

@@ -35,6 +35,7 @@ User.init({
   discord_name: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    defaultValue: '',
   },
   bio: {
     type: DataTypes.STRING(1000),
