@@ -18,6 +18,10 @@ Please remove all except for everything applicable, and then remove this line.
 - Change to documentation/GitHub flows/CICD
 - Other (please specify)
 
+## Screenshots
+
+Please include any screenshots if there are visual changes.
+
 # Checklist:
 
 - [ ] Changes have new/updated automated tests
@@ -26,4 +30,3 @@ Please remove all except for everything applicable, and then remove this line.
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] My changes generate no new warnings
 - [ ] Docs have been updated if applicable
-- [ ] Tests have been updated if applicable
