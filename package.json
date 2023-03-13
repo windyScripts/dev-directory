@@ -85,6 +85,7 @@
     "nodemon": "^2.0.20",
     "portfinder": "^1.0.32",
     "postcss": "^8.4.21",
+    "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^8.0.1",
     "sequelize-cli": "^6.6.0",
     "set-cookie-parser": "^2.5.1",
