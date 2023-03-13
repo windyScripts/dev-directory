@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     './pages/**/*.tsx',
-    './components/**/*.tsx',
+    './client/components/**/*.tsx',
   ],
   important: '#__next',
   theme: {
