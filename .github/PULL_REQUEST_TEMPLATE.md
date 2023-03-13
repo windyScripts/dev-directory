@@ -24,9 +24,9 @@ Please include any screenshots if there are visual changes.
 
 # Checklist:
 
-- [ ] Changes have new/updated automated tests
-- [ ] Changes have been manually tested
+- [ ] Changes have new/updated automated tests, if applicable
+- [ ] Changes have new/updated docs, if applicable
 - [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] My changes generate no new warnings
-- [ ] Docs have been updated if applicable
+- [ ] I have added comments on any new, hard-to-understand code
+- [ ] Changes have been manually tested
+- [ ] Changes generate no new errors or warnings
