@@ -10,7 +10,7 @@ const env = cleanEnv(process.env, {
 });
 
 const DATABASE_URL_Split = env.DATABASE_URL.split(/[:\/]+/);
-console.log(DATABASE_URL_Split);
+
 const dialectOptions = env.isProd ? {
   ssl: {
     rejectUnauthorized: false,
