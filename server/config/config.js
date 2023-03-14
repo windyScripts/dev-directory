@@ -4,25 +4,26 @@ const { cleanEnv, str } = require('envalid');
 require('dotenv-flow').config();
 
 const env = cleanEnv(process.env, {
-  DB_PORT: str(),
-  DB_USER: str(),
-  DB_HOST: str(),
-  DB_NAME: str(),
-  DB_PASSWORD: str(),
+  DATABASE_URL: str({
+    desc: 'The connection URL for the PostgreSQL database',
+  }),
 });
 
+const DATABASE_URL_Split = env.DATABASE_URL.split(/[:\/]+/);
+console.log(DATABASE_URL_Split);
 const dialectOptions = env.isProd ? {
   ssl: {
     rejectUnauthorized: false,
   },
 } : undefined;
 
+
 const creds = {
-  username: env.DB_USER,
-  password: env.DB_PASSWORD,
-  host: env.DB_HOST,
-  database: env.DB_NAME,
-  port: env.DB_PORT,
+  port: parseInt(DATABASE_URL_Split[3]),
+  username: DATABASE_URL_Split[1],
+  password: DATABASE_URL_Split[2].split('@')[0],
+  host: DATABASE_URL_Split[2].split('@')[1],
+  database: DATABASE_URL_Split[4],
   dialect: 'postgresql',
   dialectOptions,
 };
