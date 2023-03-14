@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import axios, { RawAxiosRequestConfig } from 'axios';
 import { NextPage } from 'next';
 import absoluteUrl from 'next-absolute-url';
@@ -19,28 +19,25 @@ const Index: NextPage<Props> = (props) => {
   };
 
   return (
-    <div>
-      <p>
-        You are {!isAuthed ? 'not' : ''} logged in
-      </p>
-      {isAuthed ? (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={onLogout}
-        >
-          Log out
-        </Button>
-      ) : (
-        <Button
-          variant="contained"
-          color="primary"
-          href={getDiscordOauthUrl()}
-        >
-          Log in
-        </Button>
-      )}
-    </div>
+    <Container maxWidth="lg" className="flex justify-between pt-4">
+      <Typography variant="h1" className="text-3xl">
+        dev-directory
+      </Typography>
+      <Box className="flex items-center gap-4">
+        <Typography>
+          You are {!isAuthed ? 'not' : ''} logged in
+        </Typography>
+        {isAuthed ? (
+          <Button variant="contained" color="secondary" onClick={onLogout}>
+            Log out
+          </Button>
+        ) : (
+          <Button variant="contained" color="primary" href={getDiscordOauthUrl()}>
+            Log in
+          </Button>
+        )}
+      </Box>
+    </Container>
   );
 };
 
