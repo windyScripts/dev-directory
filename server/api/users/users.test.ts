@@ -41,12 +41,12 @@ describe('auth router', () => {
   });
 
   describe('GET /:id', () => {
-    it('should return error if user.id is not found', async () => {
-      const res = await server.exec.get(`/api/users/${randNumber()}`);
+    it('returns 404 if specified user doesn\'t exist', async () => {
+      const res = await server.exec.get('/api/users/03402');
       expect(res.status).toBe(404);
     });
 
-    it('provides matching user to id', async () => {
+    it('returns the specified user', async () => {
       const user = await User.create({
         email: randEmail(),
         discord_user_id: randNumber().toString(),
