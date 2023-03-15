@@ -8,7 +8,7 @@
     "dev:server": "cross-env NODE_ENV=development npm run ts:exec server/index.ts",
     "dev": "nodemon",
     "docker:db": "docker-compose exec pg psql -U postgres -d dev-directory",
-    "docker:deps": "docker-compose up",
+    "docker:deps": "docker-compose up -d",
     "heroku-postbuild": "npm run build && npx sequelize-cli db:migrate",
     "jest": "cross-env NODE_ENV=test npx jest --runInBand",
     "lint:fix": "eslint . --fix",

@@ -39,4 +39,37 @@ describe('auth router', () => {
       });
     });
   });
+
+  describe('GET /:id', () => {
+    it('should return error if user.id is not found', async () => {
+      const res = await server.exec.get(`/api/users/${randNumber()}`);
+      expect(res.status).toBe(404);
+    });
+
+    it('provides matching user to id', async () => {
+      const user = await User.create({
+        email: randEmail(),
+        discord_user_id: randNumber().toString(),
+        discord_name: `${randUserName()}#${randNumber()}`,
+        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
+        twitter_username: randUserName(),
+        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
+        github_username: randUserName(),
+        website: 'https://leonnoel.com/',
+      });
+
+      const res = await server.exec.get(`/api/users/${user.id}`);
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({
+        id: user.id,
+        discord_user_id: user.discord_user_id,
+        discord_name: user.discord_name,
+        bio: user.bio,
+        twitter_username: user.twitter_username,
+        linkedin_url: user.linkedin_url,
+        github_username: user.github_username,
+        website: user.website,
+      });
+    });
+  });
 });
