@@ -5,13 +5,14 @@ import { Sequelize } from 'sequelize';
 import log from './log';
 
 const env = cleanEnv(process.env, {
-  DATABASE_URL: str({
-    desc: 'The connection URL for the PostgreSQL database',
-  }),
+  DATABASE_URL: str(),
   DB_LOGGING: bool({ default: false }),
+  DB_HOST: str(),
+  DB_NAME: str(),
+  DB_USER: str(),
+  DB_PASSWORD: str(),
+  DB_PORT: num(),
 });
-
-const DATABASE_URL_Split = env.DATABASE_URL.split(/[:\/]+/);
 
 const dialectOptions = env.isProd ? {
   ssl: {
@@ -23,21 +24,30 @@ const dialectOptions = env.isProd ? {
 export class Database {
   dbName: string;
   sequelize: Sequelize;
-  
-  constructor(database = DATABASE_URL_Split[4]) {
-  
+
+  constructor(database= env.DB_NAME) {
+
     this.dbName = database;
 
-   this.sequelize = new Sequelize({
-      port: parseInt(DATABASE_URL_Split[3]),
-      username: DATABASE_URL_Split[1],
-      password: DATABASE_URL_Split[2].split('@')[0],
-      host: DATABASE_URL_Split[2].split('@')[1],
-      database: database,
-      dialectOptions,
-      dialect: 'postgres',
-      logging: env.DB_LOGGING,
-    });
+    if( env.isProd ){
+      this.sequelize = new Sequelize(env.DATABASE_URL,{
+        dialectOptions,
+        dialect: 'postgres',
+        logging: env.DB_LOGGING,
+      });
+    }
+    else{
+      this.sequelize = new Sequelize({
+        port: env.DB_PORT,
+        username: env.DB_USER,
+        password: env.DB_PASSWORD,
+        host: env.DB_HOST,
+        database: database,
+        dialectOptions,
+        dialect: 'postgres',
+        logging: env.DB_LOGGING,
+      });
+    }
   }
 
   // Connect to the postgres db
