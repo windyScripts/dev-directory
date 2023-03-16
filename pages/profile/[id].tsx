@@ -12,7 +12,6 @@ import { UserProfile } from 'server/types/User';
 
 type Props = {
   user?: UserProfile;
-  notFound?: boolean;
 };
 
 const ProfilePage: NextPage<Props> = ({ user }: Props) => {
