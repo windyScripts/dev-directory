@@ -16,10 +16,6 @@ type Props = {
 };
 
 const ProfilePage: NextPage<Props> = ({ user }: Props) => {
-  if (!user) {
-    return <div>User not found</div>;
-  }
-
   function possessiveForm(name: string): string {
     return name.endsWith('s') ? `${name}'` : `${name}'s`;
   }
@@ -112,7 +108,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query
 
     return { props: { user } };
   } catch (error) {
-    return { props: { notFound: true } };
+    return { notFound: true };
   }
 };
 
