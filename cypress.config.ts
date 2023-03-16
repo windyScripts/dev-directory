@@ -13,5 +13,3 @@ videosFolder: "./client/tests/cypress/videos",
 downloadsFolder: "./client/tests/cypress/downloads",
 fileServerFolder:"./"
 });
-
-// For what the folders are: https://docs.cypress.io/guides/references/configuration#Folders-Files
