@@ -3,20 +3,25 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { Container, Box, ListItemIcon, ListItemButton, List, Typography } from '@mui/material';
-import axios, { RawAxiosRequestConfig } from 'axios';
-import { GetServerSideProps, NextPage } from 'next';
-import absoluteUrl from 'next-absolute-url';
+import { NextPage, NextPageContext } from 'next';
+import ErrorPage from 'next/error';
 import React from 'react';
 
+import createAxiosInstance from 'client/lib/axios';
 import { UserProfile } from 'server/types/User';
 
-type Props = {
+interface Props {
   user?: UserProfile;
-};
+  notFound?: boolean;
+}
 
-const ProfilePage: NextPage<Props> = ({ user }: Props) => {
+const ProfilePage: NextPage<Props> = ({ user, notFound = null }: Props) => {
   function possessiveForm(name: string): string {
     return name.endsWith('s') ? `${name}'` : `${name}'s`;
+  }
+
+  if (notFound === true) {
+    return <ErrorPage statusCode={404}/>;
   }
 
   return (
@@ -24,14 +29,14 @@ const ProfilePage: NextPage<Props> = ({ user }: Props) => {
       <Container className="flex flex-col gap-4 pt-20 items-center">
         <Box component="header">
           <Typography variant="h1" className="text-5xl font-700 text-center">
-            {possessiveForm(user.discord_name)} Profile
+            {possessiveForm(user?.discord_name || 'username')} Profile
           </Typography>
         </Box>
 
-        {user.bio && <Typography variant="body1" component="p">{user.bio}</Typography>}
+        {user?.bio && <Typography variant="body1" component="p">{user.bio}</Typography>}
 
         <List className="flex gap-2">
-          {user.twitter_username && (
+          {user?.twitter_username && (
             <ListItemButton
               component="a"
               href={`https://twitter.com/${user.twitter_username}`}
@@ -45,7 +50,7 @@ const ProfilePage: NextPage<Props> = ({ user }: Props) => {
             </ListItemButton>
           )}
 
-          {user.linkedin_url && (
+          {user?.linkedin_url && (
             <ListItemButton
               component="a"
               href={user.linkedin_url}
@@ -59,7 +64,7 @@ const ProfilePage: NextPage<Props> = ({ user }: Props) => {
             </ListItemButton>
           )}
 
-          {user.github_username && (
+          {user?.github_username && (
             <ListItemButton
               component="a"
               href={`https://github.com/${user.github_username}`}
@@ -73,7 +78,7 @@ const ProfilePage: NextPage<Props> = ({ user }: Props) => {
             </ListItemButton>
           )}
 
-          {user.website && (
+          {user?.website && (
             <ListItemButton
               component="a"
               href={user.website}
@@ -92,21 +97,14 @@ const ProfilePage: NextPage<Props> = ({ user }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query }) => {
-  const { origin } = absoluteUrl(req);
-
+ProfilePage.getInitialProps = async ({ req, res, query }: NextPageContext): Promise<Props> => {
   try {
-    const config: RawAxiosRequestConfig = req ? {
-      withCredentials: true,
-      headers: {
-        cookie: req.headers.cookie,
-      },
-    } : {};
+    const axios = createAxiosInstance(req);
+    const { data: user } = await axios.get<UserProfile>(`/api/users/${query.id}`);
 
-    const { data: user } = await axios.get<UserProfile>(`${origin}/api/users/${query.id}`, config);
-
-    return { props: { user } };
+    return { user };
   } catch (error) {
+    res.statusCode = error.response.status;
     return { notFound: true };
   }
 };
