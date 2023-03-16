@@ -1,6 +1,6 @@
 import 'dotenv-flow/config';
 import { cleanEnv, str, num, bool } from 'envalid';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Dialect  } from 'sequelize';
 
 import log from './log';
 
@@ -20,6 +20,11 @@ const dialectOptions = env.isProd ? {
   },
 } : undefined;
 
+const commonOptions = {
+  dialect: 'postgres' as Dialect,
+  logging: env.DB_LOGGING,
+};
+
 // Database object modeling mongoDB data
 export class Database {
   dbName: string;
@@ -28,11 +33,10 @@ export class Database {
   constructor(database = env.DB_NAME) {
     this.dbName = database;
 
-    if( env.isProd ){
-      this.sequelize = new Sequelize(env.DATABASE_URL,{
+    if (env.isProd) {
+      this.sequelize = new Sequelize(env.DATABASE_URL, {
         dialectOptions,
-        dialect: 'postgres',
-        logging: env.DB_LOGGING,
+        ...commonOptions,
       });
     } else {
       this.sequelize = new Sequelize({
@@ -41,8 +45,7 @@ export class Database {
         password: env.DB_PASSWORD,
         host: env.DB_HOST,
         database: database,
-        dialect: 'postgres',
-        logging: env.DB_LOGGING,
+        ...commonOptions,
       });
     }
   }

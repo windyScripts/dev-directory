@@ -4,12 +4,12 @@ const { cleanEnv, str } = require('envalid');
 require('dotenv-flow').config();
 
 const env = cleanEnv(process.env, {
-  DATABASE_URL: str(),
+  DB_PORT: str(),
+  DB_USER: str(),
   DB_HOST: str(),
   DB_NAME: str(),
-  DB_USER: str(),
   DB_PASSWORD: str(),
-  DB_PORT: str(),
+  DATABASE_URL: str(),
 });
 
 const dialectOptions = env.isProd ? {
