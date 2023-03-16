@@ -38,8 +38,9 @@
     "server/**/*",
     "client/**/*",
     "shared/**/*",
-    "pages/**/*"
-, "cypress"  ],
+    "pages/**/*",
+    "cypress"  
+  ],
   "exclude": [
     "node_modules"
   ]
