@@ -30,7 +30,7 @@ const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
       <Container className="flex flex-col gap-4 pt-20 items-center">
         <Box component="header">
           <Typography variant="h1" className="text-5xl font-700 text-center">
-            {possessiveForm(user.discord_name || 'username')} Profile
+            {possessiveForm(user.discord_name)} Profile
           </Typography>
         </Box>
 
