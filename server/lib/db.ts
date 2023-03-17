@@ -1,6 +1,6 @@
 import 'dotenv-flow/config';
 import { cleanEnv, str, num, bool } from 'envalid';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Dialect  } from 'sequelize';
 
 import log from './log';
 
@@ -11,6 +11,7 @@ const env = cleanEnv(process.env, {
   DB_PASSWORD: str(),
   DB_PORT: num(),
   DB_LOGGING: bool({ default: false }),
+  DATABASE_URL: str()
 });
 
 const dialectOptions = env.isProd ? {
@@ -18,6 +19,11 @@ const dialectOptions = env.isProd ? {
     rejectUnauthorized: false,
   },
 } : undefined;
+
+const commonOptions = {
+  dialect: 'postgres' as Dialect,
+  logging: env.DB_LOGGING,
+};
 
 // Database object modeling mongoDB data
 export class Database {
@@ -27,16 +33,21 @@ export class Database {
   constructor(database = env.DB_NAME) {
     this.dbName = database;
 
-    this.sequelize = new Sequelize({
-      port: env.DB_PORT,
-      username: env.DB_USER,
-      password: env.DB_PASSWORD,
-      host: env.DB_HOST,
-      database: database,
-      dialectOptions,
-      dialect: 'postgres',
-      logging: env.DB_LOGGING,
-    });
+    if (env.isProd) {
+      this.sequelize = new Sequelize(env.DATABASE_URL, {
+        dialectOptions,
+        ...commonOptions,
+      });
+    } else {
+      this.sequelize = new Sequelize({
+        port: env.DB_PORT,
+        username: env.DB_USER,
+        password: env.DB_PASSWORD,
+        host: env.DB_HOST,
+        database: database,
+        ...commonOptions,
+      });
+    }
   }
 
   // Connect to the postgres db
