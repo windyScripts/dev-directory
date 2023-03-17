@@ -13,7 +13,7 @@ const env = cleanEnv(process.env, {
   DISCORD_GUILD_ID: str(),
 });
 
-function mockDiscord(user: Partial<DiscordOauth2.User>, isValid = true ) {
+function mockDiscord(user: Partial<DiscordOauth2.User>, isValid = true) {
   return jest.spyOn(authLib, 'getDiscordUserAndGuilds').mockResolvedValueOnce({
     user: user as DiscordOauth2.User,
     guilds: [
