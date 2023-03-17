@@ -9,6 +9,7 @@ const env = cleanEnv(process.env, {
   DB_HOST: str(),
   DB_NAME: str(),
   DB_PASSWORD: str(),
+  DATABASE_URL: str(),
 });
 
 const dialectOptions = env.isProd ? {
