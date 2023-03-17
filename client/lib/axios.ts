@@ -4,10 +4,8 @@ import axios from 'axios';
 import absoluteUrl from 'next-absolute-url';
 
 export const createAxiosInstance = (req: IncomingMessage | null = null) => {
-  const origin = absoluteUrl(req).origin;
-
   return axios.create({
-    baseURL: origin,
+    baseURL: absoluteUrl(req).origin,
     withCredentials: true,
     headers: {
       cookie: req.headers.cookie || '',
