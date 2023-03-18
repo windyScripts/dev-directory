@@ -72,4 +72,49 @@ describe('auth router', () => {
       });
     });
   });
+
+  describe('PATCH /:id', () => {
+    it('returns 404 if specified user doesn\'t exist', async () => {
+      const res = await server.exec.patch('/api/users/03402');
+      expect(res.status).toBe(404);
+    });
+
+    it('updates the specified user', async () => {
+      const user = await User.create({
+        email: randEmail(),
+        discord_user_id: randNumber().toString(),
+        discord_name: `${randUserName()}#${randNumber()}`,
+        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
+        twitter_username: randUserName(),
+        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
+        github_username: randUserName(),
+        website: 'https://leonnoel.com/',
+      });
+
+      const fieldsToUpdate = {
+        bio: 'I was updated.',
+        twitter_username: 'Updated@updated',
+        linkedin_url: 'updated',
+        github_username: 'gotUpdated',
+        website: 'https://thiswasupdated.com/',
+      };
+
+      const res = await server.exec.patch(`/api/users/${user.id}`).send(fieldsToUpdate);
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(`User of id ${user.id} updated.`);
+
+      const updatedUser = await server.exec.get(`/api/users/${user.id}`);
+      expect(updatedUser.status).toBe(200);
+      expect(updatedUser.body).toEqual({
+        id: user.id,
+        discord_user_id: user.discord_user_id,
+        discord_name: user.discord_name,
+        bio: 'I was updated.',
+        twitter_username: 'Updated@updated',
+        linkedin_url: 'updated',
+        github_username: 'gotUpdated',
+        website: 'https://thiswasupdated.com/',
+      });
+    });
+  });
 });
