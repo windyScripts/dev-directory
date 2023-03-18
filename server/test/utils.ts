@@ -1,5 +1,7 @@
 import { rand, randEmail, randNumber, randUserName, randQuote, randBrand } from '@ngneat/falso';
 
+import { User } from 'server/models';
+
 // user interface
 interface UserObject {
   email?: string;
@@ -58,7 +60,7 @@ function randWebsite() {
 }
 
 // await createUser({ discord_name: "poop#1234", bio: "i like poop" })
-function createUser({
+async function createUser({
   email,
   discord_user_id,
   discord_name,
@@ -70,6 +72,7 @@ function createUser({
 }: UserObject = {}) {
   // build object
   // check which properties are includes
+  // 20% chance at empty values
   const userObject = {
     email: email ?? randomEmptyChance(20, randEmail()),
     discord_user_id:
@@ -81,16 +84,11 @@ function createUser({
     github_username: github_username ?? randomEmptyChance(20, randUserNameHandle()),
     website: website ?? randomEmptyChance(20, randWebsite()),
   };
-  // 20% empty values
-  // returns object
 
-  return userObject;
+  // insert into DB after creation
+  const user = await User.create(userObject);
+
+  return user;
 }
-
-// insert into the database
-// returns the object after inserting into the database
-
-console.log(createUser());
-// console.log(createUser());
 
 export default createUser;
