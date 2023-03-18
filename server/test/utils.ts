@@ -51,7 +51,7 @@ function randWebsite() {
   const scheme = rand(['https', 'http']);
   const wwwPart = rand(['www.', '']);
   const regex = new RegExp('[\\W]', 'g');
-  const host = randBrand().replace(regex);
+  const host = randBrand().replace(regex, '');
   const tld = rand(['com', 'gg', 'dev', 'org', 'net', 'me', 'io', 'us', 'info']);
 
   return `${scheme}://${wwwPart}${host}.${tld}`;
