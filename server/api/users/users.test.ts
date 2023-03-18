@@ -74,8 +74,13 @@ describe('auth router', () => {
   });
 
   describe('PATCH /:id', () => {
+    it('returns 403 if profile id is not equal to logged in user id', async () => {
+      const res = await server.exec.patch('/api/users/54321').send({});
+      expect(res.status).toBe(403);
+    });
+
     it('returns 404 if specified user doesn\'t exist', async () => {
-      const res = await server.exec.patch('/api/users/03402');
+      const res = await server.exec.patch('/api/users/1');
       expect(res.status).toBe(404);
     });
 
@@ -91,6 +96,8 @@ describe('auth router', () => {
         website: 'https://leonnoel.com/',
       });
 
+      server.login(user);
+
       const fieldsToUpdate = {
         bio: 'I was updated.',
         twitter_username: 'Updated@updated',
@@ -99,11 +106,11 @@ describe('auth router', () => {
         website: 'https://thiswasupdated.com/',
       };
 
-      const res = await server.exec.patch(`/api/users/${user.id}`).send(fieldsToUpdate);
+      const res = await server.exec.patch(`/api/users/${server.loggedInUser.dataValues.id}`).send(fieldsToUpdate);
       expect(res.status).toBe(200);
-      expect(res.body).toEqual(`User of id ${user.id} updated.`);
+      expect(res.body).toEqual(`User of id ${server.loggedInUser.dataValues.id} updated.`);
 
-      const updatedUser = await server.exec.get(`/api/users/${user.id}`);
+      const updatedUser = await server.exec.get(`/api/users/${server.loggedInUser.dataValues.id}`);
       expect(updatedUser.status).toBe(200);
       expect(updatedUser.body).toEqual({
         id: user.id,

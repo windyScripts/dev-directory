@@ -11,6 +11,6 @@ userRouter.get('/', requireUser, getCurrentUser);
 
 userRouter.get('/:id', getUserById);
 
-userRouter.patch('/:id', updateUserById);
+userRouter.patch('/:id', requireUser, updateUserById);
 
 export default userRouter;

@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { NotFoundError } from 'express-response-errors';
+import { ForbiddenError, NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
 import { User } from 'server/models';
@@ -26,6 +26,12 @@ type UserProfile = Pick<User, 'id'
   | 'github_username'
   | 'website'>
 
+type UpdatableFields = Pick<User, 'bio'
+  | 'twitter_username'
+  | 'linkedin_url'
+  | 'github_username'
+  | 'website'>
+
 export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, {
     attributes: [
@@ -47,7 +53,11 @@ export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (r
   res.json(user);
 };
 
-export const updateUserById: RequestHandler<{ id: string }, string, UserProfile> = async (req, res) => {
+export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
+  if (req.user.dataValues.id.toString() !== req.params.id) {
+    throw new ForbiddenError('User can only update their own profile');
+  }
+
   const updated = await User.update(req.body, {
     where: {
       id: req.params.id,
