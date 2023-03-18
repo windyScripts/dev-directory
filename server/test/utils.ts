@@ -12,8 +12,17 @@ interface UserObject {
   website?: string;
 }
 
+// https://stackoverflow.com/questions/39494689/is-it-possible-to-restrict-number-to-a-certain-range/39495173#39495173
+// Tim's fault for telling me this is possible
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>;
+
+type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>;
+
 // random
-function randomEmptyChance(probability: number, preferredResult: number | string) {
+// probability should only be 1 - 100
+function randomEmptyChance(probability: IntRange<0, 100>, preferredResult: string) {
   // out of a 100
   const randomNum = Math.random() * 100;
   return randomNum < probability ? '' : preferredResult;
@@ -64,7 +73,7 @@ function createUser({
   const userObject = {
     email: email ?? randomEmptyChance(20, randEmail()),
     discord_user_id:
-      discord_user_id ?? randomEmptyChance(20, randNumber({ min: 1e16, max: 1e18 - 1 })),
+      discord_user_id ?? randomEmptyChance(20, String(randNumber({ min: 1e16, max: 1e18 - 1 }))),
     discord_name: discord_name ?? randomEmptyChance(20, randDiscordUserName()),
     bio: bio ?? randomEmptyChance(20, randQuote()),
     twitter_username: twitter_username ?? randomEmptyChance(20, randUserNameHandle()),
