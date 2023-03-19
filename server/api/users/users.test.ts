@@ -75,7 +75,7 @@ describe('auth router', () => {
 
   describe('PATCH /:id', () => {
     it('returns 403 if profile id is not equal to logged in user id', async () => {
-      const res = await server.exec.patch('/api/users/54321').send({});
+      const res = await server.exec.patch('/api/users/54321');
       expect(res.status).toBe(403);
     });
 

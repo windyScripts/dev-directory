@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
-import { ForbiddenError, NotFoundError } from 'express-response-errors';
-//import DOMpurify from 'isomorphic-dompurify';
+import { NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
 import { User } from 'server/models';
@@ -57,11 +56,24 @@ export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (r
 };
 
 export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
-  if (req.user.dataValues.id.toString() !== req.params.id) {
-    throw new ForbiddenError('User can only update their own profile');
-  }
 
-  const updated = await User.update(req.body, {
+  const acceptableFields = [
+    'bio',
+    'twitter_username',
+    'linkedin_url',
+    'github_username',
+    'website',
+  ];
+
+  const toUpdate: UpdatableFields = {};
+
+  acceptableFields.forEach((field) => {
+    if (field in req.body) {
+      toUpdate[field as keyof UpdatableFields] = req.body[field as keyof UpdatableFields];
+    }
+  });
+
+  const updated = await User.update(toUpdate, {
     where: {
       id: req.params.id,
     },
