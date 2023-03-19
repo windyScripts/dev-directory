@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { ForbiddenError, NotFoundError } from 'express-response-errors';
+//import DOMpurify from 'isomorphic-dompurify';
 import _ from 'lodash';
 
 import { User } from 'server/models';
@@ -26,11 +27,13 @@ type UserProfile = Pick<User, 'id'
   | 'github_username'
   | 'website'>
 
-type UpdatableFields = Pick<User, 'bio'
-  | 'twitter_username'
-  | 'linkedin_url'
-  | 'github_username'
-  | 'website'>
+interface UpdatableFields {
+  bio?: string;
+  twitter_username?: string;
+  linkedin_url?: string;
+  github_username?: string;
+  webiste?: string;
+}
 
 export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, {
