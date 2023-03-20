@@ -44,7 +44,7 @@ const Index: NextPage<Props> = (props) => {
 Index.getInitialProps = async ({ req }) => {
   try {
     const axios = createAxiosInstance(req);
-    await axios.get(`${origin}/api/users/`);
+    await axios.get('/api/users/');
 
     return { isAuthed: true };
   } catch (error) {
