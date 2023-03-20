@@ -22,7 +22,7 @@ function randomEmptyChance(probability: IntRange<0, 100>, preferredResult: strin
   return randomNum < probability ? '' : preferredResult;
 }
 
-function randDiscordUserName() {
+function getRandDiscordUserName() {
   return `${randUserName({})}#${String(
     randNumber({
       min: 0,
@@ -35,7 +35,7 @@ function randUserNameHandle() {
   return `@${randUserName({})}`;
 }
 
-function randLinkedInURL() {
+function getRandLinkedInURL() {
   return `https://www.linkedin.com/in/${randUserName()}/`;
 }
 
@@ -67,10 +67,10 @@ async function createUser({
     email: email ?? randomEmptyChance(20, randEmail()),
     discord_user_id:
       discord_user_id ?? randomEmptyChance(20, String(randNumber({ min: 1e16, max: 1e18 - 1 }))),
-    discord_name: discord_name ?? randomEmptyChance(20, randDiscordUserName()),
+    discord_name: discord_name ?? randomEmptyChance(20, getRandDiscordUserName()),
     bio: bio ?? randomEmptyChance(20, randQuote()),
     twitter_username: twitter_username ?? randomEmptyChance(20, randUserNameHandle()),
-    linkedin_url: linkedin_url ?? randomEmptyChance(20, randLinkedInURL()),
+    linkedin_url: linkedin_url ?? randomEmptyChance(20, getRandLinkedInURL()),
     github_username: github_username ?? randomEmptyChance(20, randUserNameHandle()),
     website: website ?? randomEmptyChance(20, randWebsite()),
   };
