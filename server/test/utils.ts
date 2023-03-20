@@ -1,6 +1,7 @@
 import { rand, randEmail, randNumber, randUserName, randQuote, randBrand } from '@ngneat/falso';
 
 import { User } from 'server/models';
+import type { IntRange } from 'server/types/utils';
 
 interface UserObject {
   email?: string;
@@ -12,14 +13,6 @@ interface UserObject {
   github_username?: string;
   website?: string;
 }
-
-// https://stackoverflow.com/questions/39494689/is-it-possible-to-restrict-number-to-a-certain-range/39495173#39495173
-// Tim's fault for telling me this is possible
-type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
-  ? Acc[number]
-  : Enumerate<N, [...Acc, Acc['length']]>;
-
-type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>;
 
 // random
 // probability should only be 1 - 100
