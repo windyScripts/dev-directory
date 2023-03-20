@@ -3,17 +3,6 @@ import { rand, randEmail, randNumber, randUserName, randQuote, randBrand } from 
 import { User } from 'server/models';
 import type { IntRange } from 'server/types/utils';
 
-interface UserObject {
-  email?: string;
-  discord_user_id?: string;
-  discord_name?: string;
-  bio?: string;
-  twitter_username?: string;
-  linkedin_url?: string;
-  github_username?: string;
-  website?: string;
-}
-
 // random
 // probability should only be 1 - 100
 export function randomEmptyChance(probability: IntRange<0, 100>, preferredResult: string) {
@@ -45,6 +34,17 @@ function randWebsite() {
   return `${scheme}://${wwwPart}${host}.${tld}`;
 }
 
+interface UserObject {
+  email: string;
+  discord_user_id: string;
+  discord_name: string;
+  bio: string;
+  twitter_username: string;
+  linkedin_url: string;
+  github_username: string;
+  website: string;
+}
+
 // await createUser({ discord_name: "poop#1234", bio: "i like poop" })
 async function createUser({
   email,
@@ -55,7 +55,7 @@ async function createUser({
   linkedin_url,
   github_username,
   website,
-}: UserObject = {}) {
+}: Partial<UserObject> = {}) {
   // build object
   // check which properties are included
   // 20% chance at empty values
