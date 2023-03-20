@@ -60,9 +60,8 @@ async function createUser({
   // check which properties are included
   // 20% chance at empty values
   const userObject = {
-    email: email ?? randomEmptyChance(20, randEmail()),
-    discord_user_id:
-      discord_user_id ?? randomEmptyChance(20, String(randNumber({ min: 1e16, max: 1e18 - 1 }))),
+    email: email ?? randEmail(),
+    discord_user_id: discord_user_id ?? String(randNumber({ min: 1e16, max: 1e18 - 1 })),
     discord_name: discord_name ?? randomEmptyChance(20, getRandomDiscordUserName()),
     bio: bio ?? randomEmptyChance(20, randQuote()),
     twitter_username: twitter_username ?? randomEmptyChance(20, randUserName()),
