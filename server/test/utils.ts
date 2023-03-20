@@ -2,7 +2,6 @@ import { rand, randEmail, randNumber, randUserName, randQuote, randBrand } from 
 
 import { User } from 'server/models';
 
-// user interface
 interface UserObject {
   email?: string;
   discord_user_id?: string;
@@ -30,14 +29,12 @@ function randomEmptyChance(probability: IntRange<0, 100>, preferredResult: strin
   return randomNum < probability ? '' : preferredResult;
 }
 
-// example
-
 function randDiscordUserName() {
   return `${randUserName({})}#${String(
     randNumber({
       min: 0,
       max: 9999,
-    })
+    }),
   ).padStart(4, '0')}`;
 }
 
@@ -71,7 +68,7 @@ async function createUser({
   website,
 }: UserObject = {}) {
   // build object
-  // check which properties are includes
+  // check which properties are included
   // 20% chance at empty values
   const userObject = {
     email: email ?? randomEmptyChance(20, randEmail()),
