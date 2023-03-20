@@ -22,13 +22,13 @@ export function randomEmptyChance(probability: IntRange<0, 100>, preferredResult
   return randomNum < probability ? '' : preferredResult;
 }
 
+function getRandomDiscriminator() {
+  const range = { min: 0, max: 9999 };
+  return `#${String(randNumber(range)).padStart(4, '0')}`;
+}
+
 function getRandDiscordUserName() {
-  return `${randUserName({})}#${String(
-    randNumber({
-      min: 0,
-      max: 9999,
-    }),
-  ).padStart(4, '0')}`;
+  return `${randUserName({})}${getRandomDiscriminator()}`;
 }
 
 function randUserNameHandle() {
