@@ -31,10 +31,6 @@ function getRandomDiscordUserName() {
   return `${randUserName({})}${getRandomDiscriminator()}`;
 }
 
-function randUserNameHandle() {
-  return `@${randUserName({})}`;
-}
-
 function getRandomLinkedInURL() {
   return `https://www.linkedin.com/in/${randUserName()}/`;
 }
@@ -69,9 +65,9 @@ async function createUser({
       discord_user_id ?? randomEmptyChance(20, String(randNumber({ min: 1e16, max: 1e18 - 1 }))),
     discord_name: discord_name ?? randomEmptyChance(20, getRandomDiscordUserName()),
     bio: bio ?? randomEmptyChance(20, randQuote()),
-    twitter_username: twitter_username ?? randomEmptyChance(20, randUserNameHandle()),
+    twitter_username: twitter_username ?? randomEmptyChance(20, randUserName()),
     linkedin_url: linkedin_url ?? randomEmptyChance(20, getRandomLinkedInURL()),
-    github_username: github_username ?? randomEmptyChance(20, randUserNameHandle()),
+    github_username: github_username ?? randomEmptyChance(20, randUserName()),
     website: website ?? randomEmptyChance(20, randWebsite()),
   };
 
