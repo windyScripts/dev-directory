@@ -8,7 +8,7 @@ export const createAxiosInstance = (req: IncomingMessage | null = null) => {
     baseURL: absoluteUrl(req).origin,
     withCredentials: true,
     headers: {
-      cookie: req.headers.cookie || '',
+      cookie: req?.headers.cookie || '',
     },
   });
 };
