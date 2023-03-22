@@ -101,7 +101,7 @@ To get started,
 * Execute npm run cypress:open
 * Select E2E testing
 * Choose a browser
-* run the requisite test from the list.
+* run the requisite test spec from the list.
 
 
 ## Deployment
