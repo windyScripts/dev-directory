@@ -98,7 +98,7 @@ const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
   );
 };
 
-ProfilePage.getInitialProps = async ({ req, res, query }: NextPageContext): Promise<Props> => {
+ProfilePage.getInitialProps = async ({ req, res, query }: NextPageContext) => {
   const props: Props = {
     user: null,
     statusCode: 200,
