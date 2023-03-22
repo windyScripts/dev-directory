@@ -93,6 +93,17 @@ You can run in [watch mode](https://jestjs.io/docs/cli#--watch), which is useful
 npm run test:watch -- auth.test.ts
 ```
 
+### UI Testing
+
+We use [cypress](https://docs.cypress.io/guides/overview/why-cypress) for UI testing. Cypress requires the app to be running for testing.
+
+To get started,
+* Execute npm run cypress:open
+* Select E2E testing
+* Choose a browser
+* run the requisite test from the list.
+
+
 ## Deployment
 
 We have a CI/CD pipeline that will automatically deploy to a staging app on Heroku. The flow is:
