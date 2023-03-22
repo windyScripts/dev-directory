@@ -103,7 +103,6 @@ To get started,
 * Choose a browser
 * run the requisite test spec from the list.
 
-
 ## Deployment
 
 We have a CI/CD pipeline that will automatically deploy to a staging app on Heroku. The flow is:
