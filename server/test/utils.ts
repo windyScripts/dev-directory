@@ -1,4 +1,4 @@
-import { rand, randEmail, randNumber, randUserName, randQuote, randBrand } from '@ngneat/falso';
+import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
 
 import { User } from 'server/models';
 import type { IntRange } from 'server/types/utils';
@@ -22,16 +22,6 @@ function getRandomDiscordUserName() {
 
 function getRandomLinkedInURL() {
   return `https://www.linkedin.com/in/${randUserName()}/`;
-}
-
-function randWebsite() {
-  const scheme = rand(['https', 'http']);
-  const wwwPart = rand(['www.', '']);
-  const regex = new RegExp('[\\W]', 'g');
-  const host = randBrand().replace(regex, '');
-  const tld = rand(['com', 'gg', 'dev', 'org', 'net', 'me', 'io', 'us', 'info']);
-
-  return `${scheme}://${wwwPart}${host}.${tld}`;
 }
 
 interface UserObject {
@@ -67,7 +57,7 @@ async function createUser({
     twitter_username: twitter_username ?? randomEmptyChance(20, randUserName()),
     linkedin_url: linkedin_url ?? randomEmptyChance(20, getRandomLinkedInURL()),
     github_username: github_username ?? randomEmptyChance(20, randUserName()),
-    website: website ?? randomEmptyChance(20, randWebsite()),
+    website: website ?? randomEmptyChance(20, randUrl()),
   };
 
   // insert into DB after creation
