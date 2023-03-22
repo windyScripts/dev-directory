@@ -98,7 +98,7 @@ npm run test:watch -- auth.test.ts
 We use [cypress](https://docs.cypress.io/guides/overview/why-cypress) for UI testing. Cypress requires the app to be running for testing.
 
 To get started,
-* Execute npm run cypress:open
+* Execute `npm run cypress:open`
 * Select E2E testing
 * Choose a browser
 * run the requisite test spec from the list.
