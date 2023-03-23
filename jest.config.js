@@ -25,6 +25,6 @@ module.exports = {
     './shared',
   ],
   modulePathIgnorePatterns: [
-    './client/tests/cypress',
+    './cypress',
   ],
 };
