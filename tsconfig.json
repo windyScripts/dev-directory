@@ -16,6 +16,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+      "jest"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -38,10 +41,11 @@
     "server/**/*",
     "client/**/*",
     "shared/**/*",
-    "pages/**/*",
-    "cypress"  
+    "pages/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "./cypress.config.ts",
+    "./cypress/**/*",
   ]
 }

@@ -2,12 +2,12 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    supportFile: './client/tests/cypress/support/e2e.ts',
-    specPattern:'./client/tests/cypress/e2e',
+    supportFile: './cypress/support/e2e.ts',
+    specPattern:'./cypress/e2e',
   },
-  fixturesFolder: './client/tests/cypress/fixtures',
-  screenshotsFolder: './client/tests/cypress/screenshots',
-  videosFolder: './client/tests/cypress/videos',
-  downloadsFolder: './client/tests/cypress/downloads',
+  fixturesFolder: './cypress/fixtures',
+  screenshotsFolder: './cypress/screenshots',
+  videosFolder: './cypress/videos',
+  downloadsFolder: './cypress/downloads',
   fileServerFolder:'./',
 });
