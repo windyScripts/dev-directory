@@ -31,7 +31,7 @@ interface UpdatableFields {
   twitter_username?: string;
   linkedin_url?: string;
   github_username?: string;
-  webiste?: string;
+  website?: string;
 }
 
 export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
@@ -83,5 +83,5 @@ export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFie
     throw new NotFoundError('User not found');
   }
 
-  res.json(`User of id ${req.params.id} updated.`);
+  res.sendStatus(200);
 };

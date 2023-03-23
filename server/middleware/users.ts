@@ -4,7 +4,7 @@ import DOMpurify from 'isomorphic-dompurify';
 import { AnyRequestHandler } from 'server/types/express';
 
 export const requireSameId: AnyRequestHandler = async (req, res, next) => {
-  if (req.user.dataValues.id.toString() !== req.params.id) {
+  if (req.user.id.toString() !== req.params.id) {
     throw new ForbiddenError('User can only make changes to their own profile');
   }
 

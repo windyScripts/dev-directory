@@ -79,7 +79,7 @@ describe('auth router', () => {
       expect(res.status).toBe(403);
     });
 
-    it('returns 404 if specified user doesn\'t exist', async () => {
+    it('returns 404 if specified user doesn\'t exist in the database', async () => {
       const res = await server.exec.patch('/api/users/1');
       expect(res.status).toBe(404);
     });
@@ -106,11 +106,10 @@ describe('auth router', () => {
         website: 'https://thiswasupdated.com/',
       };
 
-      const res = await server.exec.patch(`/api/users/${server.loggedInUser.dataValues.id}`).send(fieldsToUpdate);
+      const res = await server.exec.patch(`/api/users/${user.id}`).send(fieldsToUpdate);
       expect(res.status).toBe(200);
-      expect(res.body).toEqual(`User of id ${server.loggedInUser.dataValues.id} updated.`);
 
-      const updatedUser = await server.exec.get(`/api/users/${server.loggedInUser.dataValues.id}`);
+      const updatedUser = await server.exec.get(`/api/users/${user.id}`);
       expect(updatedUser.status).toBe(200);
       expect(updatedUser.body).toEqual({
         id: user.id,
@@ -148,8 +147,6 @@ describe('auth router', () => {
 
       const res = await server.exec.patch(`/api/users/${server.loggedInUser.dataValues.id}`).send(fieldsToUpdate);
       expect(res.status).toBe(200);
-      expect(res.body).toEqual(`User of id ${server.loggedInUser.dataValues.id} updated.`);
-
       const updatedUser = await server.exec.get(`/api/users/${server.loggedInUser.dataValues.id}`);
       expect(updatedUser.status).toBe(200);
       expect(updatedUser.body).toEqual({
