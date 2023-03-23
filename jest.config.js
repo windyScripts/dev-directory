@@ -24,4 +24,7 @@ module.exports = {
     './server',
     './shared',
   ],
+  modulePathIgnorePatterns: [
+    './cypress',
+  ],
 };
