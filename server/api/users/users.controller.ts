@@ -3,6 +3,7 @@ import { NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
 import { User } from 'server/models';
+import { UserProfile } from 'server/types/User';
 
 type ClientUser = Pick<User, 'id' | 'discord_user_id'>
 
@@ -16,15 +17,6 @@ export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
 
   res.json(filteredUser);
 };
-
-type UserProfile = Pick<User, 'id'
-  | 'discord_user_id'
-  | 'discord_name'
-  | 'bio'
-  | 'twitter_username'
-  | 'linkedin_url'
-  | 'github_username'
-  | 'website'>
 
 interface UpdatableFields {
   bio?: string;

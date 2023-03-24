@@ -1,9 +1,8 @@
 import { Box, Button, Container, Typography } from '@mui/material';
-import axios, { RawAxiosRequestConfig } from 'axios';
 import { NextPage } from 'next';
-import absoluteUrl from 'next-absolute-url';
 import React from 'react';
 
+import createAxiosInstance from 'client/lib/axios';
 import { getDiscordOauthUrl } from 'client/lib/oauth';
 
 interface Props {
@@ -14,6 +13,7 @@ const Index: NextPage<Props> = (props) => {
   const [isAuthed, setIsAuthed] = React.useState(props.isAuthed);
 
   const onLogout = async () => {
+    const axios = createAxiosInstance();
     await axios.post('/api/auth/logout');
     setIsAuthed(false);
   };
@@ -42,18 +42,12 @@ const Index: NextPage<Props> = (props) => {
 };
 
 Index.getInitialProps = async ({ req }) => {
-  const { origin } = absoluteUrl(req);
   try {
-    const config: RawAxiosRequestConfig = req ? {
-      withCredentials: true,
-      headers: {
-        cookie: req.headers.cookie,
-      },
-    } : {};
-    await axios.get(`${origin}/api/users/`, config);
+    const axios = createAxiosInstance(req);
+    await axios.get('/api/users/');
+
     return { isAuthed: true };
-  } catch (err) {
-    // an error likely means a 401 was thrown
+  } catch (error) {
     return { isAuthed: false };
   }
 };
