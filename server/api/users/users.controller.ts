@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { NotFoundError } from 'express-response-errors';
+import { BadRequestError, NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
 import { User } from 'server/models';
@@ -48,6 +48,10 @@ export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (r
 };
 
 export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
+
+  if (Object.keys(req.body).length === 0) {
+    throw new BadRequestError('Request body should not be an empty object.');
+  }
 
   const acceptableFields = [
     'bio',

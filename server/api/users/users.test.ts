@@ -67,8 +67,41 @@ describe('auth router', () => {
       expect(res.status).toBe(403);
     });
 
+    it('returns 400 if request body is empty object', async () => {
+      const user = await User.create({
+        email: randEmail(),
+        discord_user_id: randNumber().toString(),
+        discord_name: `${randUserName()}#${randNumber()}`,
+        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
+        twitter_username: randUserName(),
+        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
+        github_username: randUserName(),
+        website: 'https://leonnoel.com/',
+      });
+
+      server.login(user);
+
+      const res = await server.exec.patch(`/api/users/${user.id}`).send({});
+      expect(res.status).toBe(400);
+    });
+
     it('returns 404 if specified user doesn\'t exist in the database', async () => {
-      const res = await server.exec.patch('/api/users/1');
+      const user = await User.create({
+        email: randEmail(),
+        discord_user_id: randNumber().toString(),
+        discord_name: `${randUserName()}#${randNumber()}`,
+        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
+        twitter_username: randUserName(),
+        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
+        github_username: randUserName(),
+        website: 'https://leonnoel.com/',
+      });
+
+      server.login(user);
+
+      await User.destroy({ where:{ id: user.id }});
+
+      const res = await server.exec.patch(`/api/users/${user.id}`).send({ bio: 'test' });
       expect(res.status).toBe(404);
     });
 
