@@ -63,7 +63,7 @@ describe('auth router', () => {
 
       const cookiePayload = jwt.decode(cookie.value);
 
-      const createdUser = await User.findOne({ where: { discord_user_id: id } });
+      const createdUser = await User.findOne({ where: { discord_user_id: id }});
 
       // the cookie payload will contain extra things, so we just
       // want to make sure that it contains the same fields as user
@@ -89,8 +89,8 @@ describe('auth router', () => {
 
       expect(res.status).toBe(200);
 
-      const userWithOldEmail = await User.findOne({ where: { email: oldEmail } });
-      const userWithNewEmail = await User.findOne({ where: { email: newEmail } });
+      const userWithOldEmail = await User.findOne({ where: { email: oldEmail }});
+      const userWithNewEmail = await User.findOne({ where: { email: newEmail }});
       expect(userWithOldEmail).toBe(null);
       expect(userWithNewEmail.discord_user_id).toBe(id);
     });

@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography } from '@mui/material';
+import jwt from 'jsonwebtoken';
 import { NextPage } from 'next';
 import React from 'react';
-import jwt from 'jsonwebtoken';
 import Cookies from 'universal-cookie';
 
 import createAxiosInstance from 'client/lib/axios';
