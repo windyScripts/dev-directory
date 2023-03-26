@@ -1,5 +1,7 @@
+import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import createUser from 'server/test/utils';
+import { createUser, getExpectedUserObject } from 'server/test/utils';
+
 
 describe('auth router', () => {
   let server: TestServer;
@@ -24,16 +26,27 @@ describe('auth router', () => {
 
       const res = await server.exec.get(`/api/users/${user.id}`);
       expect(res.status).toBe(200);
-      expect(res.body).toEqual({
-        id: user.id,
-        discord_user_id: user.discord_user_id,
-        discord_name: user.discord_name,
-        bio: user.bio,
-        twitter_username: user.twitter_username,
-        linkedin_url: user.linkedin_url,
-        github_username: user.github_username,
-        website: user.website,
-      });
+      expect(res.body).toEqual(getExpectedUserObject(user));
+      // Delete the user that was created
+      await User.destroy({ where: {}});
+    });
+  });
+
+  describe('GET /', () => {
+    it('returns 404 if specified no users exist', async () => {
+      const res = await server.exec.get('/api/users/');
+      expect(res.status).toBe(404);
+    });
+
+    it('returns the specified user', async () => {
+      const userOne = await createUser();
+      const userTwo = await createUser();
+
+
+      const res = await server.exec.get('/api/users/');
+      expect(res.status).toBe(200);
+      expect(res.body[0]).toEqual(getExpectedUserObject(userOne));
+      expect(res.body[1]).toEqual(getExpectedUserObject(userTwo));
     });
   });
 });

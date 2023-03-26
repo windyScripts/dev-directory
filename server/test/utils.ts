@@ -35,6 +35,7 @@ interface UserObject {
   website: string;
 }
 
+
 // await createUser({ discord_name: "poop#1234", bio: "i like poop" })
 async function createUser({
   email,
@@ -66,4 +67,20 @@ async function createUser({
   return user;
 }
 
-export default createUser;
+function getExpectedUserObject(user: User) {
+  return {
+    id: user.id,
+    discord_user_id: user.discord_user_id,
+    discord_name: user.discord_name,
+    bio: user.bio,
+    twitter_username: user.twitter_username,
+    linkedin_url: user.linkedin_url,
+    github_username: user.github_username,
+    website: user.website,
+  } as User;
+}
+
+export {
+  createUser,
+  getExpectedUserObject,
+};

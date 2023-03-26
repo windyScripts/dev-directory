@@ -38,3 +38,24 @@ export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req
 
   res.json(user);
 };
+
+export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
+  const users = await User.findAll({
+    attributes: [
+      'id',
+      'discord_user_id',
+      'discord_name',
+      'bio',
+      'twitter_username',
+      'linkedin_url',
+      'github_username',
+      'website',
+    ],
+  });
+
+  if (users.length === 0) {
+    throw new NotFoundError('No Users found');
+  }
+
+  res.json(users);
+};
