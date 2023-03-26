@@ -11,7 +11,7 @@ const env = cleanEnv(process.env, {
   DB_PASSWORD: str(),
   DB_PORT: num(),
   DB_LOGGING: bool({ default: false }),
-  DATABASE_URL: str()
+  DATABASE_URL: str(),
 });
 
 const dialectOptions = env.isProd ? {
