@@ -8,8 +8,6 @@ import { getCurrentUser, getUserById, updateUserById } from './users.controller'
 
 const userRouter = AsyncRouter();
 
-userRouter.get('/', requireUser, getCurrentUser);
-
 userRouter.get('/:id', getUserById);
 
 userRouter.patch('/:id', requireUser, requireSameId, sanitize, updateUserById);
