@@ -23,6 +23,10 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     'quote-props': ['error', 'as-needed'],
     'eol-last': ['error', 'always'],
+    'comma-style': ['error', 'last'],
+    'array-bracket-spacing': ['error', 'never'],
+    'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
+    'space-in-parens': ['error', 'never'],
     'import/order': [
       'error',
       {

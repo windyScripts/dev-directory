@@ -1,10 +1,9 @@
 import { AsyncRouter } from 'express-async-router';
 
-import { requireUser } from 'server/middleware/auth';
+import { getUserById } from './users.controller';
 
-import { getCurrentUser } from './users.controller';
 const userRouter = AsyncRouter();
 
-userRouter.get('/', requireUser, getCurrentUser);
+userRouter.get('/:id', getUserById);
 
 export default userRouter;

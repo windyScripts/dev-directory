@@ -7,18 +7,17 @@ import setCookie, { Cookie } from 'set-cookie-parser';
 import * as authLib from 'server/lib/auth';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
+import createUser from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 const env = cleanEnv(process.env, {
   DISCORD_GUILD_ID: str(),
 });
 
-function mockDiscord(user: Partial<DiscordOauth2.User>, isValid = true ) {
+function mockDiscord(user: Partial<DiscordOauth2.User>, isValid = true) {
   return jest.spyOn(authLib, 'getDiscordUserAndGuilds').mockResolvedValueOnce({
     user: user as DiscordOauth2.User,
-    guilds: [
-      { id: isValid ? env.DISCORD_GUILD_ID : '12345' } as DiscordOauth2.PartialGuild,
-    ],
+    guilds: [{ id: isValid ? env.DISCORD_GUILD_ID : '12345' } as DiscordOauth2.PartialGuild],
   });
 }
 
@@ -36,8 +35,7 @@ describe('auth router', () => {
 
   describe('POST /login', () => {
     it('should error if no code was provided', async () => {
-      const res = await server.exec.post('/api/auth/login')
-        .send({ code: '' });
+      const res = await server.exec.post('/api/auth/login').send({ code: '' });
       expect(res.status).toBe(400);
     });
 
@@ -51,8 +49,7 @@ describe('auth router', () => {
       });
 
       const code = 'some_valid_code';
-      const res = await server.exec.post('/api/auth/login')
-        .send({ code });
+      const res = await server.exec.post('/api/auth/login').send({ code });
 
       expect(res.status).toBe(200);
 
@@ -62,7 +59,7 @@ describe('auth router', () => {
       const cookies: Cookie[] = res.headers['set-cookie']
         .map(setCookie.parse)
         .map((arr: Cookie[]) => arr[0]);
-      const cookie = cookies.find(cookie => cookie.name === AUTH_COOKIE_NAME);
+      const cookie = cookies.find((cookie) => cookie.name === AUTH_COOKIE_NAME);
 
       const cookiePayload = jwt.decode(cookie.value);
 
@@ -75,16 +72,12 @@ describe('auth router', () => {
     });
 
     it('should not re-create a user, but update their email if it has changed', async () => {
-      const id = String(Math.random());
-      const name = randUserName();
-      const oldEmail = randEmail();
-      const newEmail = randEmail();
+      const user = await createUser();
 
-      await User.create({
-        discord_user_id: id,
-        discord_name: name,
-        email: oldEmail,
-      });
+      const id = user.discord_user_id;
+      const name = user.discord_name;
+      const oldEmail = user.email;
+      const newEmail = randEmail();
 
       mockDiscord({
         id,
@@ -92,8 +85,7 @@ describe('auth router', () => {
         username: name,
       });
 
-      const res = await server.exec.post('/api/auth/login')
-        .send({ code: 'some_valid_code' });
+      const res = await server.exec.post('/api/auth/login').send({ code: 'some_valid_code' });
 
       expect(res.status).toBe(200);
 
@@ -104,13 +96,15 @@ describe('auth router', () => {
     });
 
     it('should error if the discord user is not a part of 100devs', async () => {
-      mockDiscord({
-        id: String(Math.random()),
-        email: randEmail(),
-      }, false);
+      mockDiscord(
+        {
+          id: String(Math.random()),
+          email: randEmail(),
+        },
+        false,
+      );
 
-      const res = await server.exec.post('/api/auth/login')
-        .send({ code: 'some_valid_code' });
+      const res = await server.exec.post('/api/auth/login').send({ code: 'some_valid_code' });
 
       expect(res.status).toBe(400);
     });
