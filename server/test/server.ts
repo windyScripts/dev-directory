@@ -11,8 +11,6 @@ import { Database } from 'server/lib/db';
 import { User } from 'server/models';
 import Server from 'server/server';
 
-
-
 const env = cleanEnv(process.env, {
   DB_NAME: str(),
   DB_USER: str(),
