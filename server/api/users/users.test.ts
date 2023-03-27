@@ -1,5 +1,3 @@
-import { randEmail, randNumber, randUserName } from '@ngneat/falso';
-
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
 import createUser from 'server/test/utils';
@@ -68,16 +66,7 @@ describe('auth router', () => {
     });
 
     it('returns 400 if request body is empty object', async () => {
-      const user = await User.create({
-        email: randEmail(),
-        discord_user_id: randNumber().toString(),
-        discord_name: `${randUserName()}#${randNumber()}`,
-        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
-        twitter_username: randUserName(),
-        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
-        github_username: randUserName(),
-        website: 'https://leonnoel.com/',
-      });
+      const user = await createUser();
 
       server.login(user);
 
@@ -86,16 +75,7 @@ describe('auth router', () => {
     });
 
     it('returns 404 if specified user doesn\'t exist in the database', async () => {
-      const user = await User.create({
-        email: randEmail(),
-        discord_user_id: randNumber().toString(),
-        discord_name: `${randUserName()}#${randNumber()}`,
-        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
-        twitter_username: randUserName(),
-        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
-        github_username: randUserName(),
-        website: 'https://leonnoel.com/',
-      });
+      const user = await createUser();
 
       server.login(user);
 
@@ -106,16 +86,7 @@ describe('auth router', () => {
     });
 
     it('updates the specified user', async () => {
-      const user = await User.create({
-        email: randEmail(),
-        discord_user_id: randNumber().toString(),
-        discord_name: `${randUserName()}#${randNumber()}`,
-        bio: 'I like to put cat pictures on Caleb\'s desktop & my owner owns nerdwallet',
-        twitter_username: randUserName(),
-        linkedin_url: `https://www.linkedin.com/in/${randUserName()}/`,
-        github_username: randUserName(),
-        website: 'https://leonnoel.com/',
-      });
+      const user = await createUser();
 
       server.login(user);
 
