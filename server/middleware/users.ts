@@ -1,5 +1,5 @@
 import { ForbiddenError } from 'express-response-errors';
-import DOMpurify from 'isomorphic-dompurify';
+import * as he from 'he';
 
 import { AnyRequestHandler } from 'server/types/express';
 
@@ -11,10 +11,12 @@ export const requireSameId: AnyRequestHandler = async (req, res, next) => {
   next();
 };
 
-export const removeMarkup: AnyRequestHandler = async (req, res, next) => {
+export const sanitize: AnyRequestHandler = async (req, res, next) => {
   const fields = Object.keys(req.body);
   fields.forEach((field) => {
-    req.body[field] = DOMpurify.sanitize(req.body[field]);
+    req.body[field] = he.encode(req.body[field], {
+      useNamedReferences: true,
+    });
   });
 
   next();
