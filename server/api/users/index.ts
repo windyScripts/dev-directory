@@ -3,7 +3,7 @@ import { AsyncRouter } from 'express-async-router';
 import { requireUser } from 'server/middleware/auth';
 import { requireSameId, sanitize } from 'server/middleware/users';
 
-import { getCurrentUser, getUserById, updateUserById } from './users.controller';
+import { getUserById, updateUserById } from './users.controller';
 
 
 const userRouter = AsyncRouter();
