@@ -34,8 +34,6 @@ DB_PASSWORD=password
 DISCORD_CLIENT_ID=bazbarfoobarbaz
 `;
 
-
-
 const fileWithKeyOutput = `# Secrets
 AUTH_SECRET=foobar
 
