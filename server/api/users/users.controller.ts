@@ -49,17 +49,22 @@ interface UpdatableFields {
 
 export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
 
-  if (Object.keys(req.body).length === 0) {
-    throw new BadRequestError('Request body should not be an empty object.');
-  }
-
-  const toUpdate = _.pick(req.body, [
+  const fieldsToUpdate = [
     'bio',
     'twitter_username',
     'linkedin_url',
     'github_username',
     'website',
-  ]);
+  ];
+
+  for (const field of fieldsToUpdate) {
+    if (field in req.body) {
+      break;
+    }
+    throw new BadRequestError('Request body should contain at least one updatable field.');
+  }
+
+  const toUpdate = _.pick(req.body, fieldsToUpdate);
 
   const updated = await User.update(toUpdate, {
     where: {

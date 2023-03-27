@@ -48,12 +48,12 @@ describe('auth router', () => {
       expect(res.status).toBe(403);
     });
 
-    it('returns 400 if request body is empty object', async () => {
+    it('returns 400 if request body does not contain any updatable fields', async () => {
       const user = await createUser();
 
       server.login(user);
 
-      const res = await server.exec.patch(`/api/users/${user.id}`).send({});
+      const res = await server.exec.patch(`/api/users/${user.id}`).send({ asdf: 'asdf' });
       expect(res.status).toBe(400);
     });
 
