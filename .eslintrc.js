@@ -41,6 +41,13 @@ module.exports = {
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'space-in-parens': ['error', 'never'],
 
+    // Newline padding rules
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'export' },
+      { blankLine: 'any', prev: 'export', next: 'export' },
+    ],
+
     // Import rules
     'import/newline-after-import': 'error',
     'import/order': ['error', {
