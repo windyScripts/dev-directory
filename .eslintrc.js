@@ -12,46 +12,64 @@ module.exports = {
     node: true,
   },
   rules: {
-    semi: ['error', 'always'],
-    'no-trailing-spaces': 'error',
+    // Basic rules
     indent: ['error', 2, { SwitchCase: 1 }],
-    'comma-dangle': ['error', 'always-multiline'],
-    quotes: ['error', 'single'],
     'max-len': ['warn', 120],
     'prefer-const': 'error',
+    semi: ['error', 'always'],
+
+    // Quote rules
+    quotes: ['error', 'single'],
+    'quote-props': ['error', 'as-needed'],
+
+    // TypeScript rules
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': 'error',
-    'quote-props': ['error', 'as-needed'],
-    'eol-last': ['error', 'always'],
+
+    // Comma rules
+    'comma-dangle': ['error', 'always-multiline'],
+    'comma-spacing': 'error',
     'comma-style': ['error', 'last'],
+
+    // End of file/trailing space rules
+    'eol-last': ['error', 'always'],
+    'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
+    'no-trailing-spaces': 'error',
+
+    // Brace/parenthesis spacing rules
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'space-in-parens': ['error', 'never'],
-    'import/order': [
+
+    // Newline padding rules
+    'padding-line-between-statements': [
       'error',
-      {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-          'object',
-        ],
-        'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: true },
-      },
+      { blankLine: 'always', prev: '*', next: 'export' },
+      { blankLine: 'any', prev: 'export', next: 'export' },
     ],
+
+    // Import rules
+    'import/newline-after-import': 'error',
+    'import/order': ['error', {
+      groups: [
+        'builtin',
+        'external',
+        'internal',
+        'parent',
+        'sibling',
+        'index',
+        'object',
+      ],
+      'newlines-between': 'always',
+      alphabetize: { order: 'asc', caseInsensitive: true },
+    }],
   },
-  overrides: [
-    {
-      files: ['server/migrations/*.js'],
-      rules: {
-        '@typescript-eslint/no-unused-vars': 0,
-      },
+  overrides: [{
+    files: ['server/migrations/*.js'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 0,
     },
-  ],
+  }],
   settings: {
     'import/resolver': {
       typescript: true,
@@ -62,3 +80,4 @@ module.exports = {
     },
   },
 };
+
