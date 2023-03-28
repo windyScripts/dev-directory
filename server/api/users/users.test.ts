@@ -6,7 +6,7 @@ import { createUser, getExpectedUserObject } from 'server/test/utils';
 describe('auth router', () => {
   let server: TestServer;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     server = new TestServer();
     await server.init();
   });
@@ -28,17 +28,17 @@ describe('auth router', () => {
       expect(res.status).toBe(200);
       expect(res.body).toEqual(getExpectedUserObject(user));
       // Delete the user that was created
-      await User.destroy({ where: {}});
+      //await User.destroy({ where: {}});
     });
   });
 
   describe('GET /', () => {
-    it('returns 404 if specified no users exist', async () => {
+    it('expects empty array if no users exist', async () => {
       const res = await server.exec.get('/api/users/');
-      expect(res.status).toBe(404);
+      expect(res.body).toStrictEqual([]);
     });
 
-    it('returns the specified user', async () => {
+    it('returns all users', async () => {
       const userOne = await createUser();
       const userTwo = await createUser();
 

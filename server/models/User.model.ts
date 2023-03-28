@@ -15,6 +15,19 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare linkedin_url: string;
   declare github_username: string;
   declare website: string;
+
+  public static get allowedFields() {
+    return [
+      'id',
+      'discord_user_id',
+      'discord_name',
+      'bio',
+      'twitter_username',
+      'linkedin_url',
+      'github_username',
+      'website',
+    ];
+  }
 }
 
 User.init({
@@ -65,6 +78,11 @@ User.init({
 }, {
   sequelize: Db.sequelize,
   tableName: 'users',
+  getterMethods: {
+    profileFields() {
+      return User.allowedFields;
+    },
+  },
 });
 
 export default User;

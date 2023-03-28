@@ -18,25 +18,16 @@ export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   res.json(filteredUser);
 };
 
-export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
-  const user = await User.findByPk(req.params.id, {
-    attributes: [
-      'id',
-      'discord_user_id',
-      'discord_name',
-      'bio',
-      'twitter_username',
-      'linkedin_url',
-      'github_username',
-      'website',
-    ],
-  });
+export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
+  const allowedFields = User.allowedFields;
+  const user = await User.findByPk(req.params.id)
 
   if (!user) {
     throw new NotFoundError('User not found');
   }
-
-  res.json(user);
+  
+  const pickedUser = _.pick(user, allowedFields) as UserProfile
+  res.json(pickedUser);
 };
 
 interface UpdatableFields {
@@ -77,22 +68,11 @@ export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFie
 }
 
 export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
-  const users = await User.findAll({
-    attributes: [
-      'id',
-      'discord_user_id',
-      'discord_name',
-      'bio',
-      'twitter_username',
-      'linkedin_url',
-      'github_username',
-      'website',
-    ],
-  });
+  const allowedFields = User.allowedFields;
+  const users = await User.findAll()
 
-  if (users.length === 0) {
-    throw new NotFoundError('No Users found');
-  }
 
-  res.json(users);
+
+  const pickedUser = _.map(users, user => _.pick(user, allowedFields));
+  res.json(pickedUser);
 };
