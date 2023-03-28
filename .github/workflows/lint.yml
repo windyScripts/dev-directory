@@ -20,7 +20,7 @@ permissions:
 jobs:
   run-ci:
     name: Run Linting and Server Tests
-    timeout-minutes: 10
+    timeout-minutes: 5
     runs-on: ubuntu-latest
 
     steps:
