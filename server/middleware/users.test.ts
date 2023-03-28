@@ -3,7 +3,6 @@ import { NextFunction } from 'express-async-router';
 
 import { sanitize } from './users';
 
-
 describe('middleware for encoding unsafe characters in input fields', () => {
   it('should remove markup from request body fields', () => {
     const next: NextFunction = jest.fn();

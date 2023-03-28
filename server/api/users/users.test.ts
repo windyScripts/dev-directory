@@ -48,6 +48,15 @@ describe('auth router', () => {
       expect(res.status).toBe(403);
     });
 
+    it('returns 400 if request body is empty', async () => {
+      const user = await createUser();
+
+      server.login(user);
+
+      const res = await server.exec.patch(`/api/users/${user.id}`).send({});
+      expect(res.status).toBe(400);
+    });
+
     it('returns 400 if request body does not contain any updatable fields', async () => {
       const user = await createUser();
 

@@ -57,14 +57,11 @@ export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFie
     'website',
   ];
 
-  for (const field of fieldsToUpdate) {
-    if (field in req.body) {
-      break;
-    }
+  const toUpdate = _.pick(req.body, fieldsToUpdate);
+
+  if (Object.keys(toUpdate).length === 0) {
     throw new BadRequestError('Request body should contain at least one updatable field.');
   }
-
-  const toUpdate = _.pick(req.body, fieldsToUpdate);
 
   const updated = await User.update(toUpdate, {
     where: {
