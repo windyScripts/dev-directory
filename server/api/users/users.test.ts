@@ -27,8 +27,6 @@ describe('auth router', () => {
       const res = await server.exec.get(`/api/users/${user.id}`);
       expect(res.status).toBe(200);
       expect(res.body).toEqual(getExpectedUserObject(user));
-      // Delete the user that was created
-      //await User.destroy({ where: {}});
     });
   });
 
