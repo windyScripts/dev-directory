@@ -2,7 +2,6 @@ import { User } from 'server/models';
 import TestServer from 'server/test/server';
 import { createUser, getExpectedUserObject } from 'server/test/utils';
 
-
 describe('auth router', () => {
   let server: TestServer;
 
@@ -39,7 +38,6 @@ describe('auth router', () => {
     it('returns all users', async () => {
       const userOne = await createUser();
       const userTwo = await createUser();
-
 
       const res = await server.exec.get('/api/users/');
       expect(res.status).toBe(200);

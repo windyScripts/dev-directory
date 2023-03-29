@@ -1,8 +1,8 @@
 import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
+import _ from 'lodash';
 
 import { User } from 'server/models';
 import type { IntRange } from 'server/types/utils';
-import _ from 'lodash';
 
 // random
 // probability should only be 1 - 100
@@ -36,7 +36,6 @@ interface UserObject {
   website: string;
 }
 
-
 // await createUser({ discord_name: "poop#1234", bio: "i like poop" })
 async function createUser({
   email,
@@ -69,9 +68,9 @@ async function createUser({
 }
 
 function getExpectedUserObject(user: User) {
-  const allowedFields = User.allowedFields
+  const allowedFields = User.allowedFields;
   const pickedUser = _.pick(user, allowedFields);
-  return pickedUser as User
+  return pickedUser as User;
 }
 
 export {

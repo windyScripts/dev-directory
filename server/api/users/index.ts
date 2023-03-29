@@ -13,5 +13,4 @@ userRouter.get('/', getUsers);
 
 userRouter.patch('/:id', requireUser, requireSameId, sanitize, updateUserById);
 
-
 export default userRouter;

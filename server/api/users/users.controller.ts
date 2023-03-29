@@ -19,15 +19,19 @@ export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
 };
 
 export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
-  const allowedFields = User.allowedFields;
-  const user = await User.findByPk(req.params.id)
+  const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
 
   if (!user) {
     throw new NotFoundError('User not found');
   }
-  
-  const pickedUser = _.pick(user, allowedFields) as UserProfile
-  res.json(pickedUser);
+
+  res.json(user);
+};
+
+export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
+  const users = await User.findAll({ attributes: User.allowedFields });
+
+  res.json(users);
 };
 
 interface UpdatableFields {
@@ -65,14 +69,4 @@ export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFie
   }
 
   res.sendStatus(200);
-}
-
-export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
-  const allowedFields = User.allowedFields;
-  const users = await User.findAll()
-
-
-
-  const pickedUser = _.map(users, user => _.pick(user, allowedFields));
-  res.json(pickedUser);
 };
