@@ -7,7 +7,7 @@ import { Sequelize } from 'sequelize';
 import supertest from 'supertest';
 import { Umzug, SequelizeStorage } from 'umzug';
 
-import { Database } from 'server/lib/db';
+import Db from 'server/lib/db';
 import { User } from 'server/models';
 import Server from 'server/server';
 
@@ -23,7 +23,7 @@ class TestServer extends Server {
   loggedInUser: User | null = null;
 
   async init() {
-    this.db = new Database(env.DB_NAME);
+    this.db = Db;
     this.umzug = new Umzug({
       migrations: {
         glob: ['../migrations/*.js', { cwd: __dirname }],
@@ -98,11 +98,7 @@ class TestServer extends Server {
   async destroy() {
     await this.revertMigrations();
     await this.db.sequelize.close();
-    if (this.server) {
-      return new Promise<void>((resolve) => {
-        this.server.close(() => resolve());
-      });
-    }
+    await this.server?.close();
   }
 }
 

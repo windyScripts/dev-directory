@@ -6,7 +6,6 @@ import { User } from 'server/models';
 import { AnyRequestHandler } from 'server/types/express';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
-
 export const attachUser: AnyRequestHandler = async (req, res, next) => {
   const token = req.cookies[AUTH_COOKIE_NAME];
   if (validateToken(token)) {
