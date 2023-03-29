@@ -1,6 +1,6 @@
-import 'dotenv-flow/config';
 import { execSync } from 'child_process';
 
+import { config } from 'dotenv-flow';
 import { cleanEnv, str } from 'envalid';
 import { getPortPromise as getPort } from 'portfinder';
 import { Sequelize } from 'sequelize';
@@ -10,6 +10,8 @@ import { Umzug, SequelizeStorage } from 'umzug';
 import Db from 'server/lib/db';
 import { User } from 'server/models';
 import Server from 'server/server';
+
+config({ silent: true });
 
 const env = cleanEnv(process.env, {
   DB_NAME: str(),

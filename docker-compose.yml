@@ -1,10 +1,11 @@
 version: "3.9"
+
 services:
   pg:
     image: postgres:15.2
     ports:
-      - "5432:5432"
+      - ${PORT:-5432}:5432
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: postgres
-      POSTGRES_DB: dev-directory
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_DB: ${DB_NAME:-dev-directory}

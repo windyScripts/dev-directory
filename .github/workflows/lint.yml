@@ -17,6 +17,11 @@ permissions:
   checks: write
   contents: write
 
+env:
+  DB_USER: "postgres"
+  DB_PASSWORD: "password"
+  DB_NAME: "test"
+
 jobs:
   run-ci:
     name: Run Linting and Server Tests
@@ -44,11 +49,11 @@ jobs:
           eslint: true
 
       - name: Start Container
-        run: docker-compose -f "docker-compose.test.yml" up -d
+        run: docker-compose -f "docker-compose.yml" up -d
 
       - name: Run Tests
         run: npm run test
 
       - name: Stop Container
         if: always()
-        run: docker-compose -f "docker-compose.test.yml" down
+        run: docker-compose -f "docker-compose.yml" down
