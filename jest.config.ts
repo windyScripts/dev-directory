@@ -1,5 +1,6 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
+import type { Config } from '@jest/types';
+
+const config: Config.InitialOptions = {
   preset: 'ts-jest',
   moduleDirectories: ['node_modules'],
   testEnvironment: 'node',
@@ -8,13 +9,7 @@ module.exports = {
     '**/?(*.)+(spec|test).+(ts|tsx|js)',
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-  },
-  // this is deprecated but the suggested fix doesn't work :|
-  globals: {
-    'ts-jest': {
-      diagnostics: false,
-    },
+    '^.+\\.(ts|tsx)$': ['ts-jest', { diagnostics: false }],
   },
   moduleNameMapper: {
     '^server/(.*)': '<rootDir>/server/$1',
@@ -28,3 +23,5 @@ module.exports = {
     './cypress',
   ],
 };
+
+export default config;
