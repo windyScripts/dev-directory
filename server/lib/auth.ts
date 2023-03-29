@@ -1,32 +1,15 @@
-import crypto from 'crypto';
-
 import DiscordOauth2 from 'discord-oauth2';
-import { cleanEnv, str, makeValidator } from 'envalid';
+import { cleanEnv, str } from 'envalid';
 import jwt from 'jsonwebtoken';
 
-import { updateOrAddToEnvFile } from 'server/lib/env';
 import { User } from 'server/models';
 
 const env = cleanEnv(process.env, {
   DISCORD_CLIENT_ID: str(),
   DISCORD_CLIENT_SECRET: str(),
   DISCORD_REDIRECT_URI: str(),
-  AUTH_SECRET: makeValidator<string>((input: string) => {
-    if (input) return input;
-    return authSecretGenerator();
-  })(),
+  AUTH_SECRET: str(),
 });
-
-function authSecretGenerator(): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!$%&*+-:;?@^_~';
-  const authSecret = Array.from(crypto.randomBytes(64))
-    .map(byte => chars.charAt(byte % chars.length))
-    .join('');
-
-  updateOrAddToEnvFile('.env', 'AUTH_SECRET', authSecret);
-
-  return authSecret;
-}
 
 export function createAuthToken(user: User) {
   const payload = { user_id: user.id };
