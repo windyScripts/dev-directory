@@ -9,12 +9,12 @@ describe('auth router', () => {
     server = new TestServer();
     await server.init();
   });
-  
+
   afterEach(async () => {
     User.destroy({
       where: {},
-      truncate: true
-    })
+      truncate: true,
+    });
   });
 
   afterAll(async () => {
