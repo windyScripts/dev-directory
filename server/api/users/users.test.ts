@@ -5,9 +5,16 @@ import { createUser, getExpectedUserObject } from 'server/test/utils';
 describe('auth router', () => {
   let server: TestServer;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     server = new TestServer();
     await server.init();
+  });
+  
+  afterEach(async () => {
+    User.destroy({
+      where: {},
+      truncate: true
+    })
   });
 
   afterAll(async () => {
