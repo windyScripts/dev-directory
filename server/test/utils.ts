@@ -1,4 +1,5 @@
 import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
+import _ from 'lodash';
 
 import { User } from 'server/models';
 import type { IntRange } from 'server/types/utils';
@@ -66,4 +67,13 @@ async function createUser({
   return user;
 }
 
-export default createUser;
+function getExpectedUserObject(user: User) {
+  const allowedFields = User.allowedFields;
+  const pickedUser = _.pick(user, allowedFields);
+  return pickedUser as User;
+}
+
+export {
+  createUser,
+  getExpectedUserObject,
+};
