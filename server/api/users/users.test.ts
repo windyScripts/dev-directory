@@ -10,7 +10,7 @@ describe('auth router', () => {
     await server.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await server.destroy();
   });
 

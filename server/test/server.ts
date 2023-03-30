@@ -7,7 +7,7 @@ import { Sequelize } from 'sequelize';
 import supertest from 'supertest';
 import { Umzug, SequelizeStorage } from 'umzug';
 
-import Db from 'server/lib/db';
+import { Database } from 'server/lib/db';
 import { User } from 'server/models';
 import Server from 'server/server';
 
@@ -23,7 +23,7 @@ class TestServer extends Server {
   loggedInUser: User | null = null;
 
   async init() {
-    this.db = Db;
+    this.db = new Database(env.DB_NAME);
     this.umzug = new Umzug({
       migrations: {
         glob: ['../migrations/*.js', { cwd: __dirname }],
