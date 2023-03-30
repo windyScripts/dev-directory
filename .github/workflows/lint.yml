@@ -47,6 +47,7 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
+          eslint_extensions: "js,jsx,ts,tsx"
 
       - name: Start Container
         run: docker-compose -f "docker-compose.yml" up -d
