@@ -18,25 +18,20 @@ export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   res.json(filteredUser);
 };
 
-export const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
-  const user = await User.findByPk(req.params.id, {
-    attributes: [
-      'id',
-      'discord_user_id',
-      'discord_name',
-      'bio',
-      'twitter_username',
-      'linkedin_url',
-      'github_username',
-      'website',
-    ],
-  });
+export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
+  const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
 
   if (!user) {
     throw new NotFoundError('User not found');
   }
 
   res.json(user);
+};
+
+export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
+  const users = await User.findAll({ attributes: User.allowedFields });
+
+  res.json(users);
 };
 
 interface UpdatableFields {

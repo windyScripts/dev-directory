@@ -1,4 +1,5 @@
 import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
+import _ from 'lodash';
 
 import { User } from 'server/models';
 import { UserObject } from 'server/types/User';
@@ -50,10 +51,20 @@ function makeUser({
   };
 }
 
-async function createUser(options:Partial<UserObject> = {}){
+async function createUser(options: Partial<UserObject> = {}) {
   const userObject = makeUser(options);
   // insert into DB after creation
   return await User.create(userObject);
 }
 
-export { makeUser, createUser };
+function getExpectedUserObject(user: User) {
+  const allowedFields = User.allowedFields;
+  const pickedUser = _.pick(user, allowedFields);
+  return pickedUser as User;
+}
+
+export {
+  makeUser,
+  createUser,
+  getExpectedUserObject,
+};

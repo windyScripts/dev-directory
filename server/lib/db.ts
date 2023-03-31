@@ -1,8 +1,10 @@
-import 'dotenv-flow/config';
+import { config } from 'dotenv-flow';
 import { cleanEnv, str, num, bool } from 'envalid';
 import { Sequelize, Dialect  } from 'sequelize';
 
 import log from './log';
+
+config({ silent: true });
 
 const env = cleanEnv(process.env, {
   DB_HOST: str(),
