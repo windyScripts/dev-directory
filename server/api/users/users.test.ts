@@ -76,7 +76,7 @@ describe('auth router', () => {
       expect(res.body.totalPages).toEqual(totalPages);
     });
 
-    it('returns first 20 users when it hits the homepage', async () => {
+    it('returns last 5 users when it hits the second page', async () => {
 
       const users: User[] = [];
 
