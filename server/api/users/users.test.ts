@@ -43,24 +43,24 @@ describe('auth router', () => {
     });
 
     it('expect invalid page request to return invalid page', async () => {
-      const res = await server.exec.get('/api/users/?page=-1')
-      expect(res.status).toBe(400)
-      expect(res.body.error).toEqual('Invalid page number')
-    })
+      const res = await server.exec.get('/api/users/?page=-1');
+      expect(res.status).toBe(400);
+      expect(res.body.error).toEqual('Invalid page number');
+    });
 
     it('expect page request beyond page limit to be out of range', async () => {
-      const res = await server.exec.get('/api/users/?page=100')
-      expect(res.status).toBe(400)
-      expect(res.body.error).toEqual('Page out of range')
-    })
+      const res = await server.exec.get('/api/users/?page=100');
+      expect(res.status).toBe(400);
+      expect(res.body.error).toEqual('Page out of range');
+    });
 
     it('returns first 20 users when it hits the homepage', async () => {
 
-      const users: User[] = []; 
+      const users: User[] = [];
 
       for(let i = 0; i < 25; i++){
         const user = await createUser();
-        users.push(user)
+        users.push(user);
       }
 
       const limit = 20;
@@ -69,20 +69,20 @@ describe('auth router', () => {
 
       const res = await server.exec.get('/api/users/');
       expect(res.status).toBe(200);
-      expect(res.body.users.length).toEqual(limit)
+      expect(res.body.users.length).toEqual(limit);
       expect(res.body.users[0]).toEqual(getExpectedUserObject(users[0]));
       expect(res.body.users[19]).toEqual(getExpectedUserObject(users[19]));
-      expect(res.body.page).toEqual(1)
-      expect(res.body.totalPages).toEqual(totalPages)
+      expect(res.body.page).toEqual(1);
+      expect(res.body.totalPages).toEqual(totalPages);
     });
 
     it('returns first 20 users when it hits the homepage', async () => {
 
-      const users: User[] = []; 
+      const users: User[] = [];
 
       for(let i = 0; i < 25; i++){
         const user = await createUser();
-        users.push(user)
+        users.push(user);
       }
 
       const limit = 20;
@@ -92,13 +92,13 @@ describe('auth router', () => {
       const res = await server.exec.get('/api/users?page=2');
 
       expect(res.status).toBe(200);
-      expect(res.body.users.length).toEqual(5)
+      expect(res.body.users.length).toEqual(5);
       expect(res.body.users[0]).toEqual(getExpectedUserObject(users[20]));
       expect(res.body.users[4]).toEqual(getExpectedUserObject(users[24]));
-      expect(res.body.page).toEqual(2)
-      expect(res.body.totalPages).toEqual(totalPages)
+      expect(res.body.page).toEqual(2);
+      expect(res.body.totalPages).toEqual(totalPages);
     });
-  })
+  });
 
   describe('PATCH /:id', () => {
     it('returns 403 if profile id is not equal to logged in user id', async () => {
