@@ -41,7 +41,8 @@
     "server/**/*",
     "client/**/*",
     "shared/**/*",
-    "pages/**/*"
+    "pages/**/*",
+    "seed.ts"
   ],
   "exclude": [
     "node_modules",

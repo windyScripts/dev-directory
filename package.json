@@ -16,6 +16,7 @@
     "lint": "eslint .",
     "migrate": "npm run sequelize-cli db:migrate",
     "migrate:undo": "npm run sequelize-cli db:migrate:undo",
+    "seed": "cross-env NODE_ENV=development npm run ts:exec server/scripts/seed.ts",
     "sequelize-cli": "cross-env NODE_ENV=development sequelize-cli",
     "start": "node dist/server/index",
     "test:server": "npm run jest -- ./server",

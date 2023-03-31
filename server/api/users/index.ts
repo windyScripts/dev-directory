@@ -5,7 +5,6 @@ import { requireSameId, sanitize } from 'server/middleware/users';
 
 import { getUserById, updateUserById } from './users.controller';
 
-
 const userRouter = AsyncRouter();
 
 userRouter.get('/:id', getUserById);

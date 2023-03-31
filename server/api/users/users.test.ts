@@ -1,6 +1,6 @@
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import createUser from 'server/test/utils';
+import { createUser } from 'server/test/utils';
 
 describe('auth router', () => {
   let server: TestServer;
