@@ -1,6 +1,6 @@
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import { createUser, getExpectedUserObject } from 'server/test/utils';
+import { createSavedUserModel, getExpectedUserObject } from 'server/test/utils';
 
 describe('auth router', () => {
   let server: TestServer;
@@ -28,7 +28,7 @@ describe('auth router', () => {
     });
 
     it('returns the specified user', async () => {
-      const user = await createUser();
+      const user = await createSavedUserModel();
 
       const res = await server.exec.get(`/api/users/${user.id}`);
       expect(res.status).toBe(200);
@@ -43,8 +43,8 @@ describe('auth router', () => {
     });
 
     it('returns all users', async () => {
-      const userOne = await createUser();
-      const userTwo = await createUser();
+      const userOne = await createSavedUserModel();
+      const userTwo = await createSavedUserModel();
 
       const res = await server.exec.get('/api/users/');
       expect(res.status).toBe(200);
@@ -55,7 +55,7 @@ describe('auth router', () => {
 
   describe('PATCH /:id', () => {
     it('returns 403 if profile id is not equal to logged in user id', async () => {
-      const user = await createUser();
+      const user = await createSavedUserModel();
 
       server.login(user);
 
@@ -64,7 +64,7 @@ describe('auth router', () => {
     });
 
     it('returns 400 if request body is empty', async () => {
-      const user = await createUser();
+      const user = await createSavedUserModel();
 
       server.login(user);
 
@@ -73,7 +73,7 @@ describe('auth router', () => {
     });
 
     it('returns 400 if request body does not contain any updatable fields', async () => {
-      const user = await createUser();
+      const user = await createSavedUserModel();
 
       server.login(user);
 
@@ -82,7 +82,7 @@ describe('auth router', () => {
     });
 
     it('returns 404 if specified user doesn\'t exist in the database', async () => {
-      const user = await createUser();
+      const user = await createSavedUserModel();
 
       server.login(user);
 
@@ -93,7 +93,7 @@ describe('auth router', () => {
     });
 
     it('updates the specified user', async () => {
-      const user = await createUser();
+      const user = await createSavedUserModel();
 
       server.login(user);
 
