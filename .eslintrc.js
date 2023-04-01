@@ -39,6 +39,7 @@ module.exports = {
     // Brace/parenthesis spacing rules
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
+    'object-shorthand': ['error', 'always', { avoidQuotes: true }],
     'space-in-parens': ['error', 'never'],
 
     // Newline padding rules

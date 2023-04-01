@@ -46,7 +46,7 @@ export class Database {
         username: env.DB_USER,
         password: env.DB_PASSWORD,
         host: env.DB_HOST,
-        database: database,
+        database,
         ...commonOptions,
       });
     }
