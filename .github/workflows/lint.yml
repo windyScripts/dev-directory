@@ -34,11 +34,8 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Build App
-        run:  docker build -t dev-directory:test .
-
       - name: Start Container
-        run: docker-compose -f "docker-compose.test.yml" up -d
+        run: docker-compose -f "docker-compose.yml" up -d
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
@@ -53,4 +50,4 @@ jobs:
 
       - name: Stop Container
         if: always()
-        run: docker-compose -f "docker-compose.test.yml" down
+        run: docker-compose -f "docker-compose.yml" down
