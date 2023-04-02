@@ -7,7 +7,7 @@ import { UserProfile } from 'server/types/User';
 
 type ClientUser = Pick<User, 'id' | 'discord_user_id'>
 
-export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
+const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
   const filteredUser = _.pick(req.user!, [
     'id',
@@ -18,7 +18,7 @@ export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   res.json(filteredUser);
 };
 
-export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
+const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
 
   if (!user) {
@@ -28,7 +28,7 @@ export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req
   res.json(user);
 };
 
-export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
+const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
   const users = await User.findAll({ attributes: User.allowedFields });
 
   res.json(users);
@@ -42,7 +42,7 @@ interface UpdatableFields {
   website?: string;
 }
 
-export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
+const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
   const fieldsToUpdate = [
     'bio',
     'twitter_username',
@@ -68,4 +68,11 @@ export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFie
   }
 
   res.sendStatus(200);
+};
+
+export {
+  getCurrentUser,
+  getUserById,
+  getUsers,
+  updateUserById,
 };

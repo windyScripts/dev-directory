@@ -61,7 +61,8 @@ module.exports = {
       { blankLine: 'any', prev: 'export', next: 'export' },
     ],
 
-    // Import rules
+    // Import/export rules
+    'import/exports-last': 'error',
     'import/newline-after-import': 'error',
     'import/order': ['error', {
       groups: [
