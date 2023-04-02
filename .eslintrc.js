@@ -13,7 +13,18 @@ module.exports = {
   },
   rules: {
     // Basic rules
-    indent: ['error', 2, { SwitchCase: 1 }],
+    // `ts-lint: indent` has known issues, we can remove if it becomes a problem...
+    // https://github.com/typescript-eslint/typescript-eslint/issues/1824
+    indent: 'off',
+    '@typescript-eslint/indent': ['error', 2, {
+      SwitchCase: 1,
+      flatTernaryExpressions: false,
+      ignoredNodes: [
+        'PropertyDefinition[decorators]',
+        'TSUnionType',
+        'FunctionExpression[params]:has(Identifier[decorators])',
+      ],
+    }],
     'max-len': ['warn', 120],
     'prefer-const': 'error',
     semi: ['error', 'always'],
