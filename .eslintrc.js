@@ -12,10 +12,17 @@ module.exports = {
     node: true,
   },
   rules: {
+    // Disable base rules to avoid @typescript-eslint conflicts
+    'brace-style': 'off',
+    indent: 'off',
+    'key-spacing': 'off',
+    'no-unused-vars': 'off',
+    semi: 'off',
+    'space-before-blocks': 'off',
+
     // Basic rules
     // `ts-lint: indent` has known issues, we can remove if it becomes a problem...
     // https://github.com/typescript-eslint/typescript-eslint/issues/1824
-    indent: 'off',
     '@typescript-eslint/indent': ['error', 2, {
       SwitchCase: 1,
       flatTernaryExpressions: false,
@@ -26,8 +33,8 @@ module.exports = {
       ],
     }],
     'max-len': ['warn', 120],
+    '@typescript-eslint/no-unused-vars': 'error',
     'prefer-const': 'error',
-    semi: 'off',
     '@typescript-eslint/semi': 'error',
 
     // Quote rules
@@ -37,8 +44,6 @@ module.exports = {
     // TypeScript rules
     '@typescript-eslint/member-delimiter-style': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
-    'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
 
     // Comma rules
     'comma-dangle': ['error', 'always-multiline'],
@@ -55,15 +60,12 @@ module.exports = {
     'array-bracket-newline': ['error', 'consistent'],
     'arrow-parens': ['error', 'as-needed'],
     'arrow-spacing': 'error',
-    'brace-style': 'off',
     '@typescript-eslint/brace-style': 'error',
-    'key-spacing': 'off',
     '@typescript-eslint/key-spacing': 'error',
     'object-curly-newline': ['error', { consistent: true }],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'object-shorthand': ['error', 'always', { avoidQuotes: true }],
     'padded-blocks': ['error', 'never'],
-    'space-before-blocks': 'off',
     '@typescript-eslint/space-before-blocks': 'error',
     'space-in-parens': ['error', 'never'],
 
