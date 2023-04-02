@@ -1,6 +1,12 @@
 version: "3.9"
 
 services:
+  app:
+    image: dev-directory:test
+    ports:
+      - "3000:3000"
+    depends_on:
+      - pg
   pg:
     image: postgres:15.2
     ports:

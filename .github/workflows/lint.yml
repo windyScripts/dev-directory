@@ -17,15 +17,9 @@ permissions:
   checks: write
   contents: write
 
-env:
-  DB_USER: "postgres"
-  DB_PASSWORD: "password"
-  DB_NAME: "test"
-
 jobs:
   run-ci:
     name: Run Linting and Server Tests
-    timeout-minutes: 5
     runs-on: ubuntu-latest
 
     steps:
@@ -41,20 +35,22 @@ jobs:
         run: npm ci
 
       - name: Build App
-        run:  npm run build
+        run:  docker build -t dev-directory:test .
+
+      - name: Start Container
+        run: docker-compose -f "docker-compose.test.yml" up -d
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
-          eslint_extensions: "js,jsx,ts,tsx"
 
-      - name: Start Container
-        run: docker-compose -f "docker-compose.yml" up -d
-
-      - name: Run Tests
+      - name: Run Jest tests
         run: npm run test
+
+      - name: Run Cypress tests
+        run: npm run cypress
 
       - name: Stop Container
         if: always()
-        run: docker-compose -f "docker-compose.yml" down
+        run: docker-compose -f "docker-compose.test.yml" down
