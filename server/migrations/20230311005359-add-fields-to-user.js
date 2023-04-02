@@ -1,48 +1,48 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn("users", "discord_name", {
+    await queryInterface.addColumn('users', 'discord_name', {
       type: Sequelize.STRING(100),
       allowNull: false,
-      defaultValue: "",
+      defaultValue: '',
     });
-    await queryInterface.addColumn("users", "bio", {
+    await queryInterface.addColumn('users', 'bio', {
       type: Sequelize.STRING(1000),
       allowNull: false,
-      defaultValue: "",
+      defaultValue: '',
     });
-    await queryInterface.addColumn("users", "twitter_username", {
+    await queryInterface.addColumn('users', 'twitter_username', {
       type: Sequelize.STRING(200),
       allowNull: false,
-      defaultValue: "",
+      defaultValue: '',
     });
-    await queryInterface.addColumn("users", "linkedin_url", {
+    await queryInterface.addColumn('users', 'linkedin_url', {
       type: Sequelize.STRING(200),
       allowNull: false,
-      defaultValue: "",
+      defaultValue: '',
     });
-    await queryInterface.addColumn("users", "github_username", {
+    await queryInterface.addColumn('users', 'github_username', {
       type: Sequelize.STRING(200),
       allowNull: false,
-      defaultValue: "",
+      defaultValue: '',
     });
-    await queryInterface.addColumn("users", "website", {
+    await queryInterface.addColumn('users', 'website', {
       type: Sequelize.STRING(500),
       allowNull: false,
-      defaultValue: "",
+      defaultValue: '',
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     return [
-      await queryInterface.removeColumn("users", "website"),
-      await queryInterface.removeColumn("users", "github_username"),
-      await queryInterface.removeColumn("users", "linkedin_url"),
-      await queryInterface.removeColumn("users", "twitter_username"),
-      await queryInterface.removeColumn("users", "bio"),
-      await queryInterface.removeColumn("users", "discord_name"),
+      await queryInterface.removeColumn('users', 'website'),
+      await queryInterface.removeColumn('users', 'github_username'),
+      await queryInterface.removeColumn('users', 'linkedin_url'),
+      await queryInterface.removeColumn('users', 'twitter_username'),
+      await queryInterface.removeColumn('users', 'bio'),
+      await queryInterface.removeColumn('users', 'discord_name'),
     ];
   },
 };

@@ -6,7 +6,7 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
-  ignorePatterns: ['.github', 'server/migrations', 'dist'],
+  ignorePatterns: ['.github', 'dist'],
   root: true,
   env: {
     node: true,
@@ -94,12 +94,6 @@ module.exports = {
       alphabetize: { order: 'asc', caseInsensitive: true },
     }],
   },
-  overrides: [{
-    files: ['server/migrations/*.js'],
-    rules: {
-      '@typescript-eslint/no-unused-vars': 0,
-    },
-  }],
   settings: {
     'import/resolver': {
       typescript: true,
