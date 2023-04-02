@@ -26,7 +26,7 @@ function getRandomLinkedInURL() {
   return `https://www.linkedin.com/in/${randUserName()}/`;
 }
 
-function makeUnsavedUserModel({
+function makeUserObject({
   email,
   discord_user_id,
   discord_name,
@@ -51,14 +51,14 @@ function makeUnsavedUserModel({
   };
 }
 
-async function createSavedUserModel(options: Partial<UserObject> = {}) {
-  const userObject = makeUnsavedUserModel(options);
+async function createUser(options: Partial<UserObject> = {}) {
+  const userObject = makeUserObject(options);
   // insert into DB after creation
   return await User.create(userObject);
 }
 
-function createManyUsers(numberOfUsers: number): UserObject[] {
-  return Array.from({ length: numberOfUsers }, makeUnsavedUserModel);
+function createManyUsers(numberOfUsers: number): Partial<UserObject>[] {
+  return Array.from({ length: numberOfUsers }, makeUserObject);
 }
 
 function getExpectedUserObject(user: User) {
@@ -68,8 +68,8 @@ function getExpectedUserObject(user: User) {
 }
 
 export {
-  makeUnsavedUserModel,
+  makeUserObject,
   createManyUsers,
-  createSavedUserModel,
+  createUser,
   getExpectedUserObject,
 };

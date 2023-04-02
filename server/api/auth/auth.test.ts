@@ -7,7 +7,7 @@ import setCookie, { Cookie } from 'set-cookie-parser';
 import * as authLib from 'server/lib/auth';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import { createSavedUserModel } from 'server/test/utils';
+import { createUser } from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 const env = cleanEnv(process.env, {
@@ -72,7 +72,7 @@ describe('auth router', () => {
     });
 
     it('should not re-create a user, but update their email if it has changed', async () => {
-      const user = await createSavedUserModel();
+      const user = await createUser();
 
       const id = user.discord_user_id;
       const name = user.discord_name;
