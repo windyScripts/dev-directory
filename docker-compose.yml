@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   app:
-    image: dev-directory:test
+    build: .
     ports:
       - "3000:3000"
     depends_on:
