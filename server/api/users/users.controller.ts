@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { User } from 'server/models';
 import { UserProfile } from 'server/types/User';
 
-type ClientUser = Pick<User, 'id' | 'discord_user_id'>
+type ClientUser = Pick<User, 'id' | 'discord_user_id'>;
 
 const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion

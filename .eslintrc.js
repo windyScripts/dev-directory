@@ -27,7 +27,8 @@ module.exports = {
     }],
     'max-len': ['warn', 120],
     'prefer-const': 'error',
-    semi: ['error', 'always'],
+    semi: 'off',
+    '@typescript-eslint/semi': 'error',
 
     // Quote rules
     quotes: ['error', 'single'],
