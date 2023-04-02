@@ -40,6 +40,8 @@ module.exports = {
     'array-bracket-spacing': ['error', 'never'],
     'arrow-parens': ['error', 'as-needed'],
     'arrow-spacing': 'error',
+    'brace-style': 'off',
+    '@typescript-eslint/brace-style': 'error',
     'key-spacing': 'off',
     '@typescript-eslint/key-spacing': 'error',
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
