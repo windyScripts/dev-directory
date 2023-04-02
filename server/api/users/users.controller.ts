@@ -28,33 +28,28 @@ export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req
   res.json(user);
 };
 
-export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
+export const getUsers: RequestHandler = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
   const limit = 20;
   const offset = (page - 1) * limit;
 
   if (!Number.isInteger(page) || page < 1) {
-    return res.status(400).json({ error: 'Invalid page number' });
+    throw new BadRequestError('Invalid page number');
   }
 
-  // Fine all users, using the limit and offset to implement offset pagination
-  const users = await User.findAll({
+  const { rows: users, count } = await User.findAndCountAll({
     attributes: User.allowedFields,
     limit: limit,
     offset: offset,
   });
 
-  const count = await User.count();
   const totalPages = Math.ceil(count / limit);
 
   if (offset >= count && page !== 1) {
-    return res.status(400).json({ error: 'Page out of range' });
+    throw new BadRequestError('Page out of range');
   }
 
-  res.json({
-    page: page,
-    totalPages: totalPages,
-    users });
+  res.json({ page: page, totalPages: totalPages, users });
 };
 
 interface UpdatableFields {
