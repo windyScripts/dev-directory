@@ -86,7 +86,7 @@ describe('auth router', () => {
 
       server.login(user);
 
-      await User.destroy({ where:{ id: user.id }});
+      await User.destroy({ where: { id: user.id }});
 
       const res = await server.exec.patch(`/api/users/${user.id}`).send({ bio: 'test' });
       expect(res.status).toBe(404);
