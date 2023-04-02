@@ -49,6 +49,7 @@ module.exports = {
     'object-curly-newline': ['error', { consistent: true }],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'object-shorthand': ['error', 'always', { avoidQuotes: true }],
+    'padded-blocks': ['error', 'never'],
     'space-before-blocks': 'off',
     '@typescript-eslint/space-before-blocks': 'error',
     'space-in-parens': ['error', 'never'],

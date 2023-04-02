@@ -43,7 +43,6 @@ interface UpdatableFields {
 }
 
 export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
-
   const fieldsToUpdate = [
     'bio',
     'twitter_username',
