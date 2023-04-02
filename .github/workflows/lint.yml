@@ -31,6 +31,10 @@ jobs:
         with:
           node-version: 18
 
+    # run docker build here with dev-directory:test.
+    # Then run docker compose test
+    # this should start up db, build app and have cypress running in that order.
+
       - name: Install Node.js dependencies
         run: npm ci
 
