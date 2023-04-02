@@ -42,6 +42,8 @@ module.exports = {
     '@typescript-eslint/key-spacing': 'error',
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'object-shorthand': ['error', 'always', { avoidQuotes: true }],
+    'space-before-blocks': 'off',
+    '@typescript-eslint/space-before-blocks': 'error',
     'space-in-parens': ['error', 'never'],
 
     // Newline padding rules
