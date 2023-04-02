@@ -39,6 +39,7 @@ module.exports = {
 
     // Brace/parenthesis spacing rules
     'array-bracket-spacing': ['error', 'never'],
+    'array-bracket-newline': ['error', 'consistent'],
     'arrow-parens': ['error', 'as-needed'],
     'arrow-spacing': 'error',
     'brace-style': 'off',
