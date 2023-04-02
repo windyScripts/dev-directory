@@ -74,6 +74,7 @@ module.exports = {
       'error',
       { blankLine: 'always', prev: '*', next: 'export' },
       { blankLine: 'any', prev: 'export', next: 'export' },
+      { blankLine: 'always', prev: 'directive', next: '*' },
     ],
 
     // Import/export rules
