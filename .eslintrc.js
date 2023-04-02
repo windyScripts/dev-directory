@@ -46,6 +46,7 @@ module.exports = {
     '@typescript-eslint/brace-style': 'error',
     'key-spacing': 'off',
     '@typescript-eslint/key-spacing': 'error',
+    'object-curly-newline': ['error', { consistent: true }],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'object-shorthand': ['error', 'always', { avoidQuotes: true }],
     'space-before-blocks': 'off',
