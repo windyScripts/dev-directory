@@ -13,7 +13,7 @@ export const requireSameId: AnyRequestHandler = async (req, res, next) => {
 
 export const sanitize: AnyRequestHandler = async (req, res, next) => {
   const fields = Object.keys(req.body);
-  fields.forEach((field) => {
+  fields.forEach(field => {
     req.body[field] = he.encode(req.body[field], {
       useNamedReferences: true,
     });
