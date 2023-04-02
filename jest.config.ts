@@ -5,7 +5,8 @@ const config: Config.InitialOptions = {
   moduleDirectories: ['node_modules'],
   testEnvironment: 'node',
   testMatch: [
-    '/dist/**/__tests__/**/*.+(ts|tsx|js)',
+    '**/dist/**/__tests__/**/*.+(ts|tsx|js)',
+    '**/dist/**/?(*.)+(spec|test).+(ts|tsx|js)',
   ],
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', { diagnostics: false }],
