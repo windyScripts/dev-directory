@@ -23,6 +23,7 @@ module.exports = {
     'quote-props': ['error', 'as-needed'],
 
     // TypeScript rules
+    '@typescript-eslint/member-delimiter-style': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': 'error',
 
