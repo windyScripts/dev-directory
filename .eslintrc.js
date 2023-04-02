@@ -38,6 +38,7 @@ module.exports = {
 
     // Brace/parenthesis spacing rules
     'array-bracket-spacing': ['error', 'never'],
+    'arrow-spacing': 'error',
     'key-spacing': 'off',
     '@typescript-eslint/key-spacing': 'error',
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
