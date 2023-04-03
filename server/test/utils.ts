@@ -1,6 +1,7 @@
 import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
 import _ from 'lodash';
 
+import Db from 'server/lib/db';
 import { User } from 'server/models';
 import { UserObject } from 'server/types/User';
 import type { IntRange } from 'server/types/utils';
@@ -57,8 +58,11 @@ async function createUser(options: Partial<UserObject> = {}) {
   return await User.create(userObject);
 }
 
-function createManyUsers(numberOfUsers: number): Partial<UserObject>[] {
-  return Array.from({ length: numberOfUsers }, makeUserObject);
+async function createManyUsers(numberOfUsers: number): Promise<User[]> {
+  const userArray = Array.from({ length: numberOfUsers }, makeUserObject);
+  return await Db.sequelize.transaction(async transaction => {
+    return await User.bulkCreate(userArray, { transaction });
+  });
 }
 
 function getExpectedUserObject(user: User) {
