@@ -41,9 +41,12 @@ export const getUsers: RequestHandler = async (req, res) => {
     attributes: User.allowedFields,
     limit: limit,
     offset: offset,
+    order: [
+      ['id', 'ASC'],
+    ],
   });
 
-  const totalPages = Math.ceil(count / limit);
+  const totalPages = Math.ceil(count / limit) || 1;
 
   if (offset >= count && page !== 1) {
     throw new BadRequestError('Page out of range');
