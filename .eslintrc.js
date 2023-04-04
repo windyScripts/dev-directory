@@ -20,6 +20,7 @@ module.exports = {
     'keyword-spacing': 'off',
     'no-unused-vars': 'off',
     'object-curly-spacing': 'off',
+    'padding-line-between-statements': 'off',
     semi: 'off',
     'space-before-blocks': 'off',
     'space-infix-ops': 'off',
@@ -78,7 +79,7 @@ module.exports = {
     'space-in-parens': ['error', 'never'],
 
     // Newline padding rules
-    'padding-line-between-statements': [
+    '@typescript-eslint/padding-line-between-statements': [
       'error',
       { blankLine: 'always', prev: '*', next: 'export' },
       { blankLine: 'any', prev: 'export', next: 'export' },
