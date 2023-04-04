@@ -20,6 +20,7 @@ module.exports = {
     'no-unused-vars': 'off',
     semi: 'off',
     'space-before-blocks': 'off',
+    'space-infix-ops': 'off',
 
     // Basic rules
     // `ts-lint: indent` has known issues, we can remove if it becomes a problem...
@@ -58,6 +59,7 @@ module.exports = {
 
     // Keyword/operator spacing rules
     '@typescript-eslint/keyword-spacing': 'error',
+    '@typescript-eslint/space-infix-ops': 'error',
 
     // Brace/parenthesis spacing rules
     'array-bracket-spacing': ['error', 'never'],
