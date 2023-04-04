@@ -7,6 +7,8 @@ import { UserProfile } from 'server/types/User';
 
 type ClientUser = Pick<User, 'id' | 'discord_user_id'>
 
+export const USERS_LIMIT = 20;
+
 export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
   const filteredUser = _.pick(req.user!, [
@@ -30,8 +32,7 @@ export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req
 
 export const getUsers: RequestHandler = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
-  const limit = 20;
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * USERS_LIMIT;
 
   if (!Number.isInteger(page) || page < 1) {
     throw new BadRequestError('Invalid page number');
@@ -39,14 +40,14 @@ export const getUsers: RequestHandler = async (req, res) => {
 
   const { rows: users, count } = await User.findAndCountAll({
     attributes: User.allowedFields,
-    limit: limit,
+    limit: USERS_LIMIT,
     offset: offset,
     order: [
       ['id', 'ASC'],
     ],
   });
 
-  const totalPages = Math.ceil(count / limit) || 1;
+  const totalPages = Math.ceil(count / USERS_LIMIT) || 1;
 
   if (offset >= count && page !== 1) {
     throw new BadRequestError('Page out of range');
