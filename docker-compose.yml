@@ -5,7 +5,7 @@ services:
     build: .
     container_name: dev-directory-app
     ports:
-      - "3000:3000"
+      - 3000:3000
     depends_on:
       - pg
   pg:
