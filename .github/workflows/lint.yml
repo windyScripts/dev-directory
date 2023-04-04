@@ -25,7 +25,7 @@ env:
 jobs:
   run-ci:
     name: Run Linting and Server Tests
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
