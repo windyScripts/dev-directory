@@ -16,6 +16,7 @@ module.exports = {
     'brace-style': 'off',
     indent: 'off',
     'key-spacing': 'off',
+    'keyword-spacing': 'off',
     'no-unused-vars': 'off',
     semi: 'off',
     'space-before-blocks': 'off',
@@ -54,6 +55,9 @@ module.exports = {
     'eol-last': ['error', 'always'],
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
     'no-trailing-spaces': 'error',
+
+    // Keyword/operator spacing rules
+    '@typescript-eslint/keyword-spacing': 'error',
 
     // Brace/parenthesis spacing rules
     'array-bracket-spacing': ['error', 'never'],
