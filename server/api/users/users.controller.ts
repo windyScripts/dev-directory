@@ -7,6 +7,8 @@ import { UserProfile } from 'server/types/User';
 
 type ClientUser = Pick<User, 'id' | 'discord_user_id'>
 
+export const USERS_LIMIT = 20;
+
 export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
   const filteredUser = _.pick(req.user!, [
@@ -28,10 +30,30 @@ export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req
   res.json(user);
 };
 
-export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
-  const users = await User.findAll({ attributes: User.allowedFields });
+export const getUsers: RequestHandler = async (req, res) => {
+  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+  const offset = (page - 1) * USERS_LIMIT;
 
-  res.json(users);
+  if (!Number.isInteger(page) || page < 1) {
+    throw new BadRequestError('Invalid page number');
+  }
+
+  const { rows: users, count } = await User.findAndCountAll({
+    attributes: User.allowedFields,
+    limit: USERS_LIMIT,
+    offset: offset,
+    order: [
+      ['id', 'ASC'],
+    ],
+  });
+
+  const totalPages = Math.ceil(count / USERS_LIMIT) || 1;
+
+  if (offset >= count && page !== 1) {
+    throw new BadRequestError('Page out of range');
+  }
+
+  res.json({ page: page, totalPages: totalPages, users });
 };
 
 interface UpdatableFields {
