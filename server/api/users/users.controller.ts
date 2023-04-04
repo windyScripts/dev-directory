@@ -18,7 +18,7 @@ const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   res.json(filteredUser);
 };
 
-const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
+const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
 
   if (!user) {
