@@ -36,7 +36,7 @@ function makeUserObject({
   linkedin_url,
   github_username,
   website,
-}: Partial<UserObject> = {}) {
+}: UserObject) {
   // build object
   // check which properties are included
   // 20% chance at empty values
@@ -52,13 +52,13 @@ function makeUserObject({
   };
 }
 
-async function createUser(options: Partial<UserObject> = {}) {
+async function createUser(options: UserObject) {
   const userObject = makeUserObject(options);
   // insert into DB after creation
   return await User.create(userObject);
 }
 
-async function createManyUsers(numberOfUsers: number): Promise<User[]> {
+async function createUsers(numberOfUsers: number): Promise<User[]> {
   const userArray = Array.from({ length: numberOfUsers }, makeUserObject);
   return await Db.sequelize.transaction(async transaction => {
     return await User.bulkCreate(userArray, { transaction });
@@ -73,7 +73,7 @@ function getExpectedUserObject(user: User) {
 
 export {
   makeUserObject,
-  createManyUsers,
+  createUsers,
   createUser,
   getExpectedUserObject,
 };
