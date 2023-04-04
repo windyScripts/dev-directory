@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     // Disable base rules to avoid @typescript-eslint conflicts
     'brace-style': 'off',
+    'comma-dangle': 'off',
     indent: 'off',
     'key-spacing': 'off',
     'keyword-spacing': 'off',
@@ -49,7 +50,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'error',
 
     // Comma rules
-    'comma-dangle': ['error', 'always-multiline'],
+    '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
     'comma-spacing': 'error',
     'comma-style': ['error', 'last'],
 
@@ -111,4 +112,3 @@ module.exports = {
     },
   },
 };
-
