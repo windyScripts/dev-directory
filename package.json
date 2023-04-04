@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && ttsc && next build",
-    "cypress": "npx cypress run",
     "cypress:open": "cypress open",
     "dev:server": "cross-env NODE_ENV=development npm run ts:exec server/index.ts",
     "dev": "nodemon",
