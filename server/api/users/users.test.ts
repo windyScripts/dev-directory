@@ -128,7 +128,7 @@ describe('user router', () => {
 
     it('should return users sorted by user.id', async () => {
       const users: User[] = await Promise.all(Array.from({ length: 5 }, createUser));
-      const userIds = users.map(user => user.id).sort((a, b) => a-b);
+      const userIds = users.map(user => user.id).sort((a, b) => a - b);
 
       const res = await server.exec.get('/api/users');
       const ids = res.body.users.map((user:UserProfile) => user.id);
@@ -136,7 +136,6 @@ describe('user router', () => {
       expect(res.status).toBe(200);
       expect(ids).toEqual(userIds);
     });
-
   });
 
   describe('PATCH /:id', () => {

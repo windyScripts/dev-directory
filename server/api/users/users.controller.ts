@@ -5,9 +5,9 @@ import _ from 'lodash';
 import { User } from 'server/models';
 import { UserProfile } from 'server/types/User';
 
-type ClientUser = Pick<User, 'id' | 'discord_user_id'>
+type ClientUser = Pick<User, 'id' | 'discord_user_id'>;
 
-export const USERS_LIMIT = 20;
+const USERS_LIMIT = 20;
 
 const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
@@ -20,7 +20,7 @@ const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   res.json(filteredUser);
 };
 
-const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
+const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
 
   if (!user) {
@@ -41,7 +41,7 @@ const getUsers: RequestHandler = async (req, res) => {
   const { rows: users, count } = await User.findAndCountAll({
     attributes: User.allowedFields,
     limit: USERS_LIMIT,
-    offset: offset,
+    offset,
     order: [
       ['id', 'ASC'],
     ],
@@ -53,7 +53,7 @@ const getUsers: RequestHandler = async (req, res) => {
     throw new BadRequestError('Page out of range');
   }
 
-  res.json({ page: page, totalPages: totalPages, users });
+  res.json({ page, totalPages, users });
 };
 
 interface UpdatableFields {
@@ -65,7 +65,6 @@ interface UpdatableFields {
 }
 
 const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
-
   const fieldsToUpdate = [
     'bio',
     'twitter_username',
@@ -94,6 +93,7 @@ const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = 
 };
 
 export {
+  USERS_LIMIT,
   getCurrentUser,
   getUserById,
   getUsers,
