@@ -28,7 +28,7 @@ const commonOptions = {
 };
 
 // Database object modeling mongoDB data
-export class Database {
+class Database {
   dbName: string;
   sequelize: Sequelize;
 
@@ -46,7 +46,7 @@ export class Database {
         username: env.DB_USER,
         password: env.DB_PASSWORD,
         host: env.DB_HOST,
-        database: database,
+        database,
         ...commonOptions,
       });
     }
@@ -62,4 +62,7 @@ export class Database {
 
 const Db = new Database();
 
-export default Db;
+export {
+  Db as default,
+  Database,
+};
