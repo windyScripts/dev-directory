@@ -17,9 +17,15 @@ permissions:
   checks: write
   contents: write
 
+env:
+  DB_USER: "postgres"
+  DB_PASSWORD: "password"
+  DB_NAME: "test"
+
 jobs:
   run-ci:
     name: Run Linting and Server Tests
+    timeout-minutes: 5
     runs-on: ubuntu-latest
 
     steps:
@@ -45,8 +51,8 @@ jobs:
       - name: Run Jest tests
         run: npm run test
 
-      - name: Run Cypress tests
-        run: npm run cypress
+      - name: Cypress run
+        uses: cypress-io/github-action@v5.x.x # use the explicit version number
 
       - name: Stop Container
         if: always()
