@@ -18,9 +18,7 @@ const AuthRedirect: React.FC = () => {
   }, [router.query.code]);
 
   return (
-    <div>
-      <CircularProgress />
-    </div>
+    <div><CircularProgress /></div>
   );
 };
 
