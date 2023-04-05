@@ -15,7 +15,7 @@ const Index: NextPage = () => {
       </Typography>
       <Box className="flex items-center gap-4">
         <Button variant="contained" color="secondary" onClick={onSkip}>
-          Dismiss
+          Skip
         </Button>
       </Box>
     </Container>
