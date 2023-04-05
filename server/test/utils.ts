@@ -36,7 +36,7 @@ function makeUserObject({
   linkedin_url,
   github_username,
   website,
-}: UserObject) {
+}: Partial<UserObject> = {}) {
   // build object
   // check which properties are included
   // 20% chance at empty values
@@ -52,7 +52,7 @@ function makeUserObject({
   };
 }
 
-async function createUser(options: UserObject) {
+async function createUser(options: Partial<UserObject> = {}) {
   const userObject = makeUserObject(options);
   // insert into DB after creation
   return await User.create(userObject);

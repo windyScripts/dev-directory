@@ -1,6 +1,10 @@
 import log from 'server/lib/log';
 import { createUsers } from 'server/test/utils';
 
+(async () => {
+  await seed(100);
+})();
+
 export async function seed(numberOfUsersToCreate: number): Promise<void> {
   try {
     const userArray = await createUsers(numberOfUsersToCreate);
@@ -9,7 +13,3 @@ export async function seed(numberOfUsersToCreate: number): Promise<void> {
     log('Error inserting users', error);
   }
 }
-
-(async () => {
-  await seed(100);
-})();
