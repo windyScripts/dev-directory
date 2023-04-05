@@ -27,7 +27,9 @@ const Index: NextPage<Props> = props => {
         dev-directory
       </Typography>
       <Box className="flex items-center gap-4">
-        <Typography>You are {!isAuthed ? 'not' : ''} logged in</Typography>
+        <Typography>
+          You are {!isAuthed ? 'not' : ''} logged in
+        </Typography>
         {isAuthed ? (
           <Button variant="contained" color="secondary" onClick={onLogout}>
             Log out
