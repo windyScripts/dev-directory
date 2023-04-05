@@ -8,7 +8,7 @@ import type { IntRange } from 'server/types/utils';
 
 // random
 // probability should only be 1 - 100
-export function randomEmptyChance(probability: IntRange<0, 100>, preferredResult: string) {
+function randomEmptyChance(probability: IntRange<0, 100>, preferredResult: string) {
   // out of a 100
   const randomNum = Math.random() * 100;
   return randomNum < probability ? '' : preferredResult;
@@ -73,6 +73,7 @@ function getExpectedUserObject(user: User) {
 
 export {
   makeUserObject,
+  randomEmptyChance,
   createUsers,
   createUser,
   getExpectedUserObject,
