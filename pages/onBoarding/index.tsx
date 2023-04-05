@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 
 const Index: NextPage = () => {
   const router = useRouter();
-  const onDismiss = () => {
-    router.push('/?seenOnBoarding=true');
+  const onSkip = () => {
+    router.push('/');
   };
 
   return (
@@ -14,7 +14,7 @@ const Index: NextPage = () => {
         OnBoarding
       </Typography>
       <Box className="flex items-center gap-4">
-        <Button variant="contained" color="secondary" onClick={onDismiss}>
+        <Button variant="contained" color="secondary" onClick={onSkip}>
           Dismiss
         </Button>
       </Box>
