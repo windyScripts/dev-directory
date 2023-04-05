@@ -72,9 +72,9 @@ function getExpectedUserObject(user: User) {
 }
 
 export {
-  makeUserObject,
-  createUsers,
-  randomEmptyChance,  
+  randomEmptyChance,
   createUser,
   getExpectedUserObject,
+  makeUserObject,
+  createUsers,
 };

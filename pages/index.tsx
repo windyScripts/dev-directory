@@ -12,7 +12,7 @@ interface Props {
   isAuthed: boolean;
 }
 
-const Index: NextPage<Props> = (props) => {
+const Index: NextPage<Props> = props => {
   const [isAuthed, setIsAuthed] = React.useState(props.isAuthed);
 
   const onLogout = async () => {

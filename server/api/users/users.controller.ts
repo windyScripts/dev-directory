@@ -5,9 +5,11 @@ import _ from 'lodash';
 import { User } from 'server/models';
 import { UserProfile } from 'server/types/User';
 
-type ClientUser = Pick<User, 'id' | 'discord_user_id'>
+type ClientUser = Pick<User, 'id' | 'discord_user_id'>;
 
-export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
+const USERS_LIMIT = 20;
+
+const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
   const filteredUser = _.pick(req.user!, [
     'id',
@@ -18,7 +20,7 @@ export const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
   res.json(filteredUser);
 };
 
-export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req, res) => {
+const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
 
   if (!user) {
@@ -28,10 +30,30 @@ export const getUserById: RequestHandler<{id: string}, UserProfile> = async (req
   res.json(user);
 };
 
-export const getUsers: RequestHandler<UserProfile[]> = async (req, res) => {
-  const users = await User.findAll({ attributes: User.allowedFields });
+const getUsers: RequestHandler = async (req, res) => {
+  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+  const offset = (page - 1) * USERS_LIMIT;
 
-  res.json(users);
+  if (!Number.isInteger(page) || page < 1) {
+    throw new BadRequestError('Invalid page number');
+  }
+
+  const { rows: users, count } = await User.findAndCountAll({
+    attributes: User.allowedFields,
+    limit: USERS_LIMIT,
+    offset,
+    order: [
+      ['id', 'ASC'],
+    ],
+  });
+
+  const totalPages = Math.ceil(count / USERS_LIMIT) || 1;
+
+  if (offset >= count && page !== 1) {
+    throw new BadRequestError('Page out of range');
+  }
+
+  res.json({ page, totalPages, users });
 };
 
 interface UpdatableFields {
@@ -42,8 +64,7 @@ interface UpdatableFields {
   website?: string;
 }
 
-export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
-
+const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = async (req, res) => {
   const fieldsToUpdate = [
     'bio',
     'twitter_username',
@@ -69,4 +90,12 @@ export const updateUserById: RequestHandler<{ id: string }, string, UpdatableFie
   }
 
   res.sendStatus(200);
+};
+
+export {
+  USERS_LIMIT,
+  getCurrentUser,
+  getUserById,
+  getUsers,
+  updateUserById,
 };

@@ -1,8 +1,11 @@
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
 import { createUser, getExpectedUserObject } from 'server/test/utils';
+import { UserProfile } from 'server/types/User';
 
-describe('auth router', () => {
+import { USERS_LIMIT } from './users.controller';
+
+describe('user router', () => {
   let server: TestServer;
 
   beforeAll(async () => {
@@ -36,20 +39,102 @@ describe('auth router', () => {
     });
   });
 
-  describe('GET /', () => {
-    it('expects empty array if no users exist', async () => {
-      const res = await server.exec.get('/api/users/');
-      expect(res.body).toStrictEqual([]);
+  describe('GET /api/users', () => {
+    it('should error with invalid page number when negative pages requested', async () => {
+      const res = await server.exec.get('/api/users/?page=-1');
+
+      expect(res.status).toBe(400);
+      expect(res.body.message).toEqual('Invalid page number');
     });
 
-    it('returns all users', async () => {
-      const userOne = await createUser();
-      const userTwo = await createUser();
+    it('should error invalid page number when non-numerical pages requested', async () => {
+      const res = await server.exec.get('/api/users/?page=a');
+
+      expect(res.status).toBe(400);
+      expect(res.body.message).toEqual('Invalid page number');
+    });
+
+    it('should error with page out of range when page exceeds total pages', async () => {
+      const res = await server.exec.get('/api/users/?page=9001');
+
+      expect(res.status).toBe(400);
+      expect(res.body.message).toEqual('Page out of range');
+    });
+
+    it('should return empty array if no users exist', async () => {
+      const res = await server.exec.get('/api/users/');
+
+      expect(res.status).toBe(200);
+      expect(res.body.users).toStrictEqual([]);
+    });
+
+    it('should return proper page metadata with the first page and no users', async () => {
+      const res = await server.exec.get('/api/users/');
+
+      expect(res.status).toBe(200);
+      expect(res.body.page).toEqual(1);
+      expect(res.body.totalPages).toEqual(1);
+    });
+
+    it('should return proper page metadata with the first page and 20 users', async () => {
+      await Promise.all(Array.from({ length: 20 }, createUser));
 
       const res = await server.exec.get('/api/users/');
+
       expect(res.status).toBe(200);
-      expect(res.body[0]).toEqual(getExpectedUserObject(userOne));
-      expect(res.body[1]).toEqual(getExpectedUserObject(userTwo));
+      expect(res.body.page).toEqual(1);
+      expect(res.body.totalPages).toEqual(1);
+    });
+
+    it('should return proper page metadata with the first page and 21 users', async () => {
+      await Promise.all(Array.from({ length: 21 }, createUser));
+
+      const res = await server.exec.get('/api/users/');
+
+      expect(res.status).toBe(200);
+      expect(res.body.page).toEqual(1);
+      expect(res.body.totalPages).toEqual(2);
+    });
+
+    it('should return proper page metadata with the second page', async () => {
+      await Promise.all(Array.from({ length: 25 }, createUser));
+
+      const res = await server.exec.get('/api/users?page=2');
+
+      expect(res.status).toBe(200);
+      expect(res.body.page).toEqual(2);
+      expect(res.body.totalPages).toEqual(2);
+    });
+
+    it(`should return ${USERS_LIMIT} users on first page`, async () => {
+      await Promise.all(Array.from({ length: 25 }, createUser));
+
+      const res = await server.exec.get('/api/users/');
+
+      expect(res.status).toBe(200);
+      expect(res.body.users.length).toEqual(USERS_LIMIT);
+      expect(res.body.page).toEqual(1);
+      expect(res.body.totalPages).toEqual(2);
+    });
+
+    it('should return 5 users on second page', async () => {
+      await Promise.all(Array.from({ length: 25 }, createUser));
+
+      const res = await server.exec.get('/api/users?page=2');
+
+      expect(res.status).toBe(200);
+      expect(res.body.users.length).toEqual(5);
+    });
+
+    it('should return users sorted by user.id', async () => {
+      const users: User[] = await Promise.all(Array.from({ length: 5 }, createUser));
+      const userIds = users.map(user => user.id).sort((a, b) => a - b);
+
+      const res = await server.exec.get('/api/users');
+      const ids = res.body.users.map((user:UserProfile) => user.id);
+
+      expect(res.status).toBe(200);
+      expect(ids).toEqual(userIds);
     });
   });
 
@@ -86,7 +171,7 @@ describe('auth router', () => {
 
       server.login(user);
 
-      await User.destroy({ where:{ id: user.id }});
+      await User.destroy({ where: { id: user.id }});
 
       const res = await server.exec.patch(`/api/users/${user.id}`).send({ bio: 'test' });
       expect(res.status).toBe(404);
