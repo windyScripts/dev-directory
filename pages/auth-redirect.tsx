@@ -8,7 +8,7 @@ const AuthRedirect: React.FC = () => {
 
   const useAuthCode = async (code: string) => {
     await axios.post('/api/auth/login', { code });
-    router.push('/');
+    router.push('/onboarding');
   };
 
   React.useEffect(() => {
