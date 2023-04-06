@@ -2,7 +2,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-const Index: NextPage = () => {
+const Onboarding: NextPage = () => {
   return (
     <Container maxWidth="lg" className="flex justify-between pt-4">
       <Typography variant="h1" className="text-3xl">
@@ -19,4 +19,4 @@ const Index: NextPage = () => {
   );
 };
 
-export default Index;
+export default Onboarding;
