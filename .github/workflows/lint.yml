@@ -40,11 +40,11 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Start Database
+      - name: Start Database Container
         run: docker-compose -f "docker-compose.yml" up -d
 
-      - name: Build And Serve app
-        run: docker-compose -f docker-compose.ci.yml up -d --build 
+      - name: Build And Serve app Container
+        run: docker-compose -f "docker-compose.ci.yml" up -d --build 
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
@@ -57,6 +57,10 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v5.1.0 # use the explicit version number
 
-      - name: Stop Container
+      - name: Stop app Container
+        if: always()
+        run: docker-compose -f "docker-compose.ci.yml" down
+
+      - name: Stop Database Container
         if: always()
         run: docker-compose -f "docker-compose.yml" down
