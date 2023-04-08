@@ -8,3 +8,5 @@ export type UserProfile = Pick<User, 'id'
   | 'linkedin_url'
   | 'github_username'
   | 'website'>;
+
+export type UserObject = Omit<User, 'id'>;

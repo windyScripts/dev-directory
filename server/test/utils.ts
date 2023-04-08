@@ -1,7 +1,9 @@
 import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
 import _ from 'lodash';
 
+import Db from 'server/lib/db';
 import { User } from 'server/models';
+import { UserObject } from 'server/types/User';
 import type { IntRange } from 'server/types/utils';
 
 // random
@@ -25,19 +27,7 @@ function getRandomLinkedInURL() {
   return `https://www.linkedin.com/in/${randUserName()}/`;
 }
 
-interface UserObject {
-  email: string;
-  discord_user_id: string;
-  discord_name: string;
-  bio: string;
-  twitter_username: string;
-  linkedin_url: string;
-  github_username: string;
-  website: string;
-}
-
-// await createUser({ discord_name: "poop#1234", bio: "i like poop" })
-async function createUser({
+function makeUserObject({
   email,
   discord_user_id,
   discord_name,
@@ -50,7 +40,7 @@ async function createUser({
   // build object
   // check which properties are included
   // 20% chance at empty values
-  const userObject = {
+  return {
     email: email ?? randEmail(),
     discord_user_id: discord_user_id ?? String(randNumber({ min: 1e16, max: 1e18 - 1 })),
     discord_name: discord_name ?? randomEmptyChance(20, getRandomDiscordUserName()),
@@ -60,11 +50,19 @@ async function createUser({
     github_username: github_username ?? randomEmptyChance(20, randUserName()),
     website: website ?? randomEmptyChance(20, randUrl()),
   };
+}
 
+async function createUser(options: Partial<UserObject> = {}) {
+  const userObject = makeUserObject(options);
   // insert into DB after creation
-  const user = await User.create(userObject);
+  return await User.create(userObject);
+}
 
-  return user;
+async function createUsers(numberOfUsers: number): Promise<User[]> {
+  const userArray = Array.from({ length: numberOfUsers }, makeUserObject);
+  return await Db.sequelize.transaction(async transaction => {
+    return await User.bulkCreate(userArray, { transaction });
+  });
 }
 
 function getExpectedUserObject(user: User) {
@@ -77,4 +75,6 @@ export {
   randomEmptyChance,
   createUser,
   getExpectedUserObject,
+  makeUserObject,
+  createUsers,
 };

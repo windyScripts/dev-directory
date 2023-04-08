@@ -41,7 +41,7 @@
     "server/**/*",
     "client/**/*",
     "shared/**/*",
-    "pages/**/*"
+    "pages/**/*",
   ],
   "exclude": [
     "node_modules",
