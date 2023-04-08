@@ -40,8 +40,11 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Start Container
+      - name: Start Database
         run: docker-compose -f "docker-compose.yml" up -d
+
+      - name: Build And Serve app
+        run: docker-compose -f docker-compose.ci.yml up -d --build 
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
