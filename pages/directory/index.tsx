@@ -6,8 +6,8 @@ import createAxiosInstance from 'client/lib/axios';
 
 //TODO: Type users once sequelize-typescript is added
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Directory: NextPage<{ users: any[] }> = props => {
-  const { users } = props;
+const Directory: NextPage<{ users: any[]; error: string }> = props => {
+  const { users, error } = props;
 
   return (
     <Container maxWidth="lg" className="pt-4">
@@ -16,6 +16,7 @@ const Directory: NextPage<{ users: any[] }> = props => {
           Users:
         </Typography>
         <Box>
+          {error && <Typography>{error}</Typography>}
           <List>
             {users.map(user => (
               <ListItem key={user.id}>{user.discord_name}</ListItem>
@@ -33,9 +34,9 @@ Directory.getInitialProps = async ({ req }) => {
     const response = await axios.get('/api/users');
     const users = response.data.users;
 
-    return { users };
+    return { users, error: null };
   } catch (error) {
-    return error;
+    return { users: [], error: error.message };
   }
 };
 
