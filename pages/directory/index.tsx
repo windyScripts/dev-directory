@@ -28,14 +28,14 @@ const Directory: NextPage<{ users: any[] }> = props => {
 };
 
 Directory.getInitialProps = async ({ req }) => {
-  const axios = createAxiosInstance(req);
-  const response = await axios.get('/api/users');
-  const users = response.data.users;
-
   try {
+    const axios = createAxiosInstance(req);
+    const response = await axios.get('/api/users');
+    const users = response.data.users;
+
     return { users };
   } catch (error) {
-    return { users };
+    return error;
   }
 };
 
