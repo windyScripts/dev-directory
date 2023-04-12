@@ -3,6 +3,8 @@ version: "3.9"
 services:
   app:
     build: .
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:password@localhost:5432/dev-directory}
     container_name: dev-directory-app
     ports:
       - 3000:3000
