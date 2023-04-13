@@ -59,7 +59,7 @@ jobs:
 
       - name: Stop app Container
         if: always()
-        run: docker-compose -f "docker-compose.ci.yml" down --remove-orphans
+        run: docker-compose -f "docker-compose.ci.yml" down
 
       - name: Stop Database Container
         if: always()
