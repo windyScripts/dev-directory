@@ -50,6 +50,7 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
+          eslint_extensions: "js,jsx,ts,tsx"
 
       - name: Run Jest tests
         run: npm run test
