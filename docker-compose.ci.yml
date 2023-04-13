@@ -8,7 +8,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_NAME: dev-directory
-      DB_LOGGING: false
+      DB_LOGGING: "false"
     container_name: dev-directory-app
     ports:
       - 3000:3000
