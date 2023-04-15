@@ -37,8 +37,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Node.js dependencies
-        run: npm ci
+      - name: Install Cypress and Jest
+        run: npm i cypress jest
 
       - name: Start Database Container
         run: docker-compose -f "docker-compose.yml" up -d
@@ -52,15 +52,11 @@ jobs:
           eslint: true
           eslint_extensions: "js,jsx,ts,tsx"
 
-      - name: Run Jest tests
-        run: npm run test
+      - name: Run Jest tests on built app
+        run: npm run jest -- /app/dist
 
       - name: Cypress run
-        uses: cypress-io/github-action@v5.1.0 # use the explicit version number
-
-      - name: Stop Database container
-        if: always()
-        run: docker-compose -f "docker-compose.yml" stop
+        uses: cypress-io/github-action@v5.1.0
 
       - name: Stop and remove App Container
         if: always()
