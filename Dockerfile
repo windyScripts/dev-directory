@@ -8,7 +8,6 @@ ARG DB_PORT
 ARG DB_USER
 ARG DB_NAMEd
 
-
 ENV DB_PASSWORD $DB_PASSWORD
 ENV DB_HOST $DB_HOST
 ENV DB_PORT $DB_PORT
@@ -22,8 +21,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-
-RUN npm run sequelize-cli db:migrate
 
 EXPOSE 3000
 
