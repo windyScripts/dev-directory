@@ -37,8 +37,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Cypress and Jest
-        run: npm i cypress jest
+      - name: Install Cypress
+        run: npm i cypress
 
       - name: Start Database Container
         run: docker-compose -f "docker-compose.yml" up -d
@@ -62,10 +62,10 @@ jobs:
         if: always()
         run: docker-compose -f "docker-compose.yml" stop
 
-      - name: Stop and remove App Container
+      - name: Stop App Container
         if: always()
-        run: docker-compose -f "docker-compose.ci.yml" down
+        run: docker-compose -f "docker-compose.ci.yml" stop
 
-       - name: Stop and remove Database Container
+      - name: Remove App and Database Containers
         if: always()
-        run: docker-compose -f "docker-compose.yml" down       
+        run: docker-compose -f "docker-compose.yml" -f "docker-compose.ci.yml" rm -v      
