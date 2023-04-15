@@ -53,15 +53,15 @@ jobs:
           eslint_extensions: "js,jsx,ts,tsx"
 
       - name: Run Jest tests on built app
-        run: npm run jest -- /app/dist
+        run: docker run app npm run jest -- /app/dist
 
       - name: Cypress run
         uses: cypress-io/github-action@v5.1.0
 
+      - name: Stop and remove Database Container
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
+
       - name: Stop and remove App Container
         if: always()
         run: docker-compose -f "docker-compose.ci.yml" down
-
-      - name: Remove Database Container
-        if: always()
-        run: docker-compose -f "docker-compose.yml" down
