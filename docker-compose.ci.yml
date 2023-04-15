@@ -10,7 +10,6 @@ services:
           DB_USER: postgres
           DB_NAME: dev-directory
           DB_PASSWORD: password
-          AUTH_SECRET: secret
     ports:
       - 3000:3000
 
