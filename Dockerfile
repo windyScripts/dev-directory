@@ -23,6 +23,8 @@ COPY . .
 
 RUN npm run build
 
+RUN npm run sequelize-cli db:migrate
+
 EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
