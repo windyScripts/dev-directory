@@ -5,7 +5,7 @@ services:
     build:
         context: .
         args:
-          DB_HOST: dev-directory_pg_1
+          DB_HOST: pg
           DB_PORT: 5432
           DB_USER: postgres
           DB_NAME: dev-directory

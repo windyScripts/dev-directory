@@ -43,10 +43,10 @@ jobs:
       - name: Start Database Container
         run: docker-compose -f "docker-compose.yml" up -d
 
-      - name: Build And Serve app Container
+      - name: Build and serve App Container
         run: docker-compose -f "docker-compose.ci.yml" up -d --build 
 
-      - name: Running migrations
+      - name: Run migrations
         run: npm run sequelize-cli db:migrate
 
       - name: Run linters
@@ -61,7 +61,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v5.1.0 # use the explicit version number
 
-      - name: Stop app Container
+      - name: Stop App Container
         if: always()
         run: docker-compose -f "docker-compose.ci.yml" down
 

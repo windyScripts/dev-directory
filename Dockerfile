@@ -16,7 +16,6 @@ ENV DB_USER $DB_USER
 ENV DB_NAME $DB_NAME
 ENV DB_PASSWORD $DB_PASSWORD
 
-
 COPY package*.json ./  
 
 RUN npm install
