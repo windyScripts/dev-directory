@@ -46,6 +46,9 @@ jobs:
       - name: Build And Serve app Container
         run: docker-compose -f "docker-compose.ci.yml" up -d --build 
 
+      - name: Running migrations
+        run: npm run sequelize-cli db:migrate
+
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
