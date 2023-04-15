@@ -52,8 +52,8 @@ jobs:
           eslint: true
           eslint_extensions: "js,jsx,ts,tsx"
 
-      - name: Run Jest tests on built app
-        run: docker run dev-directory_app npm run jest -- /dist
+      - name: Run Jest tests
+        run: docker run dev-directory_app npm run test
 
       - name: Cypress run
         uses: cypress-io/github-action@v5.1.0
