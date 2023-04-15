@@ -3,14 +3,9 @@ version: "3.9"
 services:
   app:
     build:
-        context: .
-        args:
-          DB_HOST: dev-directory_pg_1
-          DB_PORT: 5432
-          DB_USER: postgres
-          DB_NAME: dev-directory
-          DB_PASSWORD: password
+      dockerfile: Dockerfile
+      context: .
+      args:
+        DB_URL: postgresql://postgres:password@pg:5432/dev-directory
     ports:
       - 3000:3000
-
-
