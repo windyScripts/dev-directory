@@ -52,11 +52,11 @@ jobs:
           eslint: true
           eslint_extensions: "js,jsx,ts,tsx"
 
-      - name: Run Jest tests
-        run: docker run dev-directory_app npm run test
-
       - name: Cypress run
         uses: cypress-io/github-action@v5.1.0
+
+      - name: Run Jest tests
+        run: docker run dev-directory_app npm run test
 
       - name: Stop Database Container
         if: always()
