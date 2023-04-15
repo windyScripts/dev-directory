@@ -6,6 +6,10 @@ services:
       dockerfile: Dockerfile
       context: .
       args:
-        DB_URL: postgresql://postgres:password@pg:5432/dev-directory
+        DB_PASSWORD: password
+        DB_HOST: pg
+        DB_PORT: 5432
+        DB_USER: postgres
+        DB_NAME: dev-directory
     ports:
       - 3000:3000
