@@ -21,6 +21,8 @@ env:
   DB_USER: "postgres"
   DB_PASSWORD: "password"
   DB_NAME: "test"
+  DB_HOST: pg
+  DB_PORT: 5432
 
 jobs:
   run-ci:
