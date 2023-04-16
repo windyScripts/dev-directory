@@ -37,12 +37,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: "js,jsx,ts,tsx"
-
       - name: Install Cypress
         run: npm i cypress
 
@@ -52,7 +46,13 @@ jobs:
       - name: Build and serve App Container
         run: docker-compose -f "docker-compose.ci.yml" up -d --build 
 
-      - name: Cypress run
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          eslint_extensions: "js,jsx,ts,tsx"
+
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v5.1.0
 
       - name: Run Jest tests
