@@ -21,12 +21,10 @@ env:
   DB_USER: "postgres"
   DB_PASSWORD: "password"
   DB_NAME: "test"
-  DB_HOST: pg
-  DB_PORT: 5432
 
 jobs:
   run-ci:
-    name: Run Linting and Server Tests
+    name: Run Linting, Server and Client-side Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -39,6 +37,12 @@ jobs:
         with:
           node-version: 18
 
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          eslint_extensions: "js,jsx,ts,tsx"
+
       - name: Install Cypress
         run: npm i cypress
 
@@ -47,12 +51,6 @@ jobs:
 
       - name: Build and serve App Container
         run: docker-compose -f "docker-compose.ci.yml" up -d --build 
-
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: "js,jsx,ts,tsx"
 
       - name: Cypress run
         uses: cypress-io/github-action@v5.1.0
