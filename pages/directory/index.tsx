@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Container,
-  CircularProgress,
-  Grid,
-  List,
-  ListItem,
-  Typography,
-} from '@mui/material';
+import { Box, Container, CircularProgress, List, ListItem, Typography } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
 import React from 'react';
