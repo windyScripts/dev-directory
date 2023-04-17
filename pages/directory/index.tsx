@@ -19,7 +19,7 @@ import createAxiosInstance from 'client/lib/axios';
 const Directory: NextPage<{ users: any[]; error: string }> = props => {
   const { users, error } = props;
   const lastCardRef = React.useRef(null);
-  const [data, setData] = React.useState(users);
+  const [userData, setUserData] = React.useState(users);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(999);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -58,7 +58,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
         const { page, total, users } = await fetchUsers(currentPage + 1);
         setCurrentPage(page);
         setTotalPages(total);
-        setData([...data, ...users]);
+        setUserData([...userData, ...users]);
       } catch (err) {
         console.error(err);
       }
@@ -67,22 +67,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
 
     setIsLoading(false);
     lastCardObserver.observe(lastCardRef.current);
-  }, [data]);
-
-  const generateUserCards = users => {
-    const totalCards = users.length;
-    return (
-      <List>
-        {users.map((user, i) => {
-          return (
-            <ListItem key={user.id} ref={i === totalCards - 1 ? lastCardRef : null}>
-              <ProfileCard user={user} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
+  }, [userData]);
 
   return (
     <Container maxWidth="lg" className="pt-4">
@@ -92,61 +77,24 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
         </Typography>
         <Box>
           {error && <Typography>{error}</Typography>}
-          {generateUserCards(data)}
-          {/* <List>
-            {users.map(user => {
+          <List>
+            {userData.map((user, i) => {
+              console.log(i === userData.length - 1 ? `reattach: ${i}` : null);
               return (
-                <ListItem key={user.id}>
-                  <ProfileCard user={user} />
+                <ListItem
+                  key={user.id}
+                  sx={{ height: '100px' }}
+                  ref={i === userData.length - 1 ? lastCardRef : null}
+                >
+                  {user.discord_name}
                 </ListItem>
               );
             })}
-          </List> */}
+          </List>
         </Box>
       </Box>
       {isLoading ? <CircularProgress /> : null}
     </Container>
-  );
-};
-
-// this is a copy of UserObject in server\types\User.ts (temporary fix)
-interface UserObj {
-  id: number;
-  discord_user_id: string;
-  discord_name: string;
-  bio: string;
-  twitter_username: string;
-  linkedin_url: string;
-  github_username: string;
-  website: string;
-}
-
-//TODO: fix types later
-const ProfileCard: React.FC<{ user: UserObj }> = props => {
-  const { user } = props;
-  // grid inspired by https://mui.com/material-ui/react-grid/#complex-grid
-  return (
-    <Box
-      sx={{
-        backgroundColor: 'hsla(0, 0%, 85%, 1)',
-        padding: '16px 25px',
-      }}
-    >
-      <Grid container spacing={2}>
-        <Grid item>
-          <Avatar sx={{ width: 67, height: 67 }}>{user.discord_name.slice(0, 1)}</Avatar>
-        </Grid>
-        <Grid item container xs sm direction="column">
-          <Grid item xs>
-            <Typography variant="subtitle1">{user.discord_name}</Typography>
-          </Grid>
-          <Grid item xs>
-            <Typography variant="subtitle1">Somewhere</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Typography variant="body1">{user.bio}</Typography>
-    </Box>
   );
 };
 
