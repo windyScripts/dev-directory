@@ -53,7 +53,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
       } catch (err) {
         console.error(err);
       }
-      lastCardObserver.unobserve(lastCard.target);
+      lastCardObserver.disconnect();
     }, intersectionOptions);
 
     setIsLoading(false);
