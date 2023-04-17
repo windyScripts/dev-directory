@@ -32,7 +32,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
     const intersectionOptions = {
       // root default = document's viewport
       // in the future offset should be tied to the card height of the last row
-      rootMargin: '0px',
+      rootMargin: '300px',
       threshold: 0,
     };
 
