@@ -11,5 +11,15 @@ services:
         DB_PORT: ${DB_PORT:-5432}
         DB_USER: ${DB_USER:-postgres}
         DB_NAME: ${DB_NAME:-dev-directory}
+      ports:
+        - 3000:3000
+      depends_on:
+        - db
+    pg:
+    image: postgres:15.2
     ports:
-      - 3000:3000
+      - ${PORT:-5432}:5432
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_DB: ${DB_NAME:-dev-directory}
