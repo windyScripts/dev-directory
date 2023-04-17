@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { BadRequestError, NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
-import { User } from 'server/models';
+import { User, Flag } from 'server/models';
 import { UserProfile } from 'server/types/User';
 
 type ClientUser = Pick<User, 'id' | 'discord_user_id'>;
@@ -92,10 +92,32 @@ const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = 
   res.sendStatus(200);
 };
 
+interface FlagAttributes {
+  id: number;
+  user_id: number;
+  flag_name: string;
+}
+
+const getUserFlags: RequestHandler<{ id: string }, { message: string } | { flags: string[] }> = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findOne({ where: { id }});
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const flags = await Flag.findAll({ where: { user_id: id }});
+
+  const flagNames = flags.map((flag: FlagAttributes) => flag.flag_name);
+
+  return res.json({ flags: flagNames });
+};
+
 export {
   USERS_LIMIT,
   getCurrentUser,
   getUserById,
   getUsers,
   updateUserById,
+  getUserFlags,
 };

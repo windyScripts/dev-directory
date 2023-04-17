@@ -1,6 +1,8 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from 'sequelize';
+import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Association } from 'sequelize';
 
 import Db from 'server/lib/db';
+
+import Flag from './Flag.model';
 
 // order of InferAttributes & InferCreationAttributes is important.
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -27,6 +29,28 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
       'github_username',
       'website',
     ];
+  }
+
+  public static associations: {
+    flags: Association<User, Flag>;
+  };
+
+  public static associate() {
+    User.hasMany(Flag, { foreignKey: 'user_id' });
+  }
+
+  public async onboardingCompleted() {
+    await Flag.create({
+      user_id: this.id,
+      flag_name: 'onboarding_completed',
+    });
+  }
+
+  public async onboardingSkipped() {
+    await Flag.create({
+      user_id: this.id,
+      flag_name: 'onboarding_skipped',
+    });
   }
 }
 
@@ -84,5 +108,9 @@ User.init({
     },
   },
 });
+
+User.associations = {
+  flags: User.hasMany(Flag, { foreignKey: 'user_id' }),
+};
 
 export default User;
