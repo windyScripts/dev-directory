@@ -5,17 +5,17 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      args:
+      environment:
         DB_PASSWORD: ${DB_PASSWORD:-password}
         DB_HOST: ${DB_HOST:-pg}
         DB_PORT: ${DB_PORT:-5432}
         DB_USER: ${DB_USER:-postgres}
         DB_NAME: ${DB_NAME:-dev-directory}
-      ports:
-        - 3000:3000
-      depends_on:
+    ports:
+      - 3000:3000
+    depends_on:
         - db
-    pg:
+  pg:
     image: postgres:15.2
     ports:
       - ${PORT:-5432}:5432

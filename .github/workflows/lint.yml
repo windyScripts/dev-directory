@@ -58,14 +58,6 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5.1.0
 
-      - name: Stop Database Container
-        if: always()
-        run: docker-compose -f "docker-compose.yml" stop
-
-      - name: Stop App Container
-        if: always()
-        run: docker-compose -f "docker-compose.ci.yml" stop
-
       - name: Remove App and Database Containers
         if: always()
-        run: docker-compose -f "docker-compose.yml" -f "docker-compose.ci.yml" rm -v      
+        run: docker-compose -f "docker-compose.ci.yml" down      
