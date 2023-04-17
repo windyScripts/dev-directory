@@ -71,4 +71,10 @@ function getExpectedUserObject(user: User) {
   return pickedUser as User;
 }
 
-export { randomEmptyChance, createUser, getExpectedUserObject, makeUserObject, createUsers };
+export {
+  randomEmptyChance,
+  createUser,
+  getExpectedUserObject,
+  makeUserObject,
+  createUsers,
+};
