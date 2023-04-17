@@ -32,13 +32,14 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
     const intersectionOptions = {
       // root default = document's viewport
       // in the future offset should be tied to the card height of the last row
-      rootMargin: '300px',
+      rootMargin: '0px',
       threshold: 0,
     };
 
     const lastCardObserver = new IntersectionObserver(async ([lastCard]) => {
       // guard clause, should intersect only once
       if (!lastCard.isIntersecting) return;
+      lastCardObserver.disconnect();
       setIsLoading(true);
       try {
         // stop loading users when at max pages
@@ -53,7 +54,6 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
       } catch (err) {
         console.error(err);
       }
-      lastCardObserver.disconnect();
     }, intersectionOptions);
 
     setIsLoading(false);
