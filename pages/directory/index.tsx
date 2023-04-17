@@ -24,11 +24,9 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
   const [totalPages, setTotalPages] = React.useState(999);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  async function fetchUsers(page) {
-    // const axios = createAxiosInstance(req);
+  async function fetchUsers(page: number) {
     try {
       const response = await axios.get(`/api/users?page=${page}`);
-      console.log(response);
       return {
         page: response.data.page,
         total: response.data.totalPages,
@@ -40,12 +38,9 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
   }
 
   React.useEffect(() => {
-    setIsLoading(true); // needs tied to the observer
-
-    //  without options the observer uses the document's viewport as the root, with no margin, and a 0% threshold
     const intersectionOptions = {
       // root default = document's viewport
-      // in the future should be tied to the card height of the last row
+      // in the future offset should be tied to the card height of the last row
       rootMargin: '300px',
       threshold: 0,
     };
@@ -53,11 +48,13 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
     const lastCardObserver = new IntersectionObserver(async ([lastCard]) => {
       // guard clause, should intersect only once
       if (!lastCard.isIntersecting) return;
-
-      console.log('triggered');
+      setIsLoading(true);
       try {
         // stop loading users when at max pages
-        if (currentPage + 1 > totalPages) return;
+        if (currentPage + 1 > totalPages) {
+          setIsLoading(false);
+          return;
+        }
         const { page, total, users } = await fetchUsers(currentPage + 1);
         setCurrentPage(page);
         setTotalPages(total);
@@ -68,6 +65,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
       lastCardObserver.unobserve(lastCard.target);
     }, intersectionOptions);
 
+    setIsLoading(false);
     lastCardObserver.observe(lastCardRef.current);
   }, [data]);
 
