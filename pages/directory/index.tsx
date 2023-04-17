@@ -70,7 +70,6 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
           {error && <Typography>{error}</Typography>}
           <List>
             {userData.map((user, i) => {
-              console.log(i === userData.length - 1 ? `reattach: ${i}` : null);
               return (
                 <ListItem
                   key={user.id}
