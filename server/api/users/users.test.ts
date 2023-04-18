@@ -133,7 +133,7 @@ describe('user router', () => {
       const userIds = users.map(user => user.id).sort((a, b) => a - b);
 
       const res = await server.exec.get('/api/users');
-      const ids = res.body.users.map((user:UserProfile) => user.id);
+      const ids = res.body.users.map((user: UserProfile) => user.id);
 
       expect(res.status).toBe(200);
       expect(ids).toEqual(userIds);
@@ -241,5 +241,6 @@ describe('user router', () => {
       const response = await axios.get(`/api/flags/name/${flagName}`);
       expect(response.status).toBe(200);
       expect(response.data.name).toBe(flagName);
+    });
   });
 });
