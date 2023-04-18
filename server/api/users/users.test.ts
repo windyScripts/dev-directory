@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
 import { createUser, getExpectedUserObject } from 'server/test/utils';
@@ -206,5 +208,38 @@ describe('user router', () => {
         website: 'https://thiswasupdated.com/',
       });
     });
+  });
+
+  describe('Create new flag', () => {
+    it('should create a new flag and verify the data', async () => {
+      const newFlag = {
+        name: 'test flag',
+        description: 'this is a test flag',
+        isActive: true,
+      };
+      const response = await axios.post('/api/flags', newFlag);
+      expect(response.status).toBe(200);
+
+      // Retrieve the newly created flag
+      const flagResponse = await axios.get(`/api/flags/${response.data.id}`);
+      expect(flagResponse.status).toBe(200);
+      expect(flagResponse.data.name).toBe(newFlag.name);
+      expect(flagResponse.data.description).toBe(newFlag.description);
+      expect(flagResponse.data.isActive).toBe(newFlag.isActive);
+    });
+  });
+
+  describe('GET /api/flags/active', () => {
+    it('should return a list of active flags', async () => {
+      const response = await axios.get('/api/flags/active');
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.data)).toBe(true);
+    });
+
+    it('should return a flag by name', async () => {
+      const flagName = 'test flag';
+      const response = await axios.get(`/api/flags/name/${flagName}`);
+      expect(response.status).toBe(200);
+      expect(response.data.name).toBe(flagName);
   });
 });
