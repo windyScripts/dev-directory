@@ -98,10 +98,8 @@ interface FlagAttributes {
   flag_name: string;
 }
 
-const getUserFlags: RequestHandler<void, { flags: string[] }> = async (req, res) => {
-  const user = req.user;
-
-  const flags = await Flag.findAll({ where: { user_id: user.id }});
+const getUserFlags: RequestHandler = async (req, res) => {
+  const flags = await Flag.findAll({ where: { user_id: req.user.id }});
 
   const flagNames = flags.map((flag: FlagAttributes) => flag.flag_name);
 
