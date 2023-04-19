@@ -32,12 +32,14 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
     website: user.website,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFormFilled, setIsFormFilled] = useState<boolean>(false);
 
   const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
+    setIsFormFilled(true);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,6 +60,8 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
     router.push('/');
   }
 
+  const isSubmitDisabled = !isFormFilled && !isLoading;
+
   return (
     <Container maxWidth="lg" className="flex justify-between pt-4">
       <Typography variant="h1" className="text-3xl">
@@ -77,7 +81,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         />
         <TextField
           label="Twitter Username"
-          placeholder='No @ needed'
+          placeholder='JonDoe24'
           name="twitter_username"
           value={formData.twitter_username}
           onChange={handleChange}
@@ -87,7 +91,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         <TextField
           label="LinkedIn URL"
           name="linkedin_url"
-          placeholder='https://www.linkedin.com/in/...'
+          placeholder='https://www.linkedin.com/in/your-profile'
           value={formData.linkedin_url}
           onChange={handleChange}
           fullWidth
@@ -96,7 +100,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         <TextField
           label="GitHub Username"
           name="github_username"
-          placeholder='Git Username'
+          placeholder='Jon Doe'
           value={formData.github_username}
           onChange={handleChange}
           fullWidth
@@ -105,13 +109,14 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         <TextField
           label="Website"
           name="website"
+          placeholder='https://www.your-website.com'
           value={formData.website}
           onChange={handleChange}
           fullWidth
           inputProps={{ maxLength: 200 }}
         />
         <Box mt={4} textAlign="right">
-          <Button variant="contained" color="primary" type="submit" disabled={isLoading}>
+          <Button variant="contained" color="primary" type="submit" disabled={isSubmitDisabled}>
             {isLoading ? 'Submitting...' : 'Submit'}
             Submit
           </Button>
