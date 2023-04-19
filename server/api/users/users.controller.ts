@@ -98,15 +98,10 @@ interface FlagAttributes {
   flag_name: string;
 }
 
-const getUserFlags: RequestHandler<{ id: string }, { message: string } | { flags: string[] }> = async (req, res) => {
-  const { id } = req.params;
+const getUserFlags: RequestHandler<void, { flags: string[] }> = async (req, res) => {
+  const user = req.user;
 
-  const user = await User.findOne({ where: { id }});
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-
-  const flags = await Flag.findAll({ where: { user_id: id }});
+  const flags = await Flag.findAll({ where: { user_id: user.id }});
 
   const flagNames = flags.map((flag: FlagAttributes) => flag.flag_name);
 
