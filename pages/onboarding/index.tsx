@@ -19,18 +19,19 @@ interface FormData {
   website: string;
 }
 
-interface UseridData {
+interface Props {
   user: UserProfile;
 }
 
-const OnboardingPage: NextPage<UseridData> = ({ user }: UseridData) => {
+const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
   const [formData, setFormData] = useState<FormData>({
-    bio: '',
-    twitter_username: '',
-    linkedin_url: '',
-    github_username: '',
-    website: '',
+    bio: user.bio,
+    twitter_username: user.twitter_username,
+    linkedin_url: user.linkedin_url,
+    github_username: user.github_username,
+    website: user.website,
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -43,69 +44,63 @@ const OnboardingPage: NextPage<UseridData> = ({ user }: UseridData) => {
     event.preventDefault();
 
     try {
-      const response = await axios.patch(`/api/users/${user.id}`, formData);
-
-      if (response.status !== 200) {
-        throw new Error('Failed to update user profile');
-      }
-
-      router.push('/');
+      setIsLoading(true);
+      await axios.patch(`/api/users/${user.id}`, formData);
+      setIsLoading(false);
+      router.push('/directory');
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
     }
   };
+
+  if (!user) {
+    router.push('/');
+  }
 
   return (
     <Container maxWidth="lg" className="flex justify-between pt-4">
       <Typography variant="h1" className="text-3xl">
         Onboarding
       </Typography>
-      <Box className="flex items-center gap-4">
-        <Link href="/" passHref>
-          <Button variant="contained" color="secondary">
-            Skip
-          </Button>
-        </Link>
-      </Box>
-
       <form onSubmit={handleSubmit}>
         <TextField
           label="Bio"
           name="bio"
+          placeholder='Describe yourself!'
           value={formData.bio}
           onChange={handleChange}
           multiline
           rows={4}
           fullWidth
           inputProps={{ maxLength: 1000 }}
-          required
         />
         <TextField
-          label="Twitter username"
+          label="Twitter Username"
+          placeholder='No @ needed'
           name="twitter_username"
           value={formData.twitter_username}
           onChange={handleChange}
           fullWidth
           inputProps={{ maxLength: 200 }}
-          required
         />
         <TextField
           label="LinkedIn URL"
           name="linkedin_url"
+          placeholder='https://www.linkedin.com/in/...'
           value={formData.linkedin_url}
           onChange={handleChange}
           fullWidth
           inputProps={{ maxLength: 200 }}
-          required
         />
         <TextField
-          label="GitHub username"
+          label="GitHub Username"
           name="github_username"
+          placeholder='Git Username'
           value={formData.github_username}
           onChange={handleChange}
           fullWidth
           inputProps={{ maxLength: 200 }}
-          required
         />
         <TextField
           label="Website"
@@ -114,15 +109,21 @@ const OnboardingPage: NextPage<UseridData> = ({ user }: UseridData) => {
           onChange={handleChange}
           fullWidth
           inputProps={{ maxLength: 200 }}
-          required
         />
-
         <Box mt={4} textAlign="right">
-          <Button variant="contained" color="primary" type="submit">
+          <Button variant="contained" color="primary" type="submit" disabled={isLoading}>
+            {isLoading ? 'Submitting...' : 'Submit'}
             Submit
           </Button>
         </Box>
       </form>
+      <Box className="flex items-center gap-4">
+        <Link href="/directory" passHref>
+          <Button variant="contained" color="secondary">
+            Skip
+          </Button>
+        </Link>
+      </Box>
     </Container>
   );
 };

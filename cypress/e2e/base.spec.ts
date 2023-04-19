@@ -36,10 +36,10 @@ describe('Onboarding Page', () => {
       cy.get('input[name="linkedin_url"]').type('https://www.linkedin.com/in/test_linkedin');
       cy.get('input[name="github_username"]').type('test_github');
       cy.get('input[name="website"]').type('https://www.testwebsite.com');
-      cy.visit('http://localhost:3000/');
+      cy.visit('http://localhost:3000/directory');
     });
 
-    cy.url().should('equal', 'http://localhost:3000/');
+    cy.url().should('equal', 'http://localhost:3000/directory');
   });
 });
 
