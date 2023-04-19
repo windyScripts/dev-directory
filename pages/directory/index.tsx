@@ -68,7 +68,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
         </Typography>
         <Box>
           {error && <Typography>{error}</Typography>}
-          <List>
+          <List data-cy="user-container">
             {userData.map((user, i) => {
               return (
                 <ListItem
@@ -83,7 +83,7 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
           </List>
         </Box>
       </Box>
-      {isLoading ? <CircularProgress /> : null}
+      {isLoading ? <CircularProgress data-cy="loading" /> : null}
     </Container>
   );
 };

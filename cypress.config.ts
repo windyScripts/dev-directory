@@ -10,4 +10,8 @@ export default defineConfig({
   videosFolder: './cypress/videos',
   downloadsFolder: './cypress/downloads',
   fileServerFolder: './',
+  env: {
+    bash: 'C:\\Program Files\\Git\\bin\\bash.exe',
+    comSpec: 'C:\\Windows\\system32\\cmd.exe',
+  },
 });
