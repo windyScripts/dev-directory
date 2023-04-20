@@ -7,12 +7,12 @@ import createAxiosInstance from 'client/lib/axios';
 
 //TODO: Type users once sequelize-typescript is added
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Directory: NextPage<{ users: any[]; error: string }> = props => {
-  const { users, error } = props;
+const Directory: NextPage<{ users: any[]; totalPages: number; error: string }> = props => {
+  const { users, totalPages, error } = props;
   const lastCardRef = React.useRef(null);
   const [userData, setUserData] = React.useState(users);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalPages, setTotalPages] = React.useState(999);
+  const [totalPageNum, setTotalPageNum] = React.useState(totalPages);
   const [isLoading, setIsLoading] = React.useState(false);
 
   async function fetchUsers(page: number) {
@@ -42,14 +42,14 @@ const Directory: NextPage<{ users: any[]; error: string }> = props => {
       lastCardObserver.disconnect();
       setIsLoading(true);
       try {
-        // stop loading users when at max pages
-        if (currentPage + 1 > totalPages) {
+        // stop loading users when at max pages before fetching next page
+        if (currentPage + 1 > totalPageNum) {
           setIsLoading(false);
           return;
         }
         const { page, total, users } = await fetchUsers(currentPage + 1);
         setCurrentPage(page);
-        setTotalPages(total);
+        setTotalPageNum(total);
         setUserData([...userData, ...users]);
       } catch (err) {
         console.error(err);
@@ -92,11 +92,11 @@ Directory.getInitialProps = async ({ req }) => {
   try {
     const axios = createAxiosInstance(req);
     const response = await axios.get('/api/users');
-    const users = response.data.users;
+    const { users, totalPages } = response.data;
 
-    return { users, error: null };
+    return { users, totalPages, error: null };
   } catch (error) {
-    return { users: [], error: error.message };
+    return { users: [], totalPages: 1, error: error.message };
   }
 };
 
