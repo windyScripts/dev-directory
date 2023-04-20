@@ -2,7 +2,7 @@ import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat
 import _ from 'lodash';
 
 import Db from 'server/lib/db';
-import { User } from 'server/models';
+import { User, Flag } from 'server/models';
 import { UserObject } from 'server/types/User';
 import type { IntRange } from 'server/types/utils';
 
@@ -71,10 +71,17 @@ function getExpectedUserObject(user: User) {
   return pickedUser as User;
 }
 
+function getExpectedFlagObject(flag: Flag) {
+  const allowedFields = Flag.allowedFields;
+  const pickedFlag = _.pick(flag, allowedFields);
+  return pickedFlag as Flag;
+}
+
 export {
   randomEmptyChance,
   createUser,
   getExpectedUserObject,
+  getExpectedFlagObject,
   makeUserObject,
   createUsers,
 };

@@ -1,8 +1,6 @@
-import axios from 'axios';
-
-import { User } from 'server/models';
+import { User, Flag } from 'server/models';
 import TestServer from 'server/test/server';
-import { createUser, getExpectedUserObject } from 'server/test/utils';
+import { createUser, getExpectedUserObject, getExpectedFlagObject } from 'server/test/utils';
 import { UserProfile } from 'server/types/User';
 
 import { USERS_LIMIT } from './users.controller';
@@ -210,37 +208,28 @@ describe('user router', () => {
     });
   });
 
-  describe('Create new flag', () => {
-    it('should create a new flag and verify the data', async () => {
-      const newFlag = {
-        name: 'test flag',
-        description: 'this is a test flag',
-        isActive: true,
-      };
-      const response = await axios.post('/api/flags', newFlag);
-      expect(response.status).toBe(200);
+  describe('Flag API', () => {
+    describe('creating a flag', () => {
+      let user: User;
+      let flag: Flag;
 
-      // Retrieve the newly created flag
-      const flagResponse = await axios.get(`/api/flags/${response.data.id}`);
-      expect(flagResponse.status).toBe(200);
-      expect(flagResponse.data.name).toBe(newFlag.name);
-      expect(flagResponse.data.description).toBe(newFlag.description);
-      expect(flagResponse.data.isActive).toBe(newFlag.isActive);
-    });
-  });
+      beforeEach(async () => {
+        user = await createUser();
+        const flagData = { user_id: user.id, flag_name: 'test' };
+        flag = await Flag.create(flagData);
+      });
 
-  describe('GET /api/flags/active', () => {
-    it('should return a list of active flags', async () => {
-      const response = await axios.get('/api/flags/active');
-      expect(response.status).toBe(200);
-      expect(Array.isArray(response.data)).toBe(true);
-    });
+      it('should create a new flag', async () => {
+        expect(flag.id).toBeDefined();
+        expect(flag.user_id).toBe(user.id);
+        expect(flag.flag_name).toBe('test');
+      });
 
-    it('should return a flag by name', async () => {
-      const flagName = 'test flag';
-      const response = await axios.get(`/api/flags/name/${flagName}`);
-      expect(response.status).toBe(200);
-      expect(response.data.name).toBe(flagName);
+      it('should return the created flag when queried', async () => {
+        const queriedFlag = await Flag.findByPk(flag.id);
+        const expectedFlag = getExpectedFlagObject(flag);
+        expect(queriedFlag).toEqual(expectedFlag);
+      });
     });
   });
 });

@@ -7,6 +7,12 @@ class Flag extends Model {
   public user_id!: number;
   public flag_name!: string;
 
+  public static readonly allowedFields: string[] = [
+    'id',
+    'user_id',
+    'flag_name',
+  ];
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
