@@ -56,6 +56,7 @@ export function executeCypressCommand(command: string) {
     if (tryAgain) {
       cy.exec(fullCommand, execOptions).then(result => logResults(result));
     }
+  }
 }
 
 // Alternatively you can use CommonJS syntax:
