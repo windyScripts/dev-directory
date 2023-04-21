@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
-
+// import User from 'server/models/User.model';
+import { executeCypressCommand } from '../support/e2e';
 describe('Open browser and check if login button exists.', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
@@ -45,41 +46,17 @@ describe('directory infinite scroll', () => {
   }
 
   before(() => {
+    const commandReset = 'npm run resetDB';
+    executeCypressCommand(commandReset);
+
+    // fill DB with 100 users
+    const command = 'npm run seed';
+    executeCypressCommand(command);
+
     // get total pages for tests
     cy.request('http://localhost:3000/api/users').then(response => {
       totalPages = response.body.totalPages;
     });
-
-    // clear the db then fill with 100 users
-    // User.destroy({ truncate: true })
-    //   .then(() => {
-    //     runSeedCommand();
-    //   })
-    //   .catch(err => {
-    //     console.error('Error deleting existing users:', err);
-    //   });
-
-    // https://github.com/cypress-io/cypress/issues/789#issuecomment-904295222
-    // fill DB with 100 users
-    const command = 'npm run seed';
-
-    if (Cypress.platform !== 'win32') {
-      cy.exec(command);
-    } else {
-      // This is a workaround against cy.exec not working on windows machine
-      // https://github.com/cypress-io/cypress/issues/789
-      // To make this code work you need to setup 2 cypress env variables in cypress.config.ts
-      // - bash (pointing to the bash shell executable on your machine)
-      // - comSpec (pointing to cmd.exe on your machine)
-      const sh = `"${Cypress.env('bash')}" --login -c`;
-      const fullCommand = `${sh} "${command}"`;
-      // const sh = `"${Cypress.env('bash')}" --login -i -c`;
-      cy.exec(fullCommand, { env: { SHELL: Cypress.env('comSpec') } })
-        .its('code')
-        .should('eq', 0);
-    }
-
-    // runSeedCommand();
   });
 
   beforeEach(() => {

@@ -19,6 +19,7 @@
     "seed": "cross-env NODE_ENV=development npm run ts:exec server/scripts/seed.ts",
     "sequelize-cli": "cross-env NODE_ENV=development sequelize-cli",
     "start": "node dist/server/index",
+    "resetDB": "cross-env NODE_ENV=development npm run ts:exec server/scripts/resetDB.ts",
     "test:server": "npm run jest -- ./server",
     "test:watch": "npm run jest -- --watch",
     "test": "npm run jest",
