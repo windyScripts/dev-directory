@@ -43,6 +43,9 @@ jobs:
       - name: Install eslint
         run: npm i eslint
 
+      - name: Configure eslint
+        run: npm init @eslint/config
+
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
@@ -50,7 +53,7 @@ jobs:
           eslint_extensions: "js,jsx,ts,tsx"
       
       - name: Run Jest tests
-        run: docker exec dev-directory_app_1 npm run jest -- --roots=['./dist']
+        run: docker exec dev-directory_app_1 npm run jest -- --roots='./dist'
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5.1.0
