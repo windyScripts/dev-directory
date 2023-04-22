@@ -60,4 +60,4 @@ jobs:
 
       - name: Remove App Container
         if: always()
-        run: docker-compose -f "docker-compose.ci.yml" down      
+        run: docker-compose -f "docker-compose.ci.yml" down
