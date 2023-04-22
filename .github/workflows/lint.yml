@@ -38,7 +38,7 @@ jobs:
           node-version: 18
 
       - name: Build and serve App Container
-        run: docker-compose -f "docker-compose.ci.yml" up -d --build 
+        run: docker-compose -f "docker-compose.ci.yml" up -d
 
       - name: Install eslint
         run: npm i eslint
