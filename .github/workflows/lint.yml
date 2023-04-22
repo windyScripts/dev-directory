@@ -50,7 +50,7 @@ jobs:
           eslint_extensions: "js,jsx,ts,tsx"
       
       - name: Run Jest tests
-        run: docker exec dev-directory_app_1 npm run jest -- /dist
+        run: docker exec dev-directory_app_1 npm run jest -- /
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5.1.0
