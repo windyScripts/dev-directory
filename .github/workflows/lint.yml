@@ -40,6 +40,9 @@ jobs:
       - name: Build and serve App Container
         run: docker-compose -f "docker-compose.ci.yml" up -d --build 
 
+      - name: Install eslint
+        run: npm init @eslint/config
+
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
