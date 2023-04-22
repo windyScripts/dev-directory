@@ -41,7 +41,7 @@ jobs:
         run: docker-compose -f "docker-compose.ci.yml" up -d --build 
 
       - name: Install eslint
-        run: npm init @eslint/config
+        run: npm i eslint
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
