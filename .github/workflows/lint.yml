@@ -17,11 +17,6 @@ permissions:
   checks: write
   contents: write
 
-env:
-  DB_USER: "postgres"
-  DB_PASSWORD: "password"
-  DB_NAME: "test"
-
 jobs:
   run-ci:
     name: Run Linting, Server and Client-side Tests

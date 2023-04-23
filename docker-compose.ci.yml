@@ -14,7 +14,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-        - pg
+      - pg
   pg:
     image: postgres:15.2
     ports:
