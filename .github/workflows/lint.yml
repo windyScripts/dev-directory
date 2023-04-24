@@ -35,17 +35,8 @@ jobs:
       - name: Build and serve App Container
         run: docker-compose -f "docker-compose.ci.yml" up -d
 
-      - name: Install eslint
-        run: npm i eslint
-
-      - name: Configure eslint
-        run: npm init @eslint/config
-
       - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: "js,jsx,ts,tsx"
+        run: docker exec dev-directory_app_1 npm run eslint . --fix
       
       - name: Run Jest tests
         run: docker exec dev-directory_app_1 npm run jest -- --roots='./dist'
