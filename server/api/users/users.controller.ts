@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { BadRequestError, NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
-import { User, Flag } from 'server/models';
+import { User } from 'server/models';
 import { UserProfile } from 'server/types/User';
 
 type ClientUser = Pick<User, 'id' | 'discord_user_id'>;
@@ -92,39 +92,10 @@ const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = 
   res.sendStatus(200);
 };
 
-interface FlagAttributes {
-  id: number;
-  user_id: number;
-  flag_name: string;
-}
-
-const createFlag: RequestHandler = async (req, res) => {
-  try {
-    const flag = await Flag.create({
-      user_id: req.user.id,
-      flag_name: req.body.flag_name,
-    });
-    res.status(201).json({ flag });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to create flag' });
-  }
-};
-
-const getUserFlags: RequestHandler = async (req, res) => {
-  const flags = await Flag.findAll({ where: { user_id: req.user.id }});
-
-  const flagNames = flags.map((flag: FlagAttributes) => flag.flag_name);
-
-  return res.json({ flags: flagNames });
-};
-
 export {
   USERS_LIMIT,
   getCurrentUser,
   getUserById,
   getUsers,
   updateUserById,
-  createFlag,
-  getUserFlags,
 };
