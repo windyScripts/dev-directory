@@ -17,15 +17,10 @@ permissions:
   checks: write
   contents: write
 
-env:
-  DB_USER: "postgres"
-  DB_PASSWORD: "password"
-  DB_NAME: "test"
-
 jobs:
   run-ci:
-    name: Run Linting and Server Tests
-    timeout-minutes: 5
+    name: Run Linting, Server and Client-side Tests
+    timeout-minutes: 8
     runs-on: ubuntu-latest
 
     steps:
@@ -37,24 +32,18 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Node.js dependencies
-        run: npm ci
-
-      - name: Build App
-        run:  npm run build
+      - name: Build and serve App Container
+        run: docker-compose -f "docker-compose.ci.yml" up -d
 
       - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: "js,jsx,ts,tsx"
+        run: docker exec dev-directory_app_1 npm run lint:fix
+      
+      - name: Run Jest tests
+        run: docker exec dev-directory_app_1 npm run jest -- --roots='./dist'
 
-      - name: Start Container
-        run: docker-compose -f "docker-compose.yml" up -d
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v5.1.0
 
-      - name: Run Tests
-        run: npm run test
-
-      - name: Stop Container
+      - name: Remove App Container
         if: always()
-        run: docker-compose -f "docker-compose.yml" down
+        run: docker-compose -f "docker-compose.ci.yml" down
