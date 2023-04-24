@@ -36,7 +36,7 @@ jobs:
         run: docker-compose -f "docker-compose.ci.yml" up -d
 
       - name: Run linters
-        run: docker exec dev-directory_app_1 npm run eslint . --fix
+        run: docker exec dev-directory_app_1 npm run lint:fix
       
       - name: Run Jest tests
         run: docker exec dev-directory_app_1 npm run jest -- --roots='./dist'
