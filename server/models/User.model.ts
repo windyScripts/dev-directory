@@ -1,4 +1,11 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Association } from 'sequelize';
+import {
+  Model,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  DataTypes,
+  Association,
+} from 'sequelize';
 
 import Db from 'server/lib/db';
 
