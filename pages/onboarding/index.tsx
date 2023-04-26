@@ -1,19 +1,31 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import { NextPage } from 'next';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import createAxiosInstance from 'client/lib/axios';
 
 const Onboarding: NextPage = () => {
+  const router = useRouter();
+
+  const handleSkipOnboarding = async () => {
+    try {
+      const axios = createAxiosInstance();
+      await axios.post('/api/flags/skip-onboarding');
+      router.push('/directory');
+    } catch (error) {
+      return { error: error.message };
+    }
+  };
+
   return (
     <Container maxWidth="lg" className="flex justify-between pt-4">
       <Typography variant="h1" className="text-3xl">
         Onboarding
       </Typography>
       <Box className="flex items-center gap-4">
-        <Link href="/" passHref>
-          <Button variant="contained" color="secondary">
-            Skip
-          </Button>
-        </Link>
+        <Button variant="contained" color="secondary" onClick={handleSkipOnboarding} >
+          Skip
+        </Button>
       </Box>
     </Container>
   );

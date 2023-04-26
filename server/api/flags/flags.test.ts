@@ -36,4 +36,20 @@ describe('flags API', () => {
       expect(res.body.flags).toEqual(['test']);
     });
   });
+
+  describe('POST /api/flags/skip-onboarding', () => {
+    it('should return unauthorized for not logged in user', async () => {
+      const res = await server.exec.post('/api/flags/skip-onboarding');
+      expect(res.status).toBe(401);
+    });
+
+    it('should create an onboarding skipped flag', async () => {
+      server.login(user);
+      const res = await server.exec.post('/api/flags/skip-onboarding');
+      server.logout();
+
+      expect(res.status).toBe(201);
+      expect(res.body.flag.name).toEqual('onboarding_skipped');
+    });
+  });
 });
