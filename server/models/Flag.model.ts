@@ -3,18 +3,18 @@ import { Model, DataTypes } from 'sequelize';
 import Db from 'server/lib/db';
 
 class Flag extends Model {
-  public id!: number;
-  public user_id!: number;
-  public flag_name!: string;
+  public id: number;
+  public user_id: number;
+  public name: string;
 
   public static readonly allowedFields: string[] = [
     'id',
     'user_id',
-    'flag_name',
+    'name',
   ];
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
 }
 
 Flag.init(
@@ -28,7 +28,7 @@ Flag.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    flag_name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },

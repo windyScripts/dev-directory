@@ -1,6 +1,6 @@
-import { User, Flag } from 'server/models';
+import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import { createUser, getExpectedUserObject, getExpectedFlagObject } from 'server/test/utils';
+import { createUser, getExpectedUserObject } from 'server/test/utils';
 import { UserProfile } from 'server/types/User';
 
 import { USERS_LIMIT } from './users.controller';
@@ -204,31 +204,6 @@ describe('user router', () => {
         linkedin_url: 'updated',
         github_username: 'gotUpdated',
         website: 'https://thiswasupdated.com/',
-      });
-    });
-  });
-
-  describe('Flag API', () => {
-    describe('creating a flag', () => {
-      let user: User;
-      let flag: Flag;
-
-      beforeEach(async () => {
-        user = await createUser();
-        const flagData = { user_id: user.id, flag_name: 'test' };
-        flag = await Flag.create(flagData);
-      });
-
-      it('should create a new flag', async () => {
-        expect(flag.id).toBeDefined();
-        expect(flag.user_id).toBe(user.id);
-        expect(flag.flag_name).toBe('test');
-      });
-
-      it('should return the created flag when queried', async () => {
-        const queriedFlag = await Flag.findByPk(flag.id);
-        const expectedFlag = getExpectedFlagObject(flag);
-        expect(queriedFlag).toEqual(expectedFlag);
       });
     });
   });

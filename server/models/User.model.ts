@@ -42,14 +42,14 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   public async onboardingCompleted() {
     await Flag.create({
       user_id: this.id,
-      flag_name: 'onboarding_completed',
+      name: 'onboarding_completed',
     });
   }
 
   public async onboardingSkipped() {
     await Flag.create({
       user_id: this.id,
-      flag_name: 'onboarding_skipped',
+      name: 'onboarding_skipped',
     });
   }
 }
@@ -108,9 +108,5 @@ User.init({
     },
   },
 });
-
-User.associations = {
-  flags: User.hasMany(Flag, { foreignKey: 'user_id' }),
-};
 
 export default User;
