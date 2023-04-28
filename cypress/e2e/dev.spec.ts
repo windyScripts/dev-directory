@@ -1,12 +1,16 @@
 import '../support/commands';
 
 describe('example test', () => {
-  it('allows a guest to login', () => {
+  it('allows a user to login and logout', () => {
     cy.visit('http://localhost:3000');
-    cy.get('a').contains('Log in').should('have.length', 1);
+    cy.contains('a', 'Log in').should('exist');
 
     cy.login().reload();
-    cy.get('button').contains('Log out').should('have.length', 1);
+    const logoutBtn = cy.contains('button', 'Log out');
+    logoutBtn.should('exist');
+
+    logoutBtn.click();
+    cy.contains('a', 'Log in').should('exist');
   });
 });
 
