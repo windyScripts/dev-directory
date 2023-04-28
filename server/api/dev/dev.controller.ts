@@ -42,18 +42,6 @@ const getLogin: RequestHandler<{ id?: string }> = async (req, res) => {
   res.sendStatus(200);
 };
 
-const getTruncateDatabase: RequestHandler = async (req, res) => {
-  try {
-    await truncateDatabase();
-
-    res.json({ status: 'Success', message: 'Database truncated' });
-    res.status(200);
-  } catch (error) {
-    log(`Unable to truncate database: ${error.message}`);
-    throw new InternalServerError('Unable to truncate database');
-  }
-};
-
 const getSeedDatabase: RequestHandler = async (req, res) => {
   try {
     // Doesn't populate future tables
@@ -67,9 +55,21 @@ const getSeedDatabase: RequestHandler = async (req, res) => {
   }
 };
 
+const getTruncateDatabase: RequestHandler = async (req, res) => {
+  try {
+    await truncateDatabase();
+
+    res.json({ status: 'Success', message: 'Database truncated' });
+    res.status(200);
+  } catch (error) {
+    log(`Unable to truncate database: ${error.message}`);
+    throw new InternalServerError('Unable to truncate database');
+  }
+};
+
 export {
   getCreateUsers,
   getLogin,
-  getTruncateDatabase,
   getSeedDatabase,
+  getTruncateDatabase,
 };

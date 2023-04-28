@@ -20,8 +20,8 @@ declare global {
     interface Chainable {
       createUsers(count?: number): Chainable<void>;
       login(id?: number): Chainable<void>;
-      truncateDatabase(): Chainable<void>;
       seedDatabase(): Chainable<void>;
+      truncateDatabase(): Chainable<void>;
     }
   }
 }
@@ -36,12 +36,12 @@ Cypress.Commands.add('login', (id?: number) => {
   cy.request('GET', `http://localhost:3000/api/dev/login${idStr}`);
 });
 
-Cypress.Commands.add('truncateDatabase', () => {
-  cy.request('GET', 'http://localhost:3000/api/dev/truncate-database');
-});
-
 Cypress.Commands.add('seedDatabase', () => {
   cy.request('GET', 'http://localhost:3000/api/dev/seed-database');
+});
+
+Cypress.Commands.add('truncateDatabase', () => {
+  cy.request('GET', 'http://localhost:3000/api/dev/truncate-database');
 });
 
 export = {};
