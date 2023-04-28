@@ -13,7 +13,7 @@ const env = cleanEnv(process.env, {});
 apiRouter.use('/users', userRouter);
 apiRouter.use('/auth', authRouter);
 
-if (!env.isProd) {
+if (env.isDev || env.isTest) {
   // These should NEVER be loaded in production.
   apiRouter.use('/dev', devRouter);
 }
