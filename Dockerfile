@@ -1,4 +1,4 @@
-FROM node:18-alpine  
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -7,6 +7,8 @@ COPY . .
 RUN npm ci
 
 RUN npm run build
+
+RUN npm run migrate
 
 EXPOSE 3000
 
