@@ -28,7 +28,7 @@ const getLogin: RequestHandler<{ id?: string }> = async (req, res) => {
   res.sendStatus(200);
 };
 
-const postRunUtil: RequestHandler<{ method: string; args: string[] }> = async (req, res) => {
+const postRunUtil: RequestHandler<{ method: string; args: unknown[] }> = async (req, res) => {
   const { method, args } = req.body;
 
   try {
