@@ -40,10 +40,7 @@ Cypress.Commands.add('truncateDatabase', () => {
 });
 
 Cypress.Commands.add('runUtil', (method, ...args) => {
-  return cy.request('POST', 'http://localhost:3000/api/dev/run-util', {
-    method,
-    args: Object.values(args),
-  });
+  return cy.request('POST', 'http://localhost:3000/api/dev/run-util', { method, args });
 });
 
 export = {};
