@@ -2,18 +2,13 @@ import jwt from 'jsonwebtoken';
 import setCookie, { Cookie } from 'set-cookie-parser';
 import { Response } from 'superagent';
 
-import Db from 'server/lib/db';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import { createUser, createUsers, truncateDatabase } from 'server/test/utils';
+import { createUser, truncateDatabase } from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 describe('developer/testing routes', () => {
   let server: TestServer;
-
-  const excludedModels = ['SequelizeMeta'];
-  const models = Object.keys(Db.sequelize.models)
-    .filter(key => excludedModels.includes(key));
 
   beforeAll(async () => {
     server = new TestServer();
@@ -26,24 +21,6 @@ describe('developer/testing routes', () => {
 
   afterEach(async () => {
     await truncateDatabase();
-  });
-
-  describe('GET /api/dev/create-users', () => {
-    it('creates a single user if no count is specified', async () => {
-      const res = await server.exec.get('/api/dev/create-users');
-      const userCount = await User.count();
-
-      expect(res.status).toBe(200);
-      expect(userCount).toBe(1);
-    });
-
-    it('creates a specified number of users', async () => {
-      const res = await server.exec.get('/api/dev/create-users/19');
-      const userCount = await User.count();
-
-      expect(res.status).toBe(200);
-      expect(userCount).toBe(19);
-    });
   });
 
   describe('GET /api/dev/login', () => {
@@ -78,39 +55,18 @@ describe('developer/testing routes', () => {
     });
   });
 
-  describe('GET /api/dev/truncate-database', () => {
-    it('can truncate the database', async () => {
-      // Doesn't populate future tables
-      await createUsers(20);
+  describe('POST /api/dev/run-util', () => {
+    it('allows test utility functions to be run', async () => {
+      const res = await server.exec.post('/api/dev/run-util').send({
+        method: 'createUsers',
+        args: [20],
+      });
 
-      for (const model of models) {
-        const count = await Db.sequelize.models[model].count();
-        expect(count).toBeGreaterThan(0);
-      }
-
-      const res = await server.exec.get('/api/dev/truncate-database');
-      for (const model of models) {
-        const count = await Db.sequelize.models[model].count();
-        expect(count).toBe(0);
-      }
+      const userCount = await User.count();
 
       expect(res.status).toBe(200);
-      expect(res.body.message).toBe('Database truncated');
-    });
-  });
-
-  describe('GET /api/dev/seed-database', () => {
-    it('can seed the database', async () => {
-      // Doesn't populate future tables
-      const res = await server.exec.get('/api/dev/seed-database');
-
-      for (const model of models) {
-        const count = await Db.sequelize.models[model].count();
-        expect(count).toBeGreaterThan(0);
-      }
-
-      expect(res.status).toBe(200);
-      expect(res.body.message).toBe('Database seeded');
+      expect(res.body.length).toBe(20);
+      expect(userCount).toBe(20);
     });
   });
 });

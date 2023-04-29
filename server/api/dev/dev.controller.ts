@@ -5,24 +5,10 @@ import { InternalServerError, NotFoundError } from 'express-response-errors';
 import { createAuthToken } from 'server/lib/auth';
 import log from 'server/lib/log';
 import { User } from 'server/models';
-import { createUser, createUsers, truncateDatabase } from 'server/test/utils';
+import * as Utils from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 const env = cleanEnv(process.env, {});
-
-const getCreateUsers: RequestHandler<{ count?: string }, { status: string; data: User[] }> = async (req, res) => {
-  const count = req.params?.count ? parseInt(req.params?.count as string, 10) : 1;
-  let users: User[];
-
-  try {
-    users = await createUsers(count);
-
-    res.json({ status: 'Success', data: users });
-    res.status(200);
-  } catch (error) {
-    throw new InternalServerError('Unable to create user');
-  }
-};
 
 const getLogin: RequestHandler<{ id?: string }> = async (req, res) => {
   const userId = req.params.id ? parseInt(req.params.id as string, 10) : null;
@@ -32,7 +18,7 @@ const getLogin: RequestHandler<{ id?: string }> = async (req, res) => {
     user = await User.findByPk(userId, { attributes: User.allowedFields });
     if (!user) throw new NotFoundError('User not found');
   } else {
-    user = await createUser();
+    user = await Utils.createUser();
     if (!user) throw new InternalServerError('Unable to create user');
   }
 
@@ -42,34 +28,23 @@ const getLogin: RequestHandler<{ id?: string }> = async (req, res) => {
   res.sendStatus(200);
 };
 
-const getSeedDatabase: RequestHandler = async (req, res) => {
-  try {
-    // Doesn't populate future tables
-    await createUsers(100);
+const postRunUtil: RequestHandler<{ method: string; args: string[] }> = async (req, res) => {
+  const { method, args } = req.body;
 
-    res.json({ status: 'Success', message: 'Database seeded' });
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = await Utils[method](...args);
+
+    res.json(result);
     res.status(200);
   } catch (error) {
-    log(`Unable to seed database: ${error.message}`);
-    throw new InternalServerError('Unable to seed database');
-  }
-};
-
-const getTruncateDatabase: RequestHandler = async (req, res) => {
-  try {
-    await truncateDatabase();
-
-    res.json({ status: 'Success', message: 'Database truncated' });
-    res.status(200);
-  } catch (error) {
-    log(`Unable to truncate database: ${error.message}`);
-    throw new InternalServerError('Unable to truncate database');
+    log(`An error occurred while executing ${method}(${args.join('')}): ${error.message}`);
+    throw new InternalServerError(`An error occurred while executing ${method}(${args.join('')})`);
   }
 };
 
 export {
-  getCreateUsers,
   getLogin,
-  getSeedDatabase,
-  getTruncateDatabase,
+  postRunUtil,
 };

@@ -18,30 +18,32 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      createUsers(count?: number): Chainable<void>;
-      login(id?: number): Chainable<void>;
-      seedDatabase(): Chainable<void>;
-      truncateDatabase(): Chainable<void>;
+      createUsers(count?: number): Chainable<Response<unknown>>;
+      login(id?: number): Chainable<Response<unknown>>;
+      truncateDatabase(): Chainable<Response<unknown>>;
+      runUtil(method: string, ...args: unknown[]): Chainable<Response<unknown>>;
     }
   }
 }
 
 Cypress.Commands.add('createUsers', (count?: number) => {
-  const countStr = count !== undefined ? `/${count}` : '';
-  cy.request('GET', `http://localhost:3000/api/dev/create-users${countStr}`);
+  return cy.runUtil('createUsers', count);
 });
 
 Cypress.Commands.add('login', (id?: number) => {
   const idStr = id !== undefined ? `/${id}` : '';
-  cy.request('GET', `http://localhost:3000/api/dev/login${idStr}`);
-});
-
-Cypress.Commands.add('seedDatabase', () => {
-  cy.request('GET', 'http://localhost:3000/api/dev/seed-database');
+  return cy.request('GET', `http://localhost:3000/api/dev/login${idStr}`);
 });
 
 Cypress.Commands.add('truncateDatabase', () => {
-  cy.request('GET', 'http://localhost:3000/api/dev/truncate-database');
+  return cy.runUtil('truncateDatabase');
+});
+
+Cypress.Commands.add('runUtil', (method, ...args) => {
+  return cy.request('POST', 'http://localhost:3000/api/dev/run-util', {
+    method,
+    args: Object.values(args),
+  });
 });
 
 export = {};
