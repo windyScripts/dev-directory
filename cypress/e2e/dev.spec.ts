@@ -2,6 +2,10 @@ import '../support/commands';
 
 // Example tests demonstrating use of the utility functions.
 describe('example login test', () => {
+  afterEach(() => {
+    cy.truncateDatabase();
+  });
+
   it('allows a user to login and logout', () => {
     cy.visit('http://localhost:3000');
     cy.contains('a', 'Log in').should('exist');
