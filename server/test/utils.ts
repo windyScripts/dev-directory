@@ -71,10 +71,18 @@ function getExpectedUserObject(user: User) {
   return pickedUser as User;
 }
 
+async function truncateDatabase() {
+  for (const model in Db.sequelize.models) {
+    if (model === 'SequelizeMeta') continue;
+    await Db.sequelize.models[model].destroy({ truncate: true, restartIdentity: true });
+  }
+}
+
 export {
-  randomEmptyChance,
   createUser,
+  createUsers,
   getExpectedUserObject,
   makeUserObject,
-  createUsers,
+  randomEmptyChance,
+  truncateDatabase,
 };

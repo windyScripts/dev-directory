@@ -37,9 +37,12 @@ jobs:
 
       - name: Run linters
         run: docker exec dev-directory_app_1 npm run lint:fix
-      
+
       - name: Run Jest tests
         run: docker exec dev-directory_app_1 npm run jest -- --roots='./dist'
+
+      - name: Run migrations
+        run: docker exec dev-directory_app_1 npm run migrate
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5.1.0
