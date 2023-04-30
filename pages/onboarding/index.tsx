@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 
 import createAxiosInstance from 'client/lib/axios';
@@ -25,11 +25,18 @@ interface Props {
 
 const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
   const [formData, setFormData] = useState<FormData>({
-    bio: user.bio,
-    twitter_username: user.twitter_username,
-    linkedin_url: user.linkedin_url,
-    github_username: user.github_username,
-    website: user.website,
+    bio: user?.bio,
+    twitter_username: user?.twitter_username,
+    linkedin_url: user?.linkedin_url,
+    github_username: user?.github_username,
+    website: user?.website,
+  });
+  const [originalFormData, setOriginalFormData] = useState<FormData>({
+    bio: user?.bio,
+    twitter_username: user?.twitter_username,
+    linkedin_url: user?.linkedin_url,
+    github_username: user?.github_username,
+    website: user?.website,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFormFilled, setIsFormFilled] = useState<boolean>(false);
@@ -39,7 +46,14 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-    setIsFormFilled(true);
+    console.log(formData);
+    console.log(originalFormData);
+    
+    if( user !== formData && originalFormData !== formData){
+      setIsFormFilled(true);
+    }
+    else if (originalFormData === formData){setIsFormFilled(false)}
+    
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -47,7 +61,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
 
     try {
       setIsLoading(true);
-      await axios.patch(`/api/users/${user.id}`, formData);
+      await axios.patch(`/api/users/${user?.id}`, formData);
       setIsLoading(false);
       router.push('/directory');
     } catch (error) {
@@ -55,10 +69,6 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       console.error(error);
     }
   };
-
-  if (!user) {
-    router.push('/');
-  }
 
   const isSubmitDisabled = !isFormFilled && !isLoading;
 
@@ -118,7 +128,6 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         <Box mt={4} textAlign="right">
           <Button variant="contained" color="primary" type="submit" disabled={isSubmitDisabled}>
             {isLoading ? 'Submitting...' : 'Submit'}
-            Submit
           </Button>
         </Box>
       </form>
@@ -142,7 +151,14 @@ OnboardingPage.getInitialProps = async ({ req }) => {
     const userInfo = await axiosInstance.get('/api/users/' + payload.user_id);
     return { user: userInfo.data };
   } catch (error) {
-    return { user: null };
+    return { user:   {bio: "Lorem ipsum dolor sit amet",
+    discord_name: "johndoe#1111",
+    discord_user_id: "390925812364345344",
+    github_username: "johndoe",
+    id: 201,
+    linkedin_url: "https://www.johndoe.com",
+    twitter_username: "johndoe24",
+    website: "https://www.johndoe.com"} };
   }
 };
 
