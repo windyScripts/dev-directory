@@ -12,6 +12,7 @@ apiRouter.use('/users', userRouter);
 apiRouter.use('/auth', authRouter);
 
 if (env.isDev || env.isTest) {
+  // we can't import this router because it requires dev dependencies
   const devRouter = require('./dev').default; // eslint-disable-line @typescript-eslint/no-var-requires
   // These should NEVER be loaded in production.
   apiRouter.use('/dev', devRouter);
