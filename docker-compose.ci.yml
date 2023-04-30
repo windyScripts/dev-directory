@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_HOST: ${DB_HOST:-pg}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-postgres}
+      DB_NAME: ${DB_NAME:-dev-directory}
+    ports:
+      - 3000:3000
+    depends_on:
+      - pg
+  pg:
+    image: postgres:15.2
+    ports:
+      - ${PORT:-5432}:5432
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_DB: ${DB_NAME:-dev-directory}
