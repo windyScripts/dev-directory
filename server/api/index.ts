@@ -1,8 +1,6 @@
 import { cleanEnv } from 'envalid';
 import { AsyncRouter } from 'express-async-router';
 
-import devRouter from 'server/api/dev';
-
 import authRouter from './auth';
 import userRouter from './users';
 
@@ -14,6 +12,7 @@ apiRouter.use('/users', userRouter);
 apiRouter.use('/auth', authRouter);
 
 if (env.isDev || env.isTest) {
+  const devRouter = require('./dev').default; // eslint-disable-line @typescript-eslint/no-var-requires
   // These should NEVER be loaded in production.
   apiRouter.use('/dev', devRouter);
 }
