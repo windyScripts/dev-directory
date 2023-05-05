@@ -21,30 +21,19 @@ describe('Visit directory page and verify users exists', () => {
 });
 
 describe('Onboarding Page', () => {
-  
-  beforeEach(() => {
-    cy.intercept('http://localhost:3000/api/users/*', (req) => {
-      req.reply({
-        data: {
-          bio: "Lorem ipsum dolor sit amet",
-          discord_name: "johndoe#1111",
-          discord_user_id: "390925812364345344",
-          github_username: "johndoe",
-          id: 201,
-          linkedin_url: "https://www.johndoe.com",
-          twitter_username: "johndoe24",
-          website: "https://www.johndoe.com"
-        },
-      });
-    });
-    cy.visit('http://localhost:3000/onboarding');
+  afterEach(() => {
+    cy.truncateDatabase();
   });
 
   it('displays the correct heading', () => {
+    cy.visit('http://localhost:3000/onboarding');
     cy.contains('h1', 'Onboarding');
   });
 
   it('fills out the form successfully', () => {
+    cy.visit('http://localhost:3000');
+    cy.login();
+    cy.visit('http://localhost:3000/onboarding');
     cy.get('form').within(() => {
       cy.get('textarea[name="bio"]').type('Lorem ipsum dolor sit amet.');
       cy.get('input[name="twitter_username"]').type('test_twitter');

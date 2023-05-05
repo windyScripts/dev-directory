@@ -20,7 +20,7 @@ interface FormData {
 }
 
 interface Props {
-  user: UserProfile;
+  user: UserProfile | null;
 }
 
 const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
@@ -31,34 +31,27 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
     github_username: user?.github_username,
     website: user?.website,
   });
-  const [originalFormData, setOriginalFormData] = useState<FormData>({
-    bio: user?.bio,
-    twitter_username: user?.twitter_username,
-    linkedin_url: user?.linkedin_url,
-    github_username: user?.github_username,
-    website: user?.website,
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isFormFilled, setIsFormFilled] = useState<boolean>(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFormFilled, setIsFormFilled] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, [user]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-    console.log(formData);
-    console.log(originalFormData);
-    
-    if( user !== formData && originalFormData !== formData){
-      setIsFormFilled(true);
-    }
-    else if (originalFormData === formData){setIsFormFilled(false)}
-    
+    const isFormFilled = Object.values(formData).some(value => !!value);
+    setIsFormFilled(isFormFilled);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     try {
       setIsLoading(true);
       await axios.patch(`/api/users/${user?.id}`, formData);
@@ -151,14 +144,7 @@ OnboardingPage.getInitialProps = async ({ req }) => {
     const userInfo = await axiosInstance.get('/api/users/' + payload.user_id);
     return { user: userInfo.data };
   } catch (error) {
-    return { user:   {bio: "Lorem ipsum dolor sit amet",
-    discord_name: "johndoe#1111",
-    discord_user_id: "390925812364345344",
-    github_username: "johndoe",
-    id: 201,
-    linkedin_url: "https://www.johndoe.com",
-    twitter_username: "johndoe24",
-    website: "https://www.johndoe.com"} };
+    return { user: null };
   }
 };
 
