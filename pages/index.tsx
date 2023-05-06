@@ -11,7 +11,7 @@ interface Props {
   isAuthed: boolean;
 }
 
-const Index: NextPage<Props> = props => {
+const Index: NextPage<Props> = () => {
   return (
     <Container maxWidth="lg" className="flex justify-between pt-4">
       this is the home page

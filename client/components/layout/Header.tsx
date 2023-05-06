@@ -1,6 +1,7 @@
-import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import React from 'react';
+
 import Navigation from './Navigation';
 
 const Header: React.FC = () => {

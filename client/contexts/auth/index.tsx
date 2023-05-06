@@ -1,6 +1,7 @@
-import React from 'react'
-import { AuthDispatch, AuthReducer, AuthState } from "./types";
+import React from 'react';
+
 import { reducer } from './reducer';
+import { AuthDispatch, AuthReducer, AuthState } from './types';
 
 const defaultState: AuthState = {
   authed: false,
