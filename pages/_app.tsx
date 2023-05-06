@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import React from 'react';
 import 'client/styles/globals.css';
 
-import Layout from 'client/components/Layout';
+import Layout from 'client/components/layout/Layout';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
