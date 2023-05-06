@@ -10,7 +10,7 @@ const Header: React.FC = () => {
       component="header"
       className="flex align-baseline justify-between p-3"
     >
-      <Link href="/">
+      <Link href="/" passHref>
         <button className="text-lg bg-transparent border-none cursor-pointer">
           PairUp
         </button>

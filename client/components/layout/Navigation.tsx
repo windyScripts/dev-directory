@@ -60,7 +60,7 @@ const Navigation: React.FC = () => {
     <Box component="nav">
       {links.map(link => (
         link.href ? (
-          <Link href={link.href} key={link.href}>
+          <Link href={link.href} key={link.href} passHref>
             <Button onClick={link.onClick}>
               {link.label}
             </Button>
