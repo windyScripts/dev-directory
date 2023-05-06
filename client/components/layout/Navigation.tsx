@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import createAxiosInstance from 'client/lib/axios';
 import { getDiscordOauthUrl } from 'client/lib/oauth';
-import Link from 'next/link';
+import { useAuthDispatch, useAuthState } from 'client/contexts/auth';
 
 interface NavLink {
   label: string;
@@ -10,43 +12,48 @@ interface NavLink {
   onClick?: () => void;
 }
 
-const DIRECTORY_LINK: NavLink = {
-  label: 'Discover',
-  href: '/directory',
-}
-
-const PROFILE_LINK: NavLink = {
-  label: 'Profile',
-  href: '/profile',
-}
-
-const LOGIN_LINK: NavLink = {
-  label: 'Login',
-  href: getDiscordOauthUrl(),
-}
-
-const LOGOUT_LINK: NavLink = {
-  label: 'Logout',
-  onClick: async () => {
-    const axios = createAxiosInstance();
-    await axios.post('/api/auth/logout');
-  }
-}
-
-const authedNav = [
-  DIRECTORY_LINK,
-  PROFILE_LINK,
-  LOGOUT_LINK,
-]
-
-const anonNav = [
-  DIRECTORY_LINK,
-  LOGIN_LINK,
-]
-
 const Navigation: React.FC = () => {
-  const isAuthed = true;
-  const links = isAuthed ? authedNav : anonNav;
+  const { authed } = useAuthState();
+  const authDispatch = useAuthDispatch();
+  const router = useRouter();
+
+  const DIRECTORY_LINK: NavLink = {
+    label: 'Discover',
+    href: '/directory',
+  }
+
+  const PROFILE_LINK: NavLink = {
+    label: 'Profile',
+    href: '/profile',
+  }
+
+  const LOGIN_LINK: NavLink = {
+    label: 'Login',
+    href: getDiscordOauthUrl(),
+  }
+
+  const LOGOUT_LINK: NavLink = {
+    label: 'Logout',
+    onClick: async () => {
+      const axios = createAxiosInstance();
+      await axios.post('/api/auth/logout');
+      authDispatch({ type: "SET_AUTHED", authed: false })
+      router.push("/")
+    }
+  }
+
+  const authedNav = [
+    DIRECTORY_LINK,
+    PROFILE_LINK,
+    LOGOUT_LINK,
+  ]
+
+  const anonNav = [
+    DIRECTORY_LINK,
+    LOGIN_LINK,
+  ]
+
+  const links = authed ? authedNav : anonNav;
 
   return (
     <Box component="nav">
