@@ -59,7 +59,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       router.push('/directory');
     } catch (error) {
       setIsLoading(false);
-      console.error(error);
+      alert(error);
     }
   };
 
