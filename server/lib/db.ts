@@ -26,7 +26,7 @@ const dialectOptions = env.isProd ? {
 const commonOptions = {
   dialect: 'postgres' as Dialect,
   logging: env.DB_LOGGING,
-  models: [path.join(__dirname, '../models/*.model.ts')],
+  models: [path.join(__dirname, '../models/*.model.*')],
 };
 
 // Database object modeling mongoDB data
