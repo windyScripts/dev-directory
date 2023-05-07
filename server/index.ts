@@ -1,7 +1,4 @@
-import { config } from 'dotenv-flow';
-
-config({ silent: false });
-
+import 'server/lib/config-env';
 import log from './lib/log';
 import Server from './server';
 

@@ -1,9 +1,6 @@
 import { execSync } from 'child_process';
-import { config } from 'dotenv-flow';
 
-config({ silent: true });
-
-
+import 'server/lib/config-env';
 import { cleanEnv, str } from 'envalid';
 import { getPortPromise as getPort } from 'portfinder';
 import { Sequelize } from 'sequelize-typescript';
