@@ -8,6 +8,7 @@ export const reducer: AuthReducer = (state, action) => {
       return produce(state, draftState => {
         draftState.authedUser = action.user;
       });
+
     default:
       return state;
   }
