@@ -1,20 +1,75 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from 'sequelize';
+import { AllowNull, AutoIncrement, Column, CreatedAt, Default, DeletedAt, Model, PrimaryKey, Table, Unique, UpdatedAt } from 'sequelize-typescript';
 
-import Db from 'server/lib/db';
+interface UserAttributes {
+  id: number;
+  email: string;
+  discord_user_id: string;
+  discord_name: string;
+  bio: string;
+  twitter_username: string;
+  linkedin_url: string;
+  github_username: string;
+  website: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+}
 
-// order of InferAttributes & InferCreationAttributes is important.
-class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  // 'CreationOptional' is a special type that marks the field as optional
-  // when creating an instance of the model (such as using Model.create()).
-  declare id: CreationOptional<number>;
-  declare email: string;
-  declare discord_user_id: string;
-  declare discord_name: string;
-  declare bio: string;
-  declare twitter_username: string;
-  declare linkedin_url: string;
-  declare github_username: string;
-  declare website: string;
+type UserCreationAttributes = Omit<UserAttributes, "id" | "createdAt" | "updatedAt" | "deletedAt">;
+
+@Table({
+  tableName: 'users',
+  timestamps: true,
+})
+class User extends Model<UserAttributes, UserCreationAttributes> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  id: number;
+
+  @AllowNull(false)
+  @Column
+  email: string;
+
+  @AllowNull(false)
+  @Unique(true)
+  @Column
+  discord_user_id: string;
+
+  @AllowNull(false)
+  @Column
+  discord_name: string;
+
+  @AllowNull(false)
+  @Default('')
+  @Column
+  bio: string;
+  
+  @AllowNull(false)
+  @Default('')
+  @Column
+  twitter_username: string;
+  
+  @AllowNull(false)
+  @Default('')
+  @Column
+  linkedin_url: string;
+  
+  @AllowNull(false)
+  @Default('')
+  @Column
+  github_username: string;
+  
+  @AllowNull(false)
+  @Default('')
+  @Column
+  website: string;
+
+  @CreatedAt
+  createdAt: Date;
+
+  @UpdatedAt
+  updatedAt: Date;
 
   public static get allowedFields() {
     return [
@@ -29,60 +84,5 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     ];
   }
 }
-
-User.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  discord_user_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  discord_name: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-    defaultValue: '',
-  },
-  bio: {
-    type: DataTypes.STRING(1000),
-    allowNull: false,
-    defaultValue: '',
-  },
-  twitter_username: {
-    type: DataTypes.STRING(200),
-    allowNull: false,
-    defaultValue: '',
-  },
-  linkedin_url: {
-    type: DataTypes.STRING(200),
-    allowNull: false,
-    defaultValue: '',
-  },
-  github_username: {
-    type: DataTypes.STRING(200),
-    allowNull: false,
-    defaultValue: '',
-  },
-  website: {
-    type: DataTypes.STRING(500),
-    allowNull: false,
-    defaultValue: '',
-  },
-}, {
-  sequelize: Db.sequelize,
-  tableName: 'users',
-  getterMethods: {
-    profileFields() {
-      return User.allowedFields;
-    },
-  },
-});
 
 export default User;
