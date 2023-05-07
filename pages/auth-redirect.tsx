@@ -10,8 +10,8 @@ const AuthRedirect: React.FC = () => {
   const authDispatch = useAuthDispatch();
 
   const useAuthCode = async (code: string) => {
-    await axios.post('/api/auth/login', { code });
-    authDispatch({ type: 'SET_AUTHED', authed: true });
+    const res = await axios.post('/api/auth/login', { code });
+    authDispatch({ type: 'SET_AUTHED_USER', user: res.data.user });
     router.push('/onboarding');
   };
 
