@@ -3,10 +3,9 @@ import { NextPage } from 'next';
 import React from 'react';
 
 import createAxiosInstance from 'client/lib/axios';
+import { ClientUser } from 'shared/User';
 
-//TODO: Type users once sequelize-typescript is added
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Directory: NextPage<{ users: any[]; error: string }> = props => {
+const Directory: NextPage<{ users: ClientUser[]; error: string }> = props => {
   const { users, error } = props;
 
   return (

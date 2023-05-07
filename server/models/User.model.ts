@@ -1,21 +1,7 @@
 import { AllowNull, AutoIncrement, Column, CreatedAt, Default, DeletedAt, Model, PrimaryKey, Table, Unique, UpdatedAt } from 'sequelize-typescript';
+import { ServerUser as UserAttributes } from 'shared/User';
 
-interface UserAttributes {
-  id: number;
-  email: string;
-  discord_user_id: string;
-  discord_name: string;
-  bio: string;
-  twitter_username: string;
-  linkedin_url: string;
-  github_username: string;
-  website: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
-}
-
-type UserCreationAttributes = Omit<UserAttributes, "id" | "createdAt" | "updatedAt" | "deletedAt">;
+type UserCreationAttributes = Omit<UserAttributes, "id" | "createdAt" | "updatedAt">;
 
 @Table({
   tableName: 'users',
