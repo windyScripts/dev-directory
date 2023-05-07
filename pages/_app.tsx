@@ -6,15 +6,17 @@ import 'client/styles/globals.css';
 
 import Layout from 'client/components/layout/Layout';
 import { AuthContextProvider } from 'client/contexts/auth';
+import { User } from 'client/contexts/auth/types';
+import createAxiosInstance from 'client/lib/axios';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 interface Props extends AppProps {
-  isAuthed: boolean;
+  authedUser: User;
 }
 
-const App = ({ Component, pageProps, isAuthed }: Props) => {
+const App = ({ Component, pageProps, authedUser }: Props) => {
   return (
-    <AuthContextProvider initialState={{ authed: isAuthed }}>
+    <AuthContextProvider initialState={{ authedUser }}>
       <Layout>
         <Component {...pageProps} />
       </Layout>
@@ -24,21 +26,30 @@ const App = ({ Component, pageProps, isAuthed }: Props) => {
 
 App.getInitialProps = async (context: AppContext) => {
   const ctx = await NextApp.getInitialProps(context);
+  const req = context.ctx.req;
 
-  const cookies = new Cookies(context.ctx.req?.headers.cookie);
+  const cookies = new Cookies(req?.headers.cookie);
 
-  let isAuthed = false;
+  let authedUser = null;
 
   // Check if the user has a valid, non-expired auth token
   if (cookies.get(AUTH_COOKIE_NAME)) {
     const authToken = cookies.get(AUTH_COOKIE_NAME);
     const payload = jwt.decode(authToken) as jwt.JwtPayload;
+    console.log({ payload });
     if (Date.now() < payload.exp * 1000) {
-      isAuthed = true;
+      try {
+        const axios = createAxiosInstance(req);
+        const response = await axios.get(`/api/users/${payload.user_id}`);
+        authedUser = response.data || null;
+      } catch (err) {
+        // TODO: handle this in the client if it errors
+        console.error(err);
+      }
     }
   }
 
-  return { ...ctx, isAuthed };
+  return { ...ctx, authedUser };
 };
 
 export default App;

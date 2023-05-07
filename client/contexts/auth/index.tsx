@@ -4,7 +4,7 @@ import { reducer } from './reducer';
 import { AuthDispatch, AuthReducer, AuthState } from './types';
 
 const defaultState: AuthState = {
-  authed: false,
+  authedUser: null,
 };
 
 const AuthStateContext = React.createContext<AuthState>(defaultState);

@@ -14,7 +14,7 @@ interface NavLink {
 }
 
 const Navigation: React.FC = () => {
-  const { authed } = useAuthState();
+  const { authedUser } = useAuthState();
   const authDispatch = useAuthDispatch();
   const router = useRouter();
 
@@ -25,7 +25,7 @@ const Navigation: React.FC = () => {
 
   const PROFILE_LINK: NavLink = {
     label: 'Profile',
-    href: '/profile',
+    href: `/profile/${authedUser?.id}`,
   };
 
   const LOGIN_LINK: NavLink = {
@@ -38,7 +38,7 @@ const Navigation: React.FC = () => {
     onClick: async () => {
       const axios = createAxiosInstance();
       await axios.post('/api/auth/logout');
-      authDispatch({ type: 'SET_AUTHED', authed: false });
+      authDispatch({ type: 'SET_AUTHED_USER', user: null });
       router.push('/');
     },
   };
@@ -54,7 +54,7 @@ const Navigation: React.FC = () => {
     LOGIN_LINK,
   ];
 
-  const links = authed ? authedNav : anonNav;
+  const links = authedUser ? authedNav : anonNav;
 
   return (
     <Box component="nav">

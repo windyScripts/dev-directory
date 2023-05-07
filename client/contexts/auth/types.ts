@@ -1,11 +1,14 @@
+// todo: replace this with the shared user type once merged
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type User = Record<string, any>;
 
 export interface AuthState {
-  authed: boolean;
+  authedUser: User | null;
 }
 
 export type AuthAction = {
-  type: 'SET_AUTHED';
-  authed: boolean;
+  type: 'SET_AUTHED_USER';
+  user: AuthState['authedUser'];
 };
 
 // A reducer takes old state, some action, and returns the new state
