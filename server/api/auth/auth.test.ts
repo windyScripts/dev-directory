@@ -1,4 +1,3 @@
-import TestServer from 'server/test/server';
 import { randEmail, randUserName } from '@ngneat/falso';
 import DiscordOauth2 from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
@@ -7,6 +6,7 @@ import setCookie, { Cookie } from 'set-cookie-parser';
 
 import * as authLib from 'server/lib/auth';
 import { User } from 'server/models';
+import TestServer from 'server/test/server';
 import { createUser } from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
