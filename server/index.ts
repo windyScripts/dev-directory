@@ -1,4 +1,5 @@
 import { config } from 'dotenv-flow';
+
 config({ silent: false });
 
 import log from './lib/log';

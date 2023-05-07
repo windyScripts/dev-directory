@@ -1,7 +1,20 @@
-import { AllowNull, AutoIncrement, Column, CreatedAt, Default, DeletedAt, Length, Model, PrimaryKey, Table, Unique, UpdatedAt } from 'sequelize-typescript';
+import {
+  AllowNull,
+  AutoIncrement,
+  Column,
+  CreatedAt,
+  Default,
+  Length,
+  Model,
+  PrimaryKey,
+  Table,
+  Unique,
+  UpdatedAt,
+} from 'sequelize-typescript';
+
 import { ServerUser as UserAttributes } from 'shared/User';
 
-type UserCreationAttributes = Omit<UserAttributes, "id" | "createdAt" | "updatedAt">;
+type UserCreationAttributes = Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>;
 
 @Table({
   tableName: 'users',
@@ -32,25 +45,25 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   @Length({ max: 1000 })
   @Column
   bio: string;
-  
+
   @AllowNull(false)
   @Default('')
   @Length({ max: 200 })
   @Column
   twitter_username: string;
-  
+
   @AllowNull(false)
   @Default('')
   @Length({ max: 200 })
   @Column
   linkedin_url: string;
-  
+
   @AllowNull(false)
   @Default('')
   @Length({ max: 200 })
   @Column
   github_username: string;
-  
+
   @AllowNull(false)
   @Default('')
   @Length({ max: 200 })
