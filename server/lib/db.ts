@@ -1,13 +1,13 @@
-import path from 'path';
-
 import { config } from 'dotenv-flow';
+config({ silent: true });
+
+import path from 'path';
 import { cleanEnv, str, num, bool } from 'envalid';
 import { Dialect } from 'sequelize';
 import { Sequelize  } from 'sequelize-typescript';
 
 import log from './log';
 
-config({ silent: true });
 
 const env = cleanEnv(process.env, {
   DB_HOST: str(),

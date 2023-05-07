@@ -1,9 +1,9 @@
+import TestServer from 'server/test/server';
 import jwt from 'jsonwebtoken';
 import setCookie, { Cookie } from 'set-cookie-parser';
 import { Response } from 'superagent';
 
 import { User } from 'server/models';
-import TestServer from 'server/test/server';
 import { createUser, truncateDatabase } from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 

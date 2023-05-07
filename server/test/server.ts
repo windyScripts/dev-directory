@@ -1,6 +1,7 @@
-import { execSync } from 'child_process';
-
 import { config } from 'dotenv-flow';
+config({ silent: true });
+
+import { execSync } from 'child_process';
 import { cleanEnv, str } from 'envalid';
 import { getPortPromise as getPort } from 'portfinder';
 import { Sequelize } from 'sequelize-typescript';
@@ -11,7 +12,6 @@ import Db from 'server/lib/db';
 import { User } from 'server/models';
 import Server from 'server/server';
 
-config({ silent: true });
 
 const env = cleanEnv(process.env, {
   DB_NAME: str(),

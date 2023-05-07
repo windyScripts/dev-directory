@@ -1,5 +1,5 @@
-import { User } from 'server/models';
 import TestServer from 'server/test/server';
+import { User } from 'server/models';
 import { createUser, getExpectedUserObject } from 'server/test/utils';
 import { UserProfile } from 'server/types/User';
 
