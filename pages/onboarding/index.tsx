@@ -1,4 +1,5 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Snackbar } from '@mui/material';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { NextPage } from 'next';
@@ -23,6 +24,13 @@ interface Props {
   user: UserProfile | null;
 }
 
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
   const [formData, setFormData] = useState<FormData>({
     bio: user?.bio,
@@ -34,6 +42,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFormFilled, setIsFormFilled] = useState(false);
+  const [openAlertError, setOpenAlertError] = useState(false);
 
   const router = useRouter();
 
@@ -59,16 +68,23 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       router.push('/directory');
     } catch (error) {
       setIsLoading(false);
-      alert(error);
+      setOpenAlertError(error);
     }
   };
 
-  const isSubmitDisabled = !isFormFilled && !isLoading;
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlertError(false);
+  };
+
+  const isSubmitDisabled = !isFormFilled || isLoading;
 
   return (
     <Container maxWidth="lg" className="flex justify-between pt-4">
       <Typography variant="h1" className="text-3xl">
-        Onboarding
+        Complete your profile to connect with other members!
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -84,7 +100,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         />
         <TextField
           label="Twitter Username"
-          placeholder='JonDoe24'
+          placeholder='twitteruser'
           name="twitter_username"
           value={formData.twitter_username}
           onChange={handleChange}
@@ -103,7 +119,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
         <TextField
           label="GitHub Username"
           name="github_username"
-          placeholder='Jon Doe'
+          placeholder='githubuser'
           value={formData.github_username}
           onChange={handleChange}
           fullWidth
@@ -131,6 +147,11 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
           </Button>
         </Link>
       </Box>
+      <Snackbar open={openAlertError} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {openAlertError}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

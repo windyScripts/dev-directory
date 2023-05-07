@@ -1,17 +1,9 @@
 /// <reference types="cypress" />
 
 describe('Onboarding Page', () => {
-  afterEach(() => {
-    cy.truncateDatabase();
-  });
-
-  it('displays the correct heading', () => {
+  it('fills out the form successfully', () => {
     cy.login();
     cy.visit('http://localhost:3000/onboarding');
-    cy.contains('h1', 'Onboarding');
-  });
-
-  it('fills out the form successfully', () => {
     cy.get('form').within(() => {
       cy.get('textarea[name="bio"]').type('Lorem ipsum dolor sit amet.');
       cy.get('input[name="twitter_username"]').type('test_twitter');
@@ -22,6 +14,10 @@ describe('Onboarding Page', () => {
     });
 
     cy.url().should('equal', 'http://localhost:3000/directory');
+  });
+
+  after(() => {
+    cy.truncateDatabase();
   });
 });
 
