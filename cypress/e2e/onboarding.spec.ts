@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 
 describe('Onboarding Page', () => {
+  after(() => {
+    cy.truncateDatabase();
+  });
+
   it('fills out the form successfully', () => {
     cy.login();
     cy.visit('http://localhost:3000/onboarding');
@@ -14,10 +18,6 @@ describe('Onboarding Page', () => {
     });
 
     cy.url().should('equal', 'http://localhost:3000/directory');
-  });
-
-  after(() => {
-    cy.truncateDatabase();
   });
 });
 

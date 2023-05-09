@@ -68,7 +68,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       router.push('/directory');
     } catch (error) {
       setIsLoading(false);
-      setOpenAlertError(error);
+      setOpenAlertError(true);
     }
   };
 
@@ -149,7 +149,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       </Box>
       <Snackbar open={openAlertError} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {openAlertError}
+          Sorry, there was an error with your submission.
         </Alert>
       </Snackbar>
     </Container>
