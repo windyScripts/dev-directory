@@ -3,3 +3,5 @@ node_modules
 .next
 .vscode
 dist
+cypress/screenshots
+cypress/videos

@@ -43,7 +43,7 @@ function makeUserObject({
   return {
     email: email ?? randEmail(),
     discord_user_id: discord_user_id ?? String(randNumber({ min: 1e16, max: 1e18 - 1 })),
-    discord_name: discord_name ?? randomEmptyChance(20, getRandomDiscordUserName()),
+    discord_name: discord_name ?? getRandomDiscordUserName(),
     bio: bio ?? randomEmptyChance(20, randQuote()),
     twitter_username: twitter_username ?? randomEmptyChance(20, randUserName()),
     linkedin_url: linkedin_url ?? randomEmptyChance(20, getRandomLinkedInURL()),
@@ -71,10 +71,18 @@ function getExpectedUserObject(user: User) {
   return pickedUser as User;
 }
 
+async function truncateDatabase() {
+  for (const model in Db.sequelize.models) {
+    if (model === 'SequelizeMeta') continue;
+    await Db.sequelize.models[model].destroy({ truncate: true, restartIdentity: true });
+  }
+}
+
 export {
-  randomEmptyChance,
   createUser,
+  createUsers,
   getExpectedUserObject,
   makeUserObject,
-  createUsers,
+  randomEmptyChance,
+  truncateDatabase,
 };
