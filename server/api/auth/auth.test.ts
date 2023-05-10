@@ -40,7 +40,7 @@ describe('auth router', () => {
       expect(res.status).toBe(400);
     });
 
-    it('should create a user, sign a token, and set a cookie, and return the user', async () => {
+    it('should create a user, sign a token, set a cookie, and return the user', async () => {
       const id = String(Math.random());
 
       const getInfoSpy = mockDiscord({

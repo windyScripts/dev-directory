@@ -11,7 +11,7 @@ import createAxiosInstance from 'client/lib/axios';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 interface Props extends AppProps {
-  authedUser: User;
+  authedUser: User | null;
 }
 
 const App = ({ Component, pageProps, authedUser }: Props) => {
