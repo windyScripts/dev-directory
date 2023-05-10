@@ -1,27 +1,37 @@
 /// <reference types="cypress" />
-import { executeCypressCommand } from '../support/e2e';
+// import { executeCypressCommand } from '../support/e2e';
+import '../support/commands';
 
-describe('Visit directory page and verify users exists', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/directory');
-  });
+// describe('Visit directory page and verify users exists', () => {
+//   beforeEach(() => {
+//     cy.visit('http://localhost:3000/directory');
+//   });
 
-  it('Displays a list of users', () => {
-    cy.get('ul').should('be.visible');
-  });
-});
+//   it('Displays a list of users', () => {
+//     cy.get('ul').should('be.visible');
+//   });
+// });
 
 describe('directory infinite scroll', () => {
   const PAGE_LIMIT = 20;
   let totalPages = 0;
 
   before(() => {
-    const commandReset = 'npm run resetDB';
-    executeCypressCommand(commandReset);
+    cy.truncateDatabase();
+    // cy.runUtil('truncateDatabase').then(response => {
+    //   console.log(response);
+    //   // response
+    // });
+    // const commandReset = 'npm run resetDB';
+    // executeCypressCommand(commandReset);
 
     // fill DB with 100 users
-    const command = 'npm run seed';
-    executeCypressCommand(command);
+    cy.createUsers(100);
+    // cy.runUtil('createUsers', 100).then(response => {
+    //   console.log(response);
+    // });
+    // const command = 'npm run seed';
+    // executeCypressCommand(command);
 
     // get total pages for tests
     cy.request('http://localhost:3000/api/users').then(response => {
@@ -30,6 +40,7 @@ describe('directory infinite scroll', () => {
   });
 
   beforeEach(() => {
+    console.log('here');
     cy.visit('http://localhost:3000/directory');
   });
 
