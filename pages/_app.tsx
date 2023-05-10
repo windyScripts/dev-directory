@@ -36,7 +36,7 @@ App.getInitialProps = async (context: AppContext) => {
   if (cookies.get(AUTH_COOKIE_NAME)) {
     const authToken = cookies.get(AUTH_COOKIE_NAME);
     const payload = jwt.decode(authToken) as jwt.JwtPayload;
-    console.log({ payload });
+
     if (Date.now() < payload.exp * 1000) {
       try {
         const axios = createAxiosInstance(req);
