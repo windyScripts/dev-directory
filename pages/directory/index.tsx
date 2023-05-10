@@ -29,10 +29,18 @@ const Directory: NextPage<{ users: any[]; totalPages: number; error: string }> =
   }
 
   React.useEffect(() => {
+    const height = getElementHeight(document.querySelector('#last-card'));
+
+    function getElementHeight(el: HTMLElement) {
+      const rect = el.getBoundingClientRect();
+      const { marginTop, marginBottom } = getComputedStyle(el);
+
+      return rect.height + parseFloat(marginTop) + parseFloat(marginBottom);
+    }
+
     const intersectionOptions = {
       // root default = document's viewport
-      // in the future offset should be tied to the card height of the last row
-      rootMargin: '300px',
+      rootMargin: `${height}px`,
       threshold: 0,
     };
 
@@ -75,6 +83,7 @@ const Directory: NextPage<{ users: any[]; totalPages: number; error: string }> =
                   key={user.id}
                   sx={{ height: '100px' }}
                   ref={i === userData.length - 1 ? lastCardRef : null}
+                  id={i === userData.length - 1 ? 'last-card' : null}
                 >
                   {user.discord_name}
                 </ListItem>
