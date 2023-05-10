@@ -14,6 +14,25 @@ describe('Visit directory page and verify users exists', () => {
 describe('directory infinite scroll', () => {
   const PAGE_LIMIT = 20;
   let totalPages = 0;
+
+  before(() => {
+    const commandReset = 'npm run resetDB';
+    executeCypressCommand(commandReset);
+
+    // fill DB with 100 users
+    const command = 'npm run seed';
+    executeCypressCommand(command);
+
+    // get total pages for tests
+    cy.request('http://localhost:3000/api/users').then(response => {
+      totalPages = response.body.totalPages;
+    });
+  });
+
+  beforeEach(() => {
+    cy.visit('http://localhost:3000/directory');
+  });
+
   function checkInfiniteScroll(pages: number, totalPages: number) {
     for (let i = 1; i <= pages; i++) {
       cy.get('[data-cy="user-container"]').children().as('ulChildren');
@@ -35,29 +54,11 @@ describe('directory infinite scroll', () => {
     }
   }
 
-  before(() => {
-    const commandReset = 'npm run resetDB';
-    executeCypressCommand(commandReset);
-
-    // fill DB with 100 users
-    const command = 'npm run seed';
-    executeCypressCommand(command);
-
-    // get total pages for tests
-    cy.request('http://localhost:3000/api/users').then(response => {
-      totalPages = response.body.totalPages;
-    });
-  });
-
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/directory');
-  });
-
-  it('first 20 users load ', () => {
+  it('shows the initial 20 users on page load ', () => {
     cy.get('[data-cy="user-container"]').children().should('have.length', 20);
   });
 
-  it('Should show the loading spinner when loading the data then remove it afterwards', () => {
+  it('shows a loading animation while fetching users', () => {
     cy.scrollTo('bottom');
     cy.intercept('GET', '/api/users?page=*', req => {
       req.on('response', res => res.setDelay(500));
@@ -68,11 +69,11 @@ describe('directory infinite scroll', () => {
     cy.get('[data-cy="loading"]').should('not.exist'); // removed after data loaded
   });
 
-  it('data loads when scrolled multiple times', () => {
+  it('shows users when scrolled multiple times', () => {
     checkInfiniteScroll(5, totalPages);
   });
 
-  it('User is unable to Infinite scroll more than total pages', () => {
+  it("doesn't attempt to fetch more pages when page limit reached", () => {
     checkInfiniteScroll(totalPages + 1, totalPages);
   });
 });
