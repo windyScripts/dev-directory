@@ -6,7 +6,7 @@ describe('Open browser and check if login button exists.', () => {
   });
 
   it('Checks if there is an anchor with the text login', () => {
-    cy.get('a').contains('Log in').should('have.length', 1);
+    cy.get('a').contains('Login').should('have.length', 1);
   });
 });
 

@@ -54,6 +54,7 @@
     "express-async-router": "^0.1.15",
     "express-response-errors": "^1.0.5",
     "he": "^1.2.0",
+    "immer": "^10.0.1",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "next": "^12.1.2",

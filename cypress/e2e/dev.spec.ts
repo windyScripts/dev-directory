@@ -8,14 +8,14 @@ describe('example login test', () => {
 
   it('allows a user to login and logout', () => {
     cy.visit('http://localhost:3000');
-    cy.contains('a', 'Log in').should('exist');
+    cy.contains('a', 'Login').should('exist');
 
     cy.login().reload();
-    const logoutBtn = cy.contains('button', 'Log out');
+    const logoutBtn = cy.contains('button', 'Logout');
     logoutBtn.should('exist');
 
     logoutBtn.click();
-    cy.contains('a', 'Log in').should('exist');
+    cy.contains('a', 'Login').should('exist');
   });
 });
 

@@ -2,6 +2,7 @@ import { randEmail, randUserName } from '@ngneat/falso';
 import DiscordOauth2 from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
 import jwt from 'jsonwebtoken';
+import _ from 'lodash';
 import setCookie, { Cookie } from 'set-cookie-parser';
 
 import * as authLib from 'server/lib/auth';
@@ -39,7 +40,7 @@ describe('auth router', () => {
       expect(res.status).toBe(400);
     });
 
-    it('should create a user, sign a token, and set a cookie', async () => {
+    it('should create a user, sign a token, set a cookie, and return the user', async () => {
       const id = String(Math.random());
 
       const getInfoSpy = mockDiscord({
@@ -53,6 +54,10 @@ describe('auth router', () => {
 
       expect(res.status).toBe(200);
 
+      const createdUser = await User.findOne({ where: { discord_user_id: id }});
+
+      expect(res.body.user).toEqual(_.pick(createdUser, User.allowedFields));
+
       // ensure the function was called with the code that we sent
       expect(getInfoSpy.mock.calls[0][0] === code);
 
@@ -62,8 +67,6 @@ describe('auth router', () => {
       const cookie = cookies.find(cookie => cookie.name === AUTH_COOKIE_NAME);
 
       const cookiePayload = jwt.decode(cookie.value);
-
-      const createdUser = await User.findOne({ where: { discord_user_id: id }});
 
       // the cookie payload will contain extra things, so we just
       // want to make sure that it contains the same fields as user
