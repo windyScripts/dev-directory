@@ -46,6 +46,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     const lastCardObserver = new IntersectionObserver(async ([lastCard]) => {
       // guard clause, should intersect only once
       if (!lastCard.isIntersecting) return;
+
       lastCardObserver.disconnect();
       setIsLoading(true);
       try {

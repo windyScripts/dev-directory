@@ -6,13 +6,10 @@ describe('directory infinite scroll', () => {
   let totalPages = 0;
 
   before(() => {
-    // clear Db
     cy.truncateDatabase();
 
-    // fill DB with 100 users
     cy.createUsers(100);
 
-    // get total pages for tests
     cy.request('http://localhost:3000/api/users').then(response => {
       totalPages = response.body.totalPages;
     });
@@ -25,9 +22,9 @@ describe('directory infinite scroll', () => {
   function checkInfiniteScroll(pages: number, totalPages: number) {
     for (let i = 1; i <= pages; i++) {
       cy.get('[data-cy="user-container"]').children().as('ulChildren');
-      i < totalPages
-        ? cy.get('@ulChildren').should('have.length', PAGE_LIMIT * i)
-        : // last page not guaranteed to be full
+      i < totalPages ?
+        cy.get('@ulChildren').should('have.length', PAGE_LIMIT * i) :
+        // last page not guaranteed to be full
         cy.get('@ulChildren').should('have.length.within', PAGE_LIMIT * (i - 1), PAGE_LIMIT * i);
 
       cy.intercept('GET', '/api/users?page=*', req => {
@@ -37,9 +34,10 @@ describe('directory infinite scroll', () => {
 
       // last page won't have a spinner
       if (i === totalPages) break;
-      // check spinner happened & removed
-      cy.get('[data-cy="loading"]'); //check if exists
-      cy.get('[data-cy="loading"]').should('not.exist'); // removed after data loaded
+
+      // spinner should exist & be removed after request completes
+      cy.get('[data-cy="loading"]');
+      cy.get('[data-cy="loading"]').should('not.exist');
     }
   }
 
@@ -53,9 +51,10 @@ describe('directory infinite scroll', () => {
       req.on('response', res => res.setDelay(500));
     }).as('getUsers');
 
-    cy.get('[data-cy="loading"]'); //check if exists
+    // spinner should exist & be removed after request completes
+    cy.get('[data-cy="loading"]');
     cy.wait('@getUsers');
-    cy.get('[data-cy="loading"]').should('not.exist'); // removed after data loaded
+    cy.get('[data-cy="loading"]').should('not.exist');
   });
 
   it('shows users when scrolled multiple times', () => {
