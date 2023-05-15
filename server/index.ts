@@ -1,9 +1,6 @@
-import { config } from 'dotenv-flow';
-
+import 'server/lib/config-env';
 import log from './lib/log';
 import Server from './server';
-
-config({ silent: true });
 
 // this code runs the express server
 async function run() {

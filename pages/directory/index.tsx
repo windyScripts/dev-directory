@@ -4,10 +4,9 @@ import { NextPage } from 'next';
 import React from 'react';
 
 import createAxiosInstance from 'client/lib/axios';
+import { ClientUser } from 'shared/User';
 
-//TODO: Type users once sequelize-typescript is added
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Directory: NextPage<{ users: any[]; totalPages: number; error: string }> = props => {
+const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: string }> = props => {
   const { users, totalPages, error } = props;
   const lastCardRef = React.useRef(null);
   const [userData, setUserData] = React.useState(users);
