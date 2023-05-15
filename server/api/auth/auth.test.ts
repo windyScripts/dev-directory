@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import setCookie, { Cookie } from 'set-cookie-parser';
 
+import 'server/lib/config-env';
 import * as authLib from 'server/lib/auth';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';

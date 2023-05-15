@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import setCookie, { Cookie } from 'set-cookie-parser';
 import { Response } from 'superagent';
 
+import 'server/lib/config-env';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
 import { createUser, truncateDatabase } from 'server/test/utils';
