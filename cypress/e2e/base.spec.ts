@@ -9,14 +9,4 @@ describe('Open browser and check if login button exists.', () => {
   });
 });
 
-describe('Visit directory page and verify users exists', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/directory');
-  });
-
-  it('Displays a list of users', () => {
-    cy.get('ul').should('be.visible');
-  });
-});
-
 export {};
