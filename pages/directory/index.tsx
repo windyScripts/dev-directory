@@ -1,8 +1,9 @@
 import { Box, Container, CircularProgress, List, ListItem, Typography } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
-import React from 'react';
+import * as React from 'react';
 
+import ErrorPopup from 'client/components/ErrorPopup';
 import createAxiosInstance from 'client/lib/axios';
 import { ClientUser } from 'shared/User';
 
@@ -13,6 +14,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPageNum, setTotalPageNum] = React.useState(totalPages);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   async function fetchUsers(page: number) {
     try {
@@ -23,7 +25,9 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
         users: response.data.users,
       };
     } catch (err) {
-      console.error(err);
+      if (err.code === 'ERR_BAD_REQUEST') {
+        throw new Error('Page out of range', { cause: err.message });
+      }
     }
   }
 
@@ -60,7 +64,9 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
         setTotalPageNum(total);
         setUserData([...userData, ...users]);
       } catch (err) {
-        console.error(err);
+        if (err.message === 'Page out of range') {
+          setOpen(true);
+        }
       }
     }, intersectionOptions);
 
@@ -70,6 +76,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
 
   return (
     <Container maxWidth="lg" className="pt-4">
+      <ErrorPopup open={open} setOpen={setOpen} message="Page out of range" />
       <Box className="pt-4">
         <Typography variant="h2" className="text-2xl">
           Users:
