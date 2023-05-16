@@ -14,10 +14,8 @@ export default function ErrorPopup({
     setOpen(false);
   };
 
-  console.log('error component is being called with open set as ', open);
-
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} data-cy="errorpopup">
       <Alert onClose={handleClose} severity="error" elevation={6} variant="filled">
         {message}
       </Alert>

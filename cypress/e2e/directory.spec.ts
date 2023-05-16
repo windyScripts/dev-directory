@@ -64,6 +64,22 @@ describe('directory infinite scroll', () => {
   it('doesn\'t attempt to fetch more pages when page limit reached', () => {
     checkInfiniteScroll(totalPages + 1, totalPages);
   });
+
+  it('shows Error Popup when the server returns a 400 Status', () => {
+    cy.intercept('GET', '/api/users?page=2', req => {
+      req.reply({
+        statusCode: 400,
+        body: {
+          code: 'ERR_BAD_REQUEST',
+          message: 'Request failed with status code 400',
+        },
+      });
+      // req.on('before:response', res => (res.statusCode = 400));
+    }).as('getUsers');
+    cy.scrollTo('bottom');
+
+    cy.get('[data-cy="errorpopup"]');
+  });
 });
 
 export {};
