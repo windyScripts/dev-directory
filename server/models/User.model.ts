@@ -71,9 +71,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   website: string;
 
   @CreatedAt
+  @Column({ field: "created_at" })
   createdAt: Date;
 
   @UpdatedAt
+  @Column({ field: "updated_at"})
   updatedAt: Date;
 
   public static get allowedFields() {
