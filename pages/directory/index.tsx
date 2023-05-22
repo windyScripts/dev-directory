@@ -15,6 +15,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
   const [totalPageNum, setTotalPageNum] = React.useState(totalPages);
   const [isLoading, setIsLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   async function fetchUsers(page: number) {
     try {
@@ -65,6 +66,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
         setUserData([...userData, ...users]);
       } catch (err) {
         if (err.message === 'Page out of range') {
+          setErrorMessage(err.message);
           setOpen(true);
         }
       }
@@ -76,7 +78,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
 
   return (
     <Container maxWidth="lg" className="pt-4">
-      <ErrorPopup open={open} setOpen={setOpen} message="Page out of range" />
+      <ErrorPopup open={open} setOpen={setOpen} message={errorMessage} />
       <Box className="pt-4">
         <Typography variant="h2" className="text-2xl">
           Users:
