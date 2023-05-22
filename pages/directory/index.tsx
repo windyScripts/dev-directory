@@ -53,13 +53,12 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
       if (!lastCard.isIntersecting) return;
 
       lastCardObserver.disconnect();
+      // stop loading users when at max pages before fetching next page
+      if (currentPage + 1 > totalPageNum) {
+        return;
+      }
       setIsLoading(true);
       try {
-        // stop loading users when at max pages before fetching next page
-        if (currentPage + 1 > totalPageNum) {
-          setIsLoading(false);
-          return;
-        }
         const { page, total, users } = await fetchUsers(currentPage + 1);
         setCurrentPage(page);
         setTotalPageNum(total);
@@ -70,9 +69,9 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
           setShowError(true);
         }
       }
+      setIsLoading(false);
     }, intersectionOptions);
 
-    setIsLoading(false);
     lastCardObserver.observe(lastCardRef.current);
   }, [userData]);
 
