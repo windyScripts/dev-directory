@@ -14,7 +14,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPageNum, setTotalPageNum] = React.useState(totalPages);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [showError, setShowError] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
   async function fetchUsers(page: number) {
@@ -49,7 +49,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     };
 
     const lastCardObserver = new IntersectionObserver(async ([lastCard]) => {
-      // guard clause, should intersect only once
+      // guard clause, On mount intersection triggers w/ false, should intersect only once
       if (!lastCard.isIntersecting) return;
 
       lastCardObserver.disconnect();
@@ -67,7 +67,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
       } catch (err) {
         if (err.message === 'Page out of range') {
           setErrorMessage(err.message);
-          setOpen(true);
+          setShowError(true);
         }
       }
     }, intersectionOptions);
@@ -78,7 +78,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
 
   return (
     <Container maxWidth="lg" className="pt-4">
-      <ErrorPopup open={open} setOpen={setOpen} message={errorMessage} />
+      <ErrorPopup open={showError} setOpen={setShowError} message={errorMessage} />
       <Box className="pt-4">
         <Typography variant="h2" className="text-2xl">
           Users:
