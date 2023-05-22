@@ -22,10 +22,13 @@ describe('directory infinite scroll', () => {
   function checkInfiniteScroll(pages: number, totalPages: number) {
     for (let i = 1; i <= pages; i++) {
       cy.get('[data-cy="user-container"]').children().as('ulChildren');
-      i < totalPages ?
-        cy.get('@ulChildren').should('have.length', PAGE_LIMIT * i) :
+
+      if (i < totalPages) {
+        cy.get('@ulChildren').should('have.length', PAGE_LIMIT * i);
+      } else {
         // last page not guaranteed to be full
         cy.get('@ulChildren').should('have.length.within', PAGE_LIMIT * (i - 1), PAGE_LIMIT * i);
+      }
 
       cy.intercept('GET', '/api/users?page=*', req => {
         req.on('response', res => res.setDelay(500));
