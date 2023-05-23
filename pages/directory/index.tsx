@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NextPage } from 'next';
 import * as React from 'react';
 
-import ErrorPopup from 'client/components/ErrorPopup';
+import ErrorToast from 'client/components/ErrorPopup';
 import createAxiosInstance from 'client/lib/axios';
 import { ClientUser } from 'shared/User';
 
@@ -77,7 +77,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
 
   return (
     <Container maxWidth="lg" className="pt-4">
-      <ErrorPopup open={showError} setOpen={setShowError} message={errorMessage} />
+      <ErrorToast open={showError} setOpen={setShowError} message={errorMessage} />
       <Box className="pt-4">
         <Typography variant="h2" className="text-2xl">
           Users:

@@ -1,7 +1,7 @@
 import { Alert, Snackbar } from '@mui/material';
 import * as React from 'react';
 
-export default function ErrorPopup({
+export default function ErrorToast({
   open = false,
   setOpen,
   message,
