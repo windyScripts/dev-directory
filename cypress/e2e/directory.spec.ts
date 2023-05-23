@@ -78,7 +78,7 @@ describe('directory infinite scroll', () => {
           message: 'Request failed with status code 400',
         },
       });
-    }).as('getUsers');
+    });
     cy.scrollTo('bottom');
 
     cy.get('[data-cy="errorpopup"]');
