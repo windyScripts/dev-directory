@@ -28,6 +28,8 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     } catch (err) {
       if (err.code === 'ERR_BAD_REQUEST') {
         throw new Error('Page out of range', { cause: err.message });
+      } else {
+        throw err;
       }
     }
   }
@@ -64,10 +66,8 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
         setTotalPageNum(total);
         setUserData([...userData, ...users]);
       } catch (err) {
-        if (err.message === 'Page out of range') {
-          setErrorMessage(err.message);
-          setShowError(true);
-        }
+        setErrorMessage(err.message);
+        setShowError(true);
       }
       setIsLoading(false);
     }, intersectionOptions);
