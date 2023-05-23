@@ -30,16 +30,17 @@ describe('directory infinite scroll', () => {
         cy.get('@ulChildren').should('have.length.within', PAGE_LIMIT * (i - 1), PAGE_LIMIT * i);
       }
 
-      cy.intercept('GET', '/api/users?page=*', req => {
-        req.on('response', res => res.setDelay(500));
+      cy.intercept('/api/users?page=*', req => {
+        req.alias = 'getUsers';
       }).as('getUsers');
-      cy.scrollTo('bottom');
 
+      cy.scrollTo('bottom');
       // last page won't have a spinner
       if (i === totalPages) break;
 
       // spinner should exist & be removed after request completes
       cy.get('[data-cy="loading"]');
+      cy.wait('@getUsers');
       cy.get('[data-cy="loading"]').should('not.exist');
     }
   }
@@ -50,8 +51,8 @@ describe('directory infinite scroll', () => {
 
   it('shows a loading animation while fetching users', () => {
     cy.scrollTo('bottom');
-    cy.intercept('GET', '/api/users?page=*', req => {
-      req.on('response', res => res.setDelay(500));
+    cy.intercept('/api/users?page=*', req => {
+      req.alias = 'getUsers';
     }).as('getUsers');
 
     // spinner should exist & be removed after request completes
@@ -64,7 +65,7 @@ describe('directory infinite scroll', () => {
     checkInfiniteScroll(5, totalPages);
   });
 
-  it('doesn\'t attempt to fetch more pages when page limit reached', () => {
+  it("doesn't attempt to fetch more pages when page limit reached", () => {
     checkInfiniteScroll(totalPages + 1, totalPages);
   });
 
