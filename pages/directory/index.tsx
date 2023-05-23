@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NextPage } from 'next';
 import * as React from 'react';
 
-import ErrorToast from 'client/components/ErrorPopup';
+import ErrorToast from 'client/components/ErrorToast';
 import createAxiosInstance from 'client/lib/axios';
 import { ClientUser } from 'shared/User';
 
