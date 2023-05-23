@@ -65,7 +65,7 @@ describe('directory infinite scroll', () => {
     checkInfiniteScroll(5, totalPages);
   });
 
-  it("doesn't attempt to fetch more pages when page limit reached", () => {
+  it('does not attempt to fetch more pages when page limit reached', () => {
     checkInfiniteScroll(totalPages + 1, totalPages);
   });
 
@@ -81,7 +81,7 @@ describe('directory infinite scroll', () => {
     });
     cy.scrollTo('bottom');
 
-    cy.get('[data-cy="errorpopup"]');
+    cy.get('[data-cy="errortoast"]');
   });
 });
 

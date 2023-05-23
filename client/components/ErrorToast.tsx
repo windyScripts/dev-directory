@@ -15,7 +15,7 @@ export default function ErrorToast({
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} data-cy="errorpopup">
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} data-cy="errortoast">
       <Alert onClose={handleClose} severity="error" elevation={6} variant="filled">
         {message}
       </Alert>
