@@ -8,8 +8,8 @@ export interface ServerUser {
   linkedin_url: string;
   github_username: string;
   website: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
-export type ClientUser = Omit<ServerUser, 'email' | 'createdAt' | 'updatedAt'>;
+export type ClientUser = Omit<ServerUser, 'email' | 'created_at' | 'updated_at'>;

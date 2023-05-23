@@ -14,11 +14,12 @@ import {
 
 import { ServerUser as UserAttributes } from 'shared/User';
 
-type UserCreationAttributes = Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at'>;
 
 @Table({
   tableName: 'users',
   timestamps: true,
+  underscored: true,
 })
 class User extends Model<UserAttributes, UserCreationAttributes> {
   @PrimaryKey
@@ -71,12 +72,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   website: string;
 
   @CreatedAt
-  @Column({ field: "created_at" })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdatedAt
-  @Column({ field: "updated_at"})
-  updatedAt: Date;
+  updated_at: Date;
 
   public static get allowedFields() {
     return [
