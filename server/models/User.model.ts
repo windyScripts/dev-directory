@@ -19,7 +19,6 @@ type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'update
 @Table({
   tableName: 'users',
   timestamps: true,
-  underscored: true,
 })
 class User extends Model<UserAttributes, UserCreationAttributes> {
   @PrimaryKey
