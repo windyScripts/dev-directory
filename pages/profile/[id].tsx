@@ -2,11 +2,13 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { Container, Box, ListItemIcon, ListItemButton, List, Typography } from '@mui/material';
+import { Container, Box, Button, ListItemIcon, ListItemButton, List, Typography } from '@mui/material';
 import { NextPage, NextPageContext } from 'next';
 import ErrorPage from 'next/error';
 import React from 'react';
 
+import UserForm from 'client/components/layout/UserForm';
+import { useAuthState } from 'client/contexts/auth';
 import createAxiosInstance from 'client/lib/axios';
 import { UserProfile } from 'server/types/User';
 
@@ -25,6 +27,16 @@ const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
     return <ErrorPage statusCode={isErrorCode ? statusCode : 404}/>;
   }
 
+  const { authedUser } = useAuthState();
+
+  const isAuthedUsersProfile = authedUser.id === user.id;
+
+  const [isFormVisible, setIsFormVisible] = React.useState(false);
+
+  const handleToggleForm = async () => {
+    setIsFormVisible(prev => !prev);
+  };
+
   return (
     <>
       <Container className="flex flex-col gap-4 pt-20 items-center">
@@ -32,7 +44,15 @@ const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
           <Typography variant="h1" className="text-5xl font-700 text-center">
             {possessiveForm(user.discord_name)} Profile
           </Typography>
+          {isAuthedUsersProfile && (
+            <Button variant="contained" color="primary" className="text-2xl font-700 text-center"
+              onClick={handleToggleForm}>
+              Edit Profile
+            </Button>
+          )}
         </Box>
+
+        {isFormVisible && <UserForm/>}
 
         {user.bio && <Typography variant="body1" component="p">{user.bio}</Typography>}
 
