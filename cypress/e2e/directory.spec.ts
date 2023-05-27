@@ -30,10 +30,7 @@ describe('directory infinite scroll', () => {
         cy.get('@ulChildren').should('have.length.within', PAGE_LIMIT * (i - 1), PAGE_LIMIT * i);
       }
 
-      cy.intercept('/api/users?page=*', req => {
-        req.alias = 'getUsers';
-      }).as('getUsers');
-
+      cy.intercept('/api/users?page=*').as('getUsers');
       cy.scrollTo('bottom');
       // last page won't have a spinner
       if (i === totalPages) break;
@@ -51,9 +48,7 @@ describe('directory infinite scroll', () => {
 
   it('shows a loading animation while fetching users', () => {
     cy.scrollTo('bottom');
-    cy.intercept('/api/users?page=*', req => {
-      req.alias = 'getUsers';
-    }).as('getUsers');
+    cy.intercept('/api/users?page=*').as('getUsers');
 
     // spinner should exist & be removed after request completes
     cy.get('[data-cy="loading"]');
