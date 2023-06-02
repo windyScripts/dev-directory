@@ -17,17 +17,19 @@ interface Props {
   statusCode: number;
 }
 
-const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
+const ProfilePage: NextPage<Props> = ({ user:userProp, statusCode }) => {
   function possessiveForm(name: string): string {
     return name.endsWith('s') ? `${name}'` : `${name}'s`;
   }
 
   const isErrorCode = statusCode < 200 || statusCode >= 300;
-  if (isErrorCode || !user) {
+  if (isErrorCode || !userProp) {
     return <ErrorPage statusCode={isErrorCode ? statusCode : 404}/>;
   }
 
   const { authedUser } = useAuthState();
+
+  const [user, setUser] = React.useState<UserProfile>(userProp);
 
   const isAuthedUsersProfile = authedUser.id === user.id;
 
@@ -52,7 +54,7 @@ const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
           )}
         </Box>
 
-        {isFormVisible && <UserForm/>}
+        {isFormVisible && <UserForm setUser={setUser} user={user}/>}
 
         {user.bio && <Typography variant="body1" component="p">{user.bio}</Typography>}
 

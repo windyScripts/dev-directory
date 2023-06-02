@@ -2,18 +2,29 @@ import { Button, Container, TextField } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
 
-import { useAuthState, useAuthDispatch } from 'client/contexts/auth';
+import { useAuthDispatch } from 'client/contexts/auth';
 
-const UserForm = () => {
-  const { authedUser } = useAuthState();
+import { UserProfile } from 'server/types/User';
+
+interface Props {
+  user: UserProfile;
+  setUser: React.Dispatch<React.SetStateAction<UserProfile>>;
+}
+
+
+//fix edit profile button
+//add testing
+//basic design love
+
+const UserForm:React.FC<Props> = ( {user, setUser} ) => {
   const authDispatch = useAuthDispatch();
 
   const [userData, setUserData] = useState({
-    bio: authedUser.bio || '',
-    twitter_username: authedUser.twitter_username || '',
-    linkedin_url: authedUser.linkedin_url || '',
-    github_username: authedUser.github_username || '',
-    website: authedUser.website || '',
+    bio: user.bio || '',
+    twitter_username: user.twitter_username || '',
+    linkedin_url: user.linkedin_url || '',
+    github_username: user.github_username || '',
+    website: user.website || '',
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -23,18 +34,22 @@ const UserForm = () => {
     setUserData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSubmit:React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     if (isLoading) {
       return;
     }
     setIsLoading(true);
     try {
-      const userId = authedUser.id;
+      const userId = user.id;
 
       const response = await axios.patch(`/api/users/${userId}`, userData);
       authDispatch({ type: 'SET_AUTHED_USER', user: userData });
       console.log(response.status);
+      setUser({
+        ...user,
+        ...userData,
+      })
 
     } catch (error) {
       console.error(error);
@@ -42,7 +57,6 @@ const UserForm = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit}>
