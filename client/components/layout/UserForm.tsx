@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useAuthDispatch } from 'client/contexts/auth';
 
 import { UserProfile } from 'server/types/User';
+import { Box } from '@mui/system';
 
 interface Props {
   user: UserProfile;
@@ -60,39 +61,43 @@ const UserForm:React.FC<Props> = ( {user, setUser} ) => {
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit}>
-        <TextField
-          name="bio"
-          label="Bio"
-          value={userData.bio}
-          onChange={handleChange}
-        />
-        <TextField
-          name="twitter_username"
-          label="Twitter Username"
-          value={userData.twitter_username}
-          onChange={handleChange}
-        />
-        <TextField
-          name="linkedin_url"
-          label="LinkedIn URL"
-          value={userData.linkedin_url}
-          onChange={handleChange}
-        />
-        <TextField
-          name="github_username"
-          label="GitHub Username"
-          value={userData.github_username}
-          onChange={handleChange}
-        />
-        <TextField
-          name="website"
-          label="Website"
-          value={userData.website}
-          onChange={handleChange}
-        />
-        <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
-          {isLoading ? 'Updating...' : 'Update'}
-        </Button>
+        <Box display="flex" flexDirection="column" gap={2}>
+          <TextField
+            id="outlined-multiline-static"
+            label="Bio"
+            multiline
+            rows={4}
+            value={userData.bio}
+            onChange={handleChange}
+          />
+          <TextField
+            name="twitter_username"
+            label="Twitter Username"
+            value={userData.twitter_username}
+            onChange={handleChange}
+          />
+          <TextField
+            name="linkedin_url"
+            label="LinkedIn URL"
+            value={userData.linkedin_url}
+            onChange={handleChange}
+          />
+          <TextField
+            name="github_username"
+            label="GitHub Username"
+            value={userData.github_username}
+            onChange={handleChange}
+          />
+          <TextField
+            name="website"
+            label="Website"
+            value={userData.website}
+            onChange={handleChange}
+          />
+          <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
+            {isLoading ? 'Updating...' : 'Update'}
+          </Button>
+        </Box>
       </form>
     </Container>
   );
