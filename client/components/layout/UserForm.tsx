@@ -1,20 +1,17 @@
 import { Button, Container, TextField } from '@mui/material';
+import { Box } from '@mui/system';
 import axios from 'axios';
 import { useState } from 'react';
 
 import { useAuthDispatch } from 'client/contexts/auth';
-
 import { UserProfile } from 'server/types/User';
-import { Box } from '@mui/system';
 
 interface Props {
   user: UserProfile;
   setUser: React.Dispatch<React.SetStateAction<UserProfile>>;
 }
 
-//add testing
-
-const UserForm:React.FC<Props> = ( {user, setUser} ) => {
+const UserForm:React.FC<Props> = ({ user, setUser }) => {
   const authDispatch = useAuthDispatch();
 
   const [userData, setUserData] = useState({
@@ -33,7 +30,7 @@ const UserForm:React.FC<Props> = ( {user, setUser} ) => {
     setUserData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit:React.FormEventHandler<HTMLFormElement> = async (event) => {
+  const handleSubmit:React.FormEventHandler<HTMLFormElement> = async event => {
     event.preventDefault();
     if (isLoading) {
       return;
@@ -44,11 +41,10 @@ const UserForm:React.FC<Props> = ( {user, setUser} ) => {
 
       const response = await axios.patch(`/api/users/${userId}`, userData);
       authDispatch({ type: 'SET_AUTHED_USER', user: { ...user, ...userData }});
-      console.log(response.status);
       setUser({
         ...user,
         ...userData,
-      })
+      });
       setIsFormVisible(false);
     } catch (error) {
       console.error(error);

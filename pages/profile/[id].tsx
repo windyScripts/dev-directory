@@ -17,7 +17,7 @@ interface Props {
   statusCode: number;
 }
 
-const ProfilePage: NextPage<Props> = ({ user:userProp, statusCode }) => {
+const ProfilePage: NextPage<Props> = ({ user: userProp, statusCode }) => {
   function possessiveForm(name: string): string {
     return name.endsWith('s') ? `${name}'` : `${name}'s`;
   }
@@ -38,6 +38,8 @@ const ProfilePage: NextPage<Props> = ({ user:userProp, statusCode }) => {
   const handleToggleForm = async () => {
     setIsFormVisible(prev => !prev);
   };
+
+  console.log(authedUser);
 
   return (
     <>
