@@ -39,8 +39,6 @@ const ProfilePage: NextPage<Props> = ({ user: userProp, statusCode }) => {
     setIsFormVisible(prev => !prev);
   };
 
-  console.log(authedUser);
-
   return (
     <>
       <Container className="flex flex-col gap-4 pt-20 items-center">

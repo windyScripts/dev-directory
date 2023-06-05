@@ -39,7 +39,7 @@ const UserForm:React.FC<Props> = ({ user, setUser }) => {
     try {
       const userId = user.id;
 
-      const response = await axios.patch(`/api/users/${userId}`, userData);
+      await axios.patch(`/api/users/${userId}`, userData);
       authDispatch({ type: 'SET_AUTHED_USER', user: { ...user, ...userData }});
       setUser({
         ...user,
