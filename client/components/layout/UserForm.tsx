@@ -12,10 +12,7 @@ interface Props {
   setUser: React.Dispatch<React.SetStateAction<UserProfile>>;
 }
 
-
-//fix edit profile button
 //add testing
-//basic design love
 
 const UserForm:React.FC<Props> = ( {user, setUser} ) => {
   const authDispatch = useAuthDispatch();
@@ -29,6 +26,7 @@ const UserForm:React.FC<Props> = ( {user, setUser} ) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -45,19 +43,24 @@ const UserForm:React.FC<Props> = ( {user, setUser} ) => {
       const userId = user.id;
 
       const response = await axios.patch(`/api/users/${userId}`, userData);
-      authDispatch({ type: 'SET_AUTHED_USER', user: userData });
+      authDispatch({ type: 'SET_AUTHED_USER', user: { ...user, ...userData }});
       console.log(response.status);
       setUser({
         ...user,
         ...userData,
       })
-
+      setIsFormVisible(false);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (!isFormVisible) {
+    return null;
+  }
+
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit}>
@@ -65,6 +68,7 @@ const UserForm:React.FC<Props> = ( {user, setUser} ) => {
           <TextField
             id="outlined-multiline-static"
             label="Bio"
+            name="bio"
             multiline
             rows={4}
             value={userData.bio}
