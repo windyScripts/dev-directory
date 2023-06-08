@@ -14,7 +14,7 @@ import {
 
 import { ServerUser as UserAttributes } from 'shared/User';
 
-type UserCreationAttributes = Omit<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at'>;
 
 @Table({
   tableName: 'users',
@@ -71,10 +71,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   website: string;
 
   @CreatedAt
-  createdAt: Date;
+  created_at: Date;
 
   @UpdatedAt
-  updatedAt: Date;
+  updated_at: Date;
 
   public static get allowedFields() {
     return [

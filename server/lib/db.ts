@@ -27,6 +27,9 @@ const commonOptions = {
   dialect: 'postgres' as Dialect,
   logging: env.DB_LOGGING,
   models: [path.join(__dirname, '../models/*.model.*')],
+  define: {
+    underscored: true,
+  },
 };
 
 // Database object modeling mongoDB data
