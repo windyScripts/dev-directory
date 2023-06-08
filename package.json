@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && ttsc && next build",
+    "cypress": "cypress run",
     "cypress:open": "cypress open",
     "dev:server": "cross-env NODE_ENV=development npm run ts:exec server/index.ts",
     "dev": "nodemon",
@@ -21,7 +22,7 @@
     "start": "node dist/server/index",
     "test:server": "npm run jest -- ./server",
     "test:watch": "npm run jest -- --watch",
-    "test": "npm run jest",
+    "test": "npm run jest && npm run cypress",
     "ts:exec": "ts-node -r tsconfig-paths/register --project ./tsconfig.json --transpile-only",
     "ts:check": "npx tsc --noEmit"
   },
