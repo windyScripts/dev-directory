@@ -47,8 +47,12 @@ const ProfilePage: NextPage<Props> = ({ user: userProp, statusCode }) => {
             {possessiveForm(user.discord_name)} Profile
           </Typography>
           {isAuthedUsersProfile && (
-            <Button variant="contained" color="primary" className="text-2xl font-700 text-center"
-              onClick={handleToggleForm}>
+            <Button
+              variant="contained"
+              color="primary"
+              className="text-2xl font-700 text-center"
+              onClick={handleToggleForm}
+            >
               Edit Profile
             </Button>
           )}

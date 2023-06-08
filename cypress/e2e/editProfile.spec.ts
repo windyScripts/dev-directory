@@ -3,12 +3,12 @@ import '../support/commands';
 
 describe('Edit profile functions correctly', () => {
   before(() => {
-    cy.truncateDatabase();
     cy.createUsers(10);
   });
 
   beforeEach(() => {
     cy.login(1).reload();
+    cy.createUsers(10);
   });
 
   it('Prevents a user from editing other users profiles', () => {

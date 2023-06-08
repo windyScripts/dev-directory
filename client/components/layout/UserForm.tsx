@@ -62,7 +62,6 @@ const UserForm:React.FC<Props> = ({ user, setUser }) => {
       <form onSubmit={handleSubmit}>
         <Box display="flex" flexDirection="column" gap={2}>
           <TextField
-            id="outlined-multiline-static"
             label="Bio"
             name="bio"
             multiline
