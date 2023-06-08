@@ -68,6 +68,7 @@ const UserForm:React.FC<Props> = ({ user, setUser }) => {
             rows={4}
             value={userData.bio}
             onChange={handleChange}
+            data-cy="bio-input"
           />
           <TextField
             name="twitter_username"
@@ -93,7 +94,13 @@ const UserForm:React.FC<Props> = ({ user, setUser }) => {
             value={userData.website}
             onChange={handleChange}
           />
-          <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isLoading}
+            data-cy="update-button"
+          >
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
         </Box>

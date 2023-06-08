@@ -52,6 +52,7 @@ const ProfilePage: NextPage<Props> = ({ user: userProp, statusCode }) => {
               color="primary"
               className="text-2xl font-700 text-center"
               onClick={handleToggleForm}
+              data-cy="edit-button"
             >
               Edit Profile
             </Button>
