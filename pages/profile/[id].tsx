@@ -8,7 +8,7 @@ import ErrorPage from 'next/error';
 import React from 'react';
 
 import createAxiosInstance from 'client/lib/axios';
-import { UserProfile } from 'server/types/User';
+import { UserProfile } from 'shared/User';
 
 interface Props {
   user: UserProfile;

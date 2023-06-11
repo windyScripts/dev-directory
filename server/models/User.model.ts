@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   AllowNull,
   AutoIncrement,
@@ -12,7 +13,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { ServerUser as UserAttributes } from 'shared/User';
+import { UserProfile, ServerUser as UserAttributes } from 'shared/User';
 
 type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'updated_at'>;
 
@@ -87,6 +88,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
       'github_username',
       'website',
     ];
+  }
+
+  get profile(): UserProfile {
+    return _.pick(this, User.allowedFields) as UserProfile;
   }
 }
 

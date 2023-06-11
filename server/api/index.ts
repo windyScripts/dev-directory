@@ -2,7 +2,6 @@ import { cleanEnv } from 'envalid';
 import { AsyncRouter } from 'express-async-router';
 
 import authRouter from './auth';
-import flagsRouter from './flags';
 import userRouter from './users';
 
 const apiRouter = AsyncRouter();
@@ -11,7 +10,6 @@ const env = cleanEnv(process.env, {});
 
 apiRouter.use('/users', userRouter);
 apiRouter.use('/auth', authRouter);
-apiRouter.use('/flags', flagsRouter);
 
 if (env.isDev || env.isTest) {
   // we can't import this router because it requires dev dependencies

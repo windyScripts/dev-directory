@@ -11,7 +11,7 @@
     "docker:db": "docker-compose exec pg psql -U postgres -d dev-directory",
     "docker:deps": "docker-compose up -d",
     "heroku-postbuild": "npm run build && npx sequelize-cli db:migrate",
-    "jest": "cross-env NODE_ENV=test npx jest --runInBand",
+    "jest": "cross-env NODE_ENV=test npx jest",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
     "migrate": "npm run sequelize-cli db:migrate",

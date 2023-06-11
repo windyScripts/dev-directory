@@ -1,10 +1,13 @@
 import { randEmail, randNumber, randUserName, randQuote, randUrl } from '@ngneat/falso';
 import _ from 'lodash';
+import setCookie, { Cookie } from 'set-cookie-parser';
+import { Response } from 'superagent';
 
 import Db from 'server/lib/db';
 import { User, Flag } from 'server/models';
 import { UserObject } from 'server/types/User';
 import type { IntRange } from 'server/types/utils';
+import { FlagName } from 'shared/Flag';
 
 // random
 // probability should only be 1 - 100
@@ -71,25 +74,25 @@ function getExpectedUserObject(user: User) {
   return pickedUser as User;
 }
 
-function getExpectedFlagObject(flag: Flag) {
-  const allowedFields = Flag.allowedFields;
-  const pickedFlag = _.pick(flag, allowedFields);
-  return pickedFlag as Flag;
+function addFlagsForUser({ userId, flags }: { userId: number; flags: FlagName[] }) {
+  return Flag.bulkCreate(flags.map(flag => ({
+    user_id: userId,
+    name: flag,
+  })));
 }
 
-async function truncateDatabase() {
-  for (const model in Db.sequelize.models) {
-    if (model === 'SequelizeMeta') continue;
-    await Db.sequelize.models[model].destroy({ truncate: true, restartIdentity: true });
-  }
+function getCookie(res: Response, name: string): Cookie {
+  return res.headers['set-cookie']
+    .map((cookieString: string) => setCookie.parse(cookieString)[0])
+    .find((cookie: Cookie) => cookie.name === name);
 }
 
 export {
   createUser,
   createUsers,
   getExpectedUserObject,
-  getExpectedFlagObject,
   makeUserObject,
   randomEmptyChance,
-  truncateDatabase,
+  addFlagsForUser,
+  getCookie,
 };

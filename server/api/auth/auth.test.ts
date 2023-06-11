@@ -9,8 +9,9 @@ import 'server/lib/config-env';
 import * as authLib from 'server/lib/auth';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import { createUser } from 'server/test/utils';
+import { addFlagsForUser, createUser } from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
+import { FlagName } from 'shared/Flag';
 
 const env = cleanEnv(process.env, {
   DISCORD_GUILD_ID: str(),
@@ -33,6 +34,26 @@ describe('auth router', () => {
 
   afterAll(async () => {
     await server.destroy();
+  });
+
+  describe('GET /current-user', () => {
+    it('should return the current logged in user', async () => {
+      const user = await createUser();
+      await addFlagsForUser({ userId: user.id, flags: [FlagName.SKIPPED_ONBOARDING] });
+      server.login(user);
+      const res = await server.exec.get('/api/auth/current-user');
+
+      expect(res.status).toBe(200);
+      expect(res.body.user).toEqual(_.pick(user, User.allowedFields));
+      expect(res.body.flags).toEqual([FlagName.SKIPPED_ONBOARDING]);
+    });
+
+    it('should return null if not logged in', async () => {
+      server.logout();
+      const res = await server.exec.get('/api/auth/current-user');
+      expect(res.status).toBe(200);
+      expect(res.body.user).toBe(null);
+    });
   });
 
   describe('POST /login', () => {

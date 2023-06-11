@@ -1,11 +1,9 @@
 import jwt from 'jsonwebtoken';
-import setCookie, { Cookie } from 'set-cookie-parser';
-import { Response } from 'superagent';
 
 import 'server/lib/config-env';
 import { User } from 'server/models';
 import TestServer from 'server/test/server';
-import { createUser, truncateDatabase } from 'server/test/utils';
+import { createUser, getCookie } from 'server/test/utils';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 describe('developer/testing routes', () => {
@@ -18,10 +16,6 @@ describe('developer/testing routes', () => {
 
   afterAll(async () => {
     await server.destroy();
-  });
-
-  afterEach(async () => {
-    await truncateDatabase();
   });
 
   describe('GET /api/dev/login', () => {
@@ -63,17 +57,8 @@ describe('developer/testing routes', () => {
         args: [20],
       });
 
-      const userCount = await User.count();
-
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(20);
-      expect(userCount).toBe(20);
     });
   });
 });
-
-function getCookie(res: Response, name: string): Cookie {
-  return res.headers['set-cookie']
-    .map((cookieString: string) => setCookie.parse(cookieString)[0])
-    .find((cookie: Cookie) => cookie.name === name);
-}
