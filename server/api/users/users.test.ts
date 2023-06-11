@@ -1,7 +1,8 @@
 import 'server/lib/config-env';
-import { User } from 'server/models';
+import { Flag, User } from 'server/models';
 import TestServer from 'server/test/server';
 import { createUser, getExpectedUserObject } from 'server/test/utils';
+import { FlagName } from 'shared/Flag';
 import { UserProfile, USER_PAGE_SIZE } from 'shared/User';
 
 describe('user router', () => {
@@ -204,6 +205,40 @@ describe('user router', () => {
         github_username: 'gotUpdated',
         website: 'https://thiswasupdated.com/',
       });
+    });
+  });
+
+  describe('PUT /onboarding/skip', () => {
+    it('should set the skip onboarding flag', async () => {
+      const user = await createUser();
+      server.login(user);
+      const res = await server.exec.put('/api/users/onboarding/skip');
+      expect(res.status).toBe(200);
+
+      const flag = await Flag.findOne({
+        where: {
+          user_id: user.id,
+          name: FlagName.SKIPPED_ONBOARDING,
+        },
+      });
+      expect(flag).toBeTruthy();
+    });
+
+    it('should be idempotent', async () => {
+      const user = await createUser();
+      server.login(user);
+      const res1 = await server.exec.put('/api/users/onboarding/skip');
+      expect(res1.status).toBe(200);
+      const res2 = await server.exec.put('/api/users/onboarding/skip');
+      expect(res2.status).toBe(200);
+
+      const count = await Flag.count({
+        where: {
+          user_id: user.id,
+          name: FlagName.SKIPPED_ONBOARDING,
+        },
+      });
+      expect(count).toBe(1);
     });
   });
 });

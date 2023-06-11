@@ -19,6 +19,9 @@ type FlagCreationAttributes = Omit<FlagAttributes, 'id' | 'created_at' | 'update
 @Table({
   tableName: 'flags',
   timestamps: true,
+  indexes: [
+    { unique: true, fields: ['user_id', 'name'] },
+  ],
 })
 class Flag extends Model<FlagAttributes, FlagCreationAttributes> {
   @PrimaryKey

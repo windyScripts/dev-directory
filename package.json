@@ -19,7 +19,7 @@
     "seed": "cross-env NODE_ENV=development npm run ts:exec server/scripts/seed.ts",
     "sequelize-cli": "cross-env NODE_ENV=development sequelize-cli",
     "start": "node dist/server/index",
-    "test:server": "npm run jest -- ./server",
+    "test:server": "npm run jest",
     "test:watch": "npm run jest -- --watch",
     "test": "npm run jest",
     "ts:exec": "ts-node -r tsconfig-paths/register --project ./tsconfig.json --transpile-only",

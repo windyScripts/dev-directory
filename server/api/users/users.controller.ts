@@ -2,7 +2,8 @@ import { RequestHandler } from 'express';
 import { BadRequestError, NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
-import { User } from 'server/models';
+import { Flag, User } from 'server/models';
+import { FlagName } from 'shared/Flag';
 import { UserProfile, USER_PAGE_SIZE } from 'shared/User';
 
 const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
@@ -77,8 +78,18 @@ const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = 
   res.sendStatus(200);
 };
 
+const skipOnboarding: RequestHandler = async (req, res) => {
+  await Flag.upsert({
+    user_id: req.user.id,
+    name: FlagName.SKIPPED_ONBOARDING,
+  });
+
+  res.send();
+};
+
 export {
   getUserById,
   getUsers,
   updateUserById,
+  skipOnboarding,
 };
