@@ -1,43 +1,45 @@
-import { Model, DataTypes } from 'sequelize';
+import {
+  AllowNull,
+  AutoIncrement,
+  Column,
+  CreatedAt,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
 
-import Db from 'server/lib/db';
+import { FlagName, FlagType as FlagAttributes } from 'shared/Flag';
 
-class Flag extends Model {
-  public id: number;
-  public user_id: number;
-  public name: string;
+import User from './User.model';
 
-  public static readonly allowedFields: string[] = [
-    'id',
-    'user_id',
-    'name',
-  ];
+type FlagCreationAttributes = Omit<FlagAttributes, 'id' | 'created_at' | 'updated_at'>;
 
-  public readonly createdAt: Date;
-  public readonly updatedAt: Date;
+@Table({
+  tableName: 'flags',
+  timestamps: true,
+})
+class Flag extends Model<FlagAttributes, FlagCreationAttributes> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  id: number;
+
+  @ForeignKey(() => User)
+  @AllowNull
+  @Column
+  user_id: number;
+
+  @AllowNull(false)
+  @Column
+  name: FlagName;
+
+  @CreatedAt
+  created_at: Date;
+
+  @UpdatedAt
+  updated_at: Date;
 }
-
-Flag.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    sequelize: Db.sequelize,
-    modelName: 'Flag',
-    tableName: 'flags',
-  },
-);
 
 export default Flag;
