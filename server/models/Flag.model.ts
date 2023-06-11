@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   Column,
   CreatedAt,
+  DataType,
   ForeignKey,
   Model,
   PrimaryKey,
@@ -35,7 +36,7 @@ class Flag extends Model<FlagAttributes, FlagCreationAttributes> {
   user_id: number;
 
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING)
   name: FlagName;
 
   @CreatedAt

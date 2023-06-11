@@ -10,7 +10,7 @@ const Onboarding: NextPage = () => {
   const handleSkipOnboarding = async () => {
     try {
       const axios = createAxiosInstance();
-      await axios.post('/api/flags/skip-onboarding');
+      await axios.put('/api/users/onboarding/skip');
       router.push('/directory');
     } catch (error) {
       return { error: error.message };
