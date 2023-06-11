@@ -2,9 +2,11 @@ import DiscordOauth2 from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
 import { RequestHandler } from 'express';
 import { BadRequestError, InternalServerError } from 'express-response-errors';
+import _ from 'lodash';
 
 import { createAuthToken, getDiscordUserAndGuilds, upsertUser } from 'server/lib/auth';
 import log from 'server/lib/log';
+import { User } from 'server/models';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 const env = cleanEnv(process.env, {
@@ -12,7 +14,7 @@ const env = cleanEnv(process.env, {
   DISCORD_GUILD_ID: str(),
 });
 
-export const login: RequestHandler<void, void, { code: string }> = async (req, res) => {
+export const login: RequestHandler<void, { user: Partial<User> }, { code: string }> = async (req, res) => {
   const { code } = req.body;
 
   if (!code) {
@@ -38,7 +40,7 @@ export const login: RequestHandler<void, void, { code: string }> = async (req, r
   const token = createAuthToken(user);
 
   res.cookie(AUTH_COOKIE_NAME, token, { secure: env.isProd });
-  res.sendStatus(200);
+  res.json({ user: _.pick(user, User.allowedFields) });
 };
 
 export const logout: RequestHandler = async (req, res) => {

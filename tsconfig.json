@@ -21,6 +21,8 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "strict": false,
     "noEmit": false,
     "incremental": true,

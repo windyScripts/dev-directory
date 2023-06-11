@@ -1,10 +1,11 @@
-import { config } from 'dotenv-flow';
+import path from 'path';
+
+import 'server/lib/config-env';
 import { cleanEnv, str, num, bool } from 'envalid';
-import { Sequelize, Dialect  } from 'sequelize';
+import { Dialect } from 'sequelize';
+import { Sequelize  } from 'sequelize-typescript';
 
 import log from './log';
-
-config({ silent: true });
 
 const env = cleanEnv(process.env, {
   DB_HOST: str(),
@@ -25,6 +26,10 @@ const dialectOptions = env.isProd ? {
 const commonOptions = {
   dialect: 'postgres' as Dialect,
   logging: env.DB_LOGGING,
+  models: [path.join(__dirname, '../models/*.model.*')],
+  define: {
+    underscored: true,
+  },
 };
 
 // Database object modeling mongoDB data
