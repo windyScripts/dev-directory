@@ -10,13 +10,13 @@ describe('directory infinite scroll', () => {
 
     cy.createUsers(100);
 
-    cy.request('http://localhost:3000/api/users').then(response => {
+    cy.request('/api/users').then(response => {
       totalPages = response.body.totalPages;
     });
   });
 
   beforeEach(() => {
-    cy.visit('http://localhost:3000/directory');
+    cy.visit('/directory');
   });
 
   function checkInfiniteScroll(pages: number, totalPages: number) {

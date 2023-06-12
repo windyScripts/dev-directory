@@ -7,7 +7,7 @@ describe('example login test', () => {
   });
 
   it('allows a user to login and logout', () => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
     cy.contains('a', 'Login').should('exist');
 
     cy.login().reload();
@@ -34,15 +34,15 @@ describe('example run-util test', () => {
 // describe('example create users/truncate test', () => {
 //   it('can create users and truncate the database afterwards', () => {
 //     cy.truncateDatabase();
-//     cy.visit('http://localhost:3000/directory');
+//     cy.visit('/directory');
 //     cy.get('ul li').should('have.length', 0);
 //
 //     cy.createUsers(20);
-//     cy.visit('http://localhost:3000/directory');
+//     cy.visit('/directory');
 //     cy.get('ul li').should('have.length', 20);
 //
 //     cy.truncateDatabase();
-//     cy.visit('http://localhost:3000/directory');
+//     cy.visit('/directory');
 //     cy.get('ul li').should('have.length', 0);
 //   });
 // });

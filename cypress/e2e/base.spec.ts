@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 describe('Open browser and check if login button exists.', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
   });
 
   it('Checks if there is an anchor with the text login', () => {
