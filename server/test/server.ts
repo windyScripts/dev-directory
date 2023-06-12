@@ -28,6 +28,10 @@ class TestServer extends Server {
     this.dbName = dbName;
   }
 
+  get isCustomDb() {
+    return this.dbName !== env.DB_NAME;
+  }
+
   async init() {
     this.db = new Database(this.dbName);
     this.umzug = new Umzug({
@@ -49,9 +53,13 @@ class TestServer extends Server {
       logger: undefined,
     });
 
-    await this.createDb();
+    if (this.isCustomDb) {
+      await this.createDb();
+    }
     await this.db.connect();
-    await this.runMigrations();
+    if (this.isCustomDb) {
+      await this.runMigrations();
+    }
 
     this.setMiddleware();
     this.setFakeAuth();
@@ -77,9 +85,6 @@ class TestServer extends Server {
   }
 
   async createDb() {
-    if (this.dbName === env.DB_NAME) {
-      return;
-    }
     await this.runDbCommands([
       `DROP DATABASE IF EXISTS ${this.dbName}`,
       `CREATE DATABASE ${this.dbName}`,
@@ -87,9 +92,6 @@ class TestServer extends Server {
   }
 
   async dropDb() {
-    if (this.dbName === env.DB_NAME) {
-      return;
-    }
     await this.runDbCommands([`DROP DATABASE IF EXISTS "${this.dbName}";`]);
   }
 
@@ -121,7 +123,9 @@ class TestServer extends Server {
   async destroy() {
     await this.db.sequelize.close();
     await this.server?.close();
-    await this.dropDb();
+    if (this.isCustomDb) {
+      await this.dropDb();
+    }
   }
 }
 

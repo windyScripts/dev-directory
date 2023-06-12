@@ -31,23 +31,31 @@
     "jsx": "preserve",
     "baseUrl": "./",
     "paths": {
-      "server/*": ["server/*"],
-      "client/*": ["client/*"],
-      "shared/*": ["shared/*"]
+      "server/*": [
+        "server/*"
+      ],
+      "client/*": [
+        "client/*"
+      ],
+      "shared/*": [
+        "shared/*"
+      ]
     },
     "plugins": [
-      { "transform": "typescript-transform-paths" }
+      {
+        "transform": "typescript-transform-paths"
+      }
     ]
   },
   "include": [
     "server/**/*",
     "client/**/*",
     "shared/**/*",
-    "pages/**/*",
+    "pages/**/*"
   ],
   "exclude": [
     "node_modules",
     "./cypress.config.ts",
-    "./cypress/**/*",
+    "./cypress/**/*"
   ]
 }
