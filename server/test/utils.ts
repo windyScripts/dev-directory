@@ -83,7 +83,7 @@ function addFlagsForUser({ userId, flags }: { userId: number; flags: FlagName[] 
 
 function getCookie(res: Response, name: string): Cookie {
   return res.headers['set-cookie']
-    .map((cookieString: string) => setCookie.parse(cookieString)[0])
+    ?.map((cookieString: string) => setCookie.parse(cookieString)[0])
     .find((cookie: Cookie) => cookie.name === name);
 }
 

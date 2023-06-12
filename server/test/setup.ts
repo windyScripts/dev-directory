@@ -15,7 +15,7 @@ const env = cleanEnv(process.env, {
 });
 
 async function testSetup() {
-  console.log('recreating test db in env', process.env.NODE_ENV);
+  console.log('recreating test db in env');
   const client = new Client({
     user: env.DB_USER,
     host: env.DB_HOST,
@@ -23,7 +23,6 @@ async function testSetup() {
     port: env.DB_PORT,
   });
   await client.connect();
-  console.log(`recreating db name: ${env.DB_NAME}`);
   await client.query(`DROP DATABASE IF EXISTS "${env.DB_NAME}"`);
   await client.query(`CREATE DATABASE "${env.DB_NAME}"`);
   await client.end();
@@ -46,7 +45,7 @@ async function testSetup() {
     },
     context: db.sequelize.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize: db.sequelize }),
-    logger: undefined,
+    logger: console,
   });
   await umzug.up();
   console.log('completed test setup');
