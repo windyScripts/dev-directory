@@ -1,7 +1,6 @@
 import 'server/lib/config-env';
 import { cleanEnv, num, str } from 'envalid';
 import { Client } from 'pg';
-import { getPortPromise as getPort } from 'portfinder';
 import { Sequelize } from 'sequelize-typescript';
 import supertest from 'supertest';
 import { Umzug, SequelizeStorage } from 'umzug';
@@ -65,9 +64,6 @@ class TestServer extends Server {
     this.setFakeAuth();
     this.setApiRoutes();
     this.setErrorHandlers();
-
-    const port = await getPort();
-    this.server = this.app.listen(port);
   }
 
   async runDbCommands(commands: string[]) {
@@ -122,7 +118,6 @@ class TestServer extends Server {
 
   async destroy() {
     await this.db.sequelize.close();
-    await this.server?.close();
     if (this.isCustomDb) {
       await this.dropDb();
     }
