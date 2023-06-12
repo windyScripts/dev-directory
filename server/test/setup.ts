@@ -1,3 +1,4 @@
+import 'server/lib/config-env';
 import { cleanEnv, num, str } from 'envalid';
 import { Client } from 'pg';
 import { Sequelize } from 'sequelize-typescript';
@@ -14,6 +15,7 @@ const env = cleanEnv(process.env, {
 });
 
 async function testSetup() {
+  console.log('recreating test db');
   const client = new Client({
     user: env.DB_USER,
     host: env.DB_HOST,
@@ -25,6 +27,7 @@ async function testSetup() {
   await client.query(`CREATE DATABASE "${env.DB_NAME}"`);
   await client.end();
 
+  console.log('running migrations');
   const db = new Database();
   const umzug = new Umzug({
     migrations: {
@@ -45,6 +48,7 @@ async function testSetup() {
     logger: undefined,
   });
   await umzug.up();
+  console.log('completed test setup');
 }
 
 async function go() {
