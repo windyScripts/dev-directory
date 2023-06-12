@@ -2,11 +2,13 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { Container, Box, ListItemIcon, ListItemButton, List, Typography } from '@mui/material';
+import { Container, Box, Button, ListItemIcon, ListItemButton, List, Typography } from '@mui/material';
 import { NextPage, NextPageContext } from 'next';
 import ErrorPage from 'next/error';
 import React from 'react';
 
+import UserForm from 'client/components/layout/UserForm';
+import { useAuthState } from 'client/contexts/auth';
 import createAxiosInstance from 'client/lib/axios';
 import { UserProfile } from 'shared/User';
 
@@ -15,15 +17,27 @@ interface Props {
   statusCode: number;
 }
 
-const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
+const ProfilePage: NextPage<Props> = ({ user: userProp, statusCode }) => {
   function possessiveForm(name: string): string {
     return name.endsWith('s') ? `${name}'` : `${name}'s`;
   }
 
   const isErrorCode = statusCode < 200 || statusCode >= 300;
-  if (isErrorCode || !user) {
+  if (isErrorCode || !userProp) {
     return <ErrorPage statusCode={isErrorCode ? statusCode : 404}/>;
   }
+
+  const { authedUser } = useAuthState();
+
+  const [user, setUser] = React.useState<UserProfile>(userProp);
+
+  const isAuthedUsersProfile = authedUser.id === user.id;
+
+  const [isFormVisible, setIsFormVisible] = React.useState(false);
+
+  const handleToggleForm = async () => {
+    setIsFormVisible(prev => !prev);
+  };
 
   return (
     <>
@@ -32,7 +46,20 @@ const ProfilePage: NextPage<Props> = ({ user, statusCode }: Props) => {
           <Typography variant="h1" className="text-5xl font-700 text-center">
             {possessiveForm(user.discord_name)} Profile
           </Typography>
+          {isAuthedUsersProfile && (
+            <Button
+              variant="contained"
+              color="primary"
+              className="text-2xl font-700 text-center"
+              onClick={handleToggleForm}
+              data-cy="edit-button"
+            >
+              Edit Profile
+            </Button>
+          )}
         </Box>
+
+        {isFormVisible && <UserForm setUser={setUser} user={user}/>}
 
         {user.bio && <Typography variant="body1" component="p">{user.bio}</Typography>}
 
