@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 
 import { useAuthDispatch } from 'client/contexts/auth';
-import { UserProfile } from 'server/types/User';
+import { UserProfile } from 'shared/User';
 
 interface Props {
   user: UserProfile;
