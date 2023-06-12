@@ -1,7 +1,6 @@
-import { execSync } from 'child_process';
-
 import 'server/lib/config-env';
-import { cleanEnv, str } from 'envalid';
+import { cleanEnv, num, str } from 'envalid';
+import { Client } from 'pg';
 import { getPortPromise as getPort } from 'portfinder';
 import { Sequelize } from 'sequelize-typescript';
 import supertest from 'supertest';
@@ -14,6 +13,9 @@ import Server from 'server/server';
 const env = cleanEnv(process.env, {
   DB_NAME: str(),
   DB_USER: str(),
+  DB_PASSWORD: str(),
+  DB_PORT: num(),
+  DB_HOST: str(),
 });
 
 class TestServer extends Server {
@@ -60,26 +62,35 @@ class TestServer extends Server {
     this.server = this.app.listen(port);
   }
 
-  createDb() {
-    return new Promise(resolve => {
-      try {
-        execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${this.dbName}`, { stdio: 'ignore' });
-      } catch (err) {
-        // this will fail if the db already exists, which will be all the time after the first time it's run
-      }
-      resolve(0);
+  async runDbCommands(commands: string[]) {
+    const client = new Client({
+      user: env.DB_USER,
+      host: env.DB_HOST,
+      password: env.DB_PASSWORD,
+      port: env.DB_PORT,
     });
+    await client.connect();
+    for (const command of commands) {
+      await client.query(command);
+    }
+    await client.end();
   }
 
-  dropDb() {
-    return new Promise(resolve => {
-      try {
-        execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${this.dbName}`, { stdio: 'ignore' });
-      } catch (err) {
-        // this will fail if the db already exists, which will be all the time after the first time it's run
-      }
-      resolve(0);
-    });
+  async createDb() {
+    if (this.dbName === env.DB_NAME) {
+      return;
+    }
+    await this.runDbCommands([
+      `DROP DATABASE IF EXISTS ${this.dbName}`,
+      `CREATE DATABASE ${this.dbName}`,
+    ]);
+  }
+
+  async dropDb() {
+    if (this.dbName === env.DB_NAME) {
+      return;
+    }
+    await this.runDbCommands([`DROP DATABASE IF EXISTS "${this.dbName}";`]);
   }
 
   async runMigrations() {
@@ -108,11 +119,9 @@ class TestServer extends Server {
   }
 
   async destroy() {
-    if (this.dbName) {
-      await this.dropDb();
-    }
     await this.db.sequelize.close();
     await this.server?.close();
+    await this.dropDb();
   }
 }
 

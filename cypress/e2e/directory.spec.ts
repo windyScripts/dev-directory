@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 import '../support/commands';
 
-describe('directory infinite scroll', () => {
+// TODO: run these tests without truncating the database
+describe.skip('directory infinite scroll', () => {
   const PAGE_LIMIT = 20;
   let totalPages = 0;
 
