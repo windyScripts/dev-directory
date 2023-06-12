@@ -18,7 +18,6 @@ describe('user router', () => {
   });
 
   beforeEach(async () => {
-    jest.restoreAllMocks();
     await User.destroy({ truncate: true, cascade: true });
   });
 
