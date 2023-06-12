@@ -19,7 +19,7 @@ export const getCurrentUser: RequestHandler<void, CurrentUserResponse> = async (
   const { user } = req;
 
   if (!user) {
-    return res.json({ user: null });
+    return res.json({ user: null, flags: [] });
   }
 
   const flags = await Flag.findAll({ where: { user_id: user.id }});

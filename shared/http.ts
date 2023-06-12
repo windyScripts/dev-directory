@@ -3,8 +3,6 @@ import { UserProfile } from 'shared/User';
 import { FlagName } from './Flag';
 
 export type CurrentUserResponse = {
-  user: UserProfile;
+  user: UserProfile | null;
   flags: FlagName[];
-} | {
-  user: null;
 };
