@@ -86,8 +86,8 @@ class TestServer extends Server {
 
   async createDb() {
     await this.runDbCommands([
-      `DROP DATABASE IF EXISTS ${this.dbName}`,
-      `CREATE DATABASE ${this.dbName}`,
+      `DROP DATABASE IF EXISTS "${this.dbName}"`,
+      `CREATE DATABASE "${this.dbName}"`,
     ]);
   }
 

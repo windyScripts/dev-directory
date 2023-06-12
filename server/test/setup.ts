@@ -21,8 +21,8 @@ async function testSetup() {
     port: env.DB_PORT,
   });
   await client.connect();
-  await client.query(`DROP DATABASE IF EXISTS ${env.DB_NAME}`);
-  await client.query(`CREATE DATABASE ${env.DB_NAME}`);
+  await client.query(`DROP DATABASE IF EXISTS "${env.DB_NAME}"`);
+  await client.query(`CREATE DATABASE "${env.DB_NAME}"`);
   await client.end();
 
   const db = new Database();
