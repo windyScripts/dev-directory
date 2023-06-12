@@ -15,7 +15,7 @@ const env = cleanEnv(process.env, {
 });
 
 async function testSetup() {
-  console.log('recreating test db');
+  console.log('recreating test db in env', process.env.NODE_ENV);
   const client = new Client({
     user: env.DB_USER,
     host: env.DB_HOST,
