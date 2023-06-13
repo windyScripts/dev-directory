@@ -149,7 +149,7 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       </Box>
       <Snackbar open={openAlertError} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          Sorry, there was an error with your submission.
+        An error occurred, please try again.
         </Alert>
       </Snackbar>
     </Container>
