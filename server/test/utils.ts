@@ -20,7 +20,11 @@ function getRandomDiscriminator() {
 }
 
 function getRandomDiscordUserName() {
-  return `${randUserName({})}${getRandomDiscriminator()}`;
+  const username = randUserName();
+  const discriminator = getRandomDiscriminator();
+  const useDiscriminator = Math.random() < 0.5;
+
+  return useDiscriminator ? `${username}${discriminator}` : username;
 }
 
 function getRandomLinkedInURL() {
