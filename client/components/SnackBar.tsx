@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { useSnackbar, OptionsWithExtraProps } from 'notistack';
 import React from 'react';
 
-export function useAlerts(/* props: {  snackbarId: string; successMessage: string; errorMessage: string } */) {
+export function useAlert(/* props: {  snackbarId: string; successMessage: string; errorMessage: string } */) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const action = (snackbarId: string) => (
     <>
