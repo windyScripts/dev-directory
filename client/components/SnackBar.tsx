@@ -17,11 +17,11 @@ export function useAlert() {
   const successOptions: OptionsWithExtraProps<'success'> = { action, autoHideDuration: 6000, variant: 'success' };
   const errorOptions: OptionsWithExtraProps<'error'> = { action, autoHideDuration: 6000, variant: 'error' };
   return (
-    [(message: string, props?: OptionsWithExtraProps<'success'>) => {
+    { showSuccess: (message: string, props?: OptionsWithExtraProps<'success'>) => {
       enqueueSnackbar(message, { ...successOptions, ...props });
     },
-    (message: string, props?: OptionsWithExtraProps<'error'>) => {
+    showError: (message: string, props?: OptionsWithExtraProps<'error'>) => {
       enqueueSnackbar(message, { ...errorOptions, ...props });
-    }]
+    } }
   );
 }
