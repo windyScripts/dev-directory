@@ -16,12 +16,15 @@ export function useAlert() {
 
   const successOptions: OptionsWithExtraProps<'success'> = { action, autoHideDuration: 6000, variant: 'success' };
   const errorOptions: OptionsWithExtraProps<'error'> = { action, autoHideDuration: 6000, variant: 'error' };
-  return (
-    { showSuccess: (message: string, props?: OptionsWithExtraProps<'success'>) => {
-      enqueueSnackbar(message, { ...successOptions, ...props });
-    },
-    showError: (message: string, props?: OptionsWithExtraProps<'error'>) => {
-      enqueueSnackbar(message, { ...errorOptions, ...props });
-    } }
-  );
+  const showSuccess = (message: string, props?: OptionsWithExtraProps<'success'>) => {
+    enqueueSnackbar(message, { ...successOptions, ...props });
+  };
+  const showError = (message: string, props?: OptionsWithExtraProps<'error'>) => {
+    enqueueSnackbar(message, { ...errorOptions, ...props });
+  };
+  
+  return {
+    showSuccess,
+    showError,
+  };
 }
