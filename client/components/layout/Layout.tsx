@@ -1,4 +1,5 @@
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { SnackbarProvider } from 'notistack'; // SnackbarProvider must be a child of ThemeProvider
 import React from 'react';
 
 import Header from './Header';
@@ -12,9 +13,13 @@ const darkTheme = createTheme({
 const Layout: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline enableColorScheme />
-      <Header />
-      <main>{children}</main>
+      <SnackbarProvider maxSnack={1}>
+        <CssBaseline enableColorScheme />
+        <Header />
+        <main>
+          {children}
+        </main>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };
