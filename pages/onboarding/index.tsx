@@ -1,5 +1,4 @@
-import { Box, Button, Container, TextField, Typography, Snackbar } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -7,8 +6,8 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 
 import { useAlert } from 'client/components/SnackBar';
+import { useAuthState } from 'client/contexts/auth';
 import createAxiosInstance from 'client/lib/axios';
-import { UserProfile } from 'shared/User';
 
 interface FormData {
   bio: string;
@@ -18,19 +17,11 @@ interface FormData {
   website: string;
 }
 
-interface Props {
-  user: UserProfile | null;
-}
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
+const OnboardingPage: NextPage = () => {
   const { showError } = useAlert();
+  const router = useRouter();
+  const { authedUser: user } = useAuthState();
+
   const [formData, setFormData] = useState<FormData>({
     bio: user?.bio,
     twitter_username: user?.twitter_username,
@@ -41,9 +32,6 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFormFilled, setIsFormFilled] = useState(false);
-  const [openAlertError, setOpenAlertError] = useState(false);
-
-  const router = useRouter();
 
   const handleSkipOnboarding = async () => {
     try {
@@ -73,19 +61,11 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
     try {
       setIsLoading(true);
       await axios.patch(`/api/users/${user?.id}`, formData);
-      setIsLoading(false);
       router.push('/directory');
     } catch (error) {
-      setIsLoading(false);
-      setOpenAlertError(true);
+      showError(error.response?.data?.message || 'Failed to save data. Please try again.');
     }
-  };
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlertError(false);
+    setIsLoading(false);
   };
 
   const isSubmitDisabled = !isFormFilled || isLoading;
@@ -156,11 +136,6 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
           </Button>
         </Link>
       </Box>
-      <Snackbar open={openAlertError} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-        An error occurred, please try again.
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };
