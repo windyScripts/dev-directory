@@ -32,7 +32,6 @@ const commonOptions = {
   },
 };
 
-// Database object modeling mongoDB data
 class Database {
   dbName: string;
   sequelize: Sequelize;
@@ -59,7 +58,6 @@ class Database {
 
   // Connect to the postgres db
   async connect() {
-    // connnect
     await this.sequelize.authenticate();
     log('Connected to db! :)');
   }

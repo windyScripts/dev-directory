@@ -2,23 +2,9 @@ import { RequestHandler } from 'express';
 import { BadRequestError, NotFoundError } from 'express-response-errors';
 import _ from 'lodash';
 
-import { User } from 'server/models';
-import { UserProfile } from 'server/types/User';
-
-type ClientUser = Pick<User, 'id' | 'discord_user_id'>;
-
-const USERS_LIMIT = 20;
-
-const getCurrentUser: RequestHandler<void, ClientUser> = (req, res) => {
-  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-  const filteredUser = _.pick(req.user!, [
-    'id',
-    'discord_user_id',
-    'discord_name',
-  ]);
-
-  res.json(filteredUser);
-};
+import { Flag, User } from 'server/models';
+import { FlagName } from 'shared/Flag';
+import { UserProfile, USER_PAGE_SIZE } from 'shared/User';
 
 const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res) => {
   const user = await User.findByPk(req.params.id, { attributes: User.allowedFields });
@@ -32,7 +18,7 @@ const getUserById: RequestHandler<{ id: string }, UserProfile> = async (req, res
 
 const getUsers: RequestHandler = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
-  const offset = (page - 1) * USERS_LIMIT;
+  const offset = (page - 1) * USER_PAGE_SIZE;
 
   if (!Number.isInteger(page) || page < 1) {
     throw new BadRequestError('Invalid page number');
@@ -40,14 +26,14 @@ const getUsers: RequestHandler = async (req, res) => {
 
   const { rows: users, count } = await User.findAndCountAll({
     attributes: User.allowedFields,
-    limit: USERS_LIMIT,
+    limit: USER_PAGE_SIZE,
     offset,
     order: [
       ['id', 'ASC'],
     ],
   });
 
-  const totalPages = Math.ceil(count / USERS_LIMIT) || 1;
+  const totalPages = Math.ceil(count / USER_PAGE_SIZE) || 1;
 
   if (offset >= count && page !== 1) {
     throw new BadRequestError('Page out of range');
@@ -92,10 +78,18 @@ const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = 
   res.sendStatus(200);
 };
 
+const skipOnboarding: RequestHandler = async (req, res) => {
+  await Flag.upsert({
+    user_id: req.user.id,
+    name: FlagName.SKIPPED_ONBOARDING,
+  });
+
+  res.send();
+};
+
 export {
-  USERS_LIMIT,
-  getCurrentUser,
   getUserById,
   getUsers,
   updateUserById,
+  skipOnboarding,
 };

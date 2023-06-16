@@ -1,16 +1,13 @@
-import { Box, Button, Container, TextField, Typography, Snackbar } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
-import Cookies from 'universal-cookie';
 
+import { useAlert } from 'client/components/SnackBar';
+import { useAuthState } from 'client/contexts/auth';
 import createAxiosInstance from 'client/lib/axios';
-import { UserProfile } from 'server/types/User';
-import { AUTH_COOKIE_NAME } from 'shared/constants';
 
 interface FormData {
   bio: string;
@@ -20,18 +17,11 @@ interface FormData {
   website: string;
 }
 
-interface Props {
-  user: UserProfile | null;
-}
+const OnboardingPage: NextPage = () => {
+  const { showError } = useAlert();
+  const router = useRouter();
+  const { authedUser: user } = useAuthState();
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
   const [formData, setFormData] = useState<FormData>({
     bio: user?.bio,
     twitter_username: user?.twitter_username,
@@ -42,9 +32,16 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFormFilled, setIsFormFilled] = useState(false);
-  const [openAlertError, setOpenAlertError] = useState(false);
 
-  const router = useRouter();
+  const handleSkipOnboarding = async () => {
+    try {
+      const axios = createAxiosInstance();
+      await axios.put('/api/users/onboarding/skip');
+    } catch (error) {
+      showError(error.response?.data?.message || 'An error occurred.');
+    }
+    router.push('/directory');
+  };
 
   useEffect(() => {
     if (!user) {
@@ -64,19 +61,11 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
     try {
       setIsLoading(true);
       await axios.patch(`/api/users/${user?.id}`, formData);
-      setIsLoading(false);
       router.push('/directory');
     } catch (error) {
-      setIsLoading(false);
-      setOpenAlertError(true);
+      showError(error.response?.data?.message || 'Failed to save data. Please try again.');
     }
-  };
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlertError(false);
+    setIsLoading(false);
   };
 
   const isSubmitDisabled = !isFormFilled || isLoading;
@@ -142,31 +131,13 @@ const OnboardingPage: NextPage<Props> = ({ user }: Props) => {
       </form>
       <Box className="flex items-center gap-4">
         <Link href="/directory" passHref>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={handleSkipOnboarding}>
             Skip
           </Button>
         </Link>
       </Box>
-      <Snackbar open={openAlertError} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-        An error occurred, please try again.
-        </Alert>
-      </Snackbar>
     </Container>
   );
-};
-
-OnboardingPage.getInitialProps = async ({ req }) => {
-  try {
-    const cookies = new Cookies(req?.headers.cookie);
-    const token = cookies.get(AUTH_COOKIE_NAME);
-    const payload = jwt.decode(token) as jwt.JwtPayload;
-    const axiosInstance = createAxiosInstance(req);
-    const userInfo = await axiosInstance.get('/api/users/' + payload.user_id);
-    return { user: userInfo.data };
-  } catch (error) {
-    return { user: null };
-  }
 };
 
 export default OnboardingPage;

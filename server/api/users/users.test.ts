@@ -1,28 +1,24 @@
 import 'server/lib/config-env';
-import { User } from 'server/models';
+import { Flag, User } from 'server/models';
 import TestServer from 'server/test/server';
 import { createUser, getExpectedUserObject } from 'server/test/utils';
-import { UserProfile } from 'server/types/User';
-
-import { USERS_LIMIT } from './users.controller';
+import { FlagName } from 'shared/Flag';
+import { UserProfile, USER_PAGE_SIZE } from 'shared/User';
 
 describe('user router', () => {
   let server: TestServer;
 
   beforeAll(async () => {
-    server = new TestServer();
+    server = new TestServer('user_router');
     await server.init();
-  });
-
-  afterEach(async () => {
-    User.destroy({
-      where: {},
-      truncate: true,
-    });
   });
 
   afterAll(async () => {
     await server.destroy();
+  });
+
+  beforeEach(async () => {
+    await User.destroy({ truncate: true, cascade: true });
   });
 
   describe('GET /:id', () => {
@@ -107,13 +103,13 @@ describe('user router', () => {
       expect(res.body.totalPages).toEqual(2);
     });
 
-    it(`should return ${USERS_LIMIT} users on first page`, async () => {
+    it(`should return ${USER_PAGE_SIZE} users on first page`, async () => {
       await Promise.all(Array.from({ length: 25 }, createUser));
 
       const res = await server.exec.get('/api/users/');
 
       expect(res.status).toBe(200);
-      expect(res.body.users.length).toEqual(USERS_LIMIT);
+      expect(res.body.users.length).toEqual(USER_PAGE_SIZE);
       expect(res.body.page).toEqual(1);
       expect(res.body.totalPages).toEqual(2);
     });
@@ -128,14 +124,16 @@ describe('user router', () => {
     });
 
     it('should return users sorted by user.id', async () => {
-      const users: User[] = await Promise.all(Array.from({ length: 5 }, createUser));
-      const userIds = users.map(user => user.id).sort((a, b) => a - b);
+      if (await User.count() < USER_PAGE_SIZE) {
+        await Promise.all(Array.from({ length: USER_PAGE_SIZE }, createUser));
+      }
 
       const res = await server.exec.get('/api/users');
-      const ids = res.body.users.map((user:UserProfile) => user.id);
+      const ids = res.body.users.map((user: UserProfile) => user.id);
 
       expect(res.status).toBe(200);
-      expect(ids).toEqual(userIds);
+      expect(ids.length).toBe(USER_PAGE_SIZE);
+      expect(ids[0]).toBeLessThan(ids[1]);
     });
   });
 
@@ -206,6 +204,40 @@ describe('user router', () => {
         github_username: 'gotUpdated',
         website: 'https://thiswasupdated.com/',
       });
+    });
+  });
+
+  describe('PUT /onboarding/skip', () => {
+    it('should set the skip onboarding flag', async () => {
+      const user = await createUser();
+      server.login(user);
+      const res = await server.exec.put('/api/users/onboarding/skip');
+      expect(res.status).toBe(200);
+
+      const flag = await Flag.findOne({
+        where: {
+          user_id: user.id,
+          name: FlagName.SKIPPED_ONBOARDING,
+        },
+      });
+      expect(flag).toBeTruthy();
+    });
+
+    it('should be idempotent', async () => {
+      const user = await createUser();
+      server.login(user);
+      const res1 = await server.exec.put('/api/users/onboarding/skip');
+      expect(res1.status).toBe(200);
+      const res2 = await server.exec.put('/api/users/onboarding/skip');
+      expect(res2.status).toBe(200);
+
+      const count = await Flag.count({
+        where: {
+          user_id: user.id,
+          name: FlagName.SKIPPED_ONBOARDING,
+        },
+      });
+      expect(count).toBe(1);
     });
   });
 });

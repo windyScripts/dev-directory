@@ -2,19 +2,32 @@ import DiscordOauth2 from 'discord-oauth2';
 import { cleanEnv, str } from 'envalid';
 import { RequestHandler } from 'express';
 import { BadRequestError, InternalServerError } from 'express-response-errors';
-import _ from 'lodash';
 
 import { createAuthToken, getDiscordUserAndGuilds, upsertUser } from 'server/lib/auth';
 import log from 'server/lib/log';
-import { User } from 'server/models';
+import { Flag } from 'server/models';
 import { AUTH_COOKIE_NAME } from 'shared/constants';
+import { CurrentUserResponse } from 'shared/http';
 
 const env = cleanEnv(process.env, {
   AUTH_SECRET: str(),
   DISCORD_GUILD_ID: str(),
 });
 
-export const login: RequestHandler<void, { user: Partial<User> }, { code: string }> = async (req, res) => {
+export const getCurrentUser: RequestHandler<void, CurrentUserResponse> = async (req, res) => {
+  const { user } = req;
+
+  if (!user) {
+    return res.json({ user: null, flags: [] });
+  }
+
+  const flags = await Flag.findAll({ where: { user_id: user.id }});
+  const flagNames = flags.map(flag => flag.name);
+
+  res.json({ user: user.profile, flags: flagNames });
+};
+
+export const login: RequestHandler<void, CurrentUserResponse, { code: string }> = async (req, res) => {
   const { code } = req.body;
 
   if (!code) {
@@ -40,7 +53,13 @@ export const login: RequestHandler<void, { user: Partial<User> }, { code: string
   const token = createAuthToken(user);
 
   res.cookie(AUTH_COOKIE_NAME, token, { secure: env.isProd });
-  res.json({ user: _.pick(user, User.allowedFields) });
+
+  const flags = await Flag.findAll({ where: { user_id: user.id }});
+
+  res.json({
+    user: user.profile,
+    flags: flags.map(f => f.name),
+  });
 };
 
 export const logout: RequestHandler = async (req, res) => {

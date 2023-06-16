@@ -10,7 +10,7 @@ import React from 'react';
 import UserForm from 'client/components/layout/UserForm';
 import { useAuthState } from 'client/contexts/auth';
 import createAxiosInstance from 'client/lib/axios';
-import { UserProfile } from 'server/types/User';
+import { UserProfile } from 'shared/User';
 
 interface Props {
   user: UserProfile;

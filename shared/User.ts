@@ -12,4 +12,17 @@ export interface ServerUser {
   updated_at: Date;
 }
 
+export type UserProfile = Pick<ServerUser,
+  | 'id'
+  | 'discord_user_id'
+  | 'discord_name'
+  | 'bio'
+  | 'twitter_username'
+  | 'linkedin_url'
+  | 'github_username'
+  | 'website'
+>;
+
 export type ClientUser = Omit<ServerUser, 'email' | 'created_at' | 'updated_at'>;
+
+export const USER_PAGE_SIZE = 20;

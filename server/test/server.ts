@@ -1,27 +1,38 @@
-import { execSync } from 'child_process';
-
 import 'server/lib/config-env';
-import { cleanEnv, str } from 'envalid';
-import { getPortPromise as getPort } from 'portfinder';
+import { cleanEnv, num, str } from 'envalid';
+import { Client } from 'pg';
 import { Sequelize } from 'sequelize-typescript';
 import supertest from 'supertest';
 import { Umzug, SequelizeStorage } from 'umzug';
 
-import Db from 'server/lib/db';
+import { Database } from 'server/lib/db';
 import { User } from 'server/models';
 import Server from 'server/server';
 
 const env = cleanEnv(process.env, {
   DB_NAME: str(),
   DB_USER: str(),
+  DB_PASSWORD: str(),
+  DB_PORT: num(),
+  DB_HOST: str(),
 });
 
 class TestServer extends Server {
   umzug: Umzug;
   loggedInUser: User | null = null;
+  dbName: string;
+
+  constructor(dbName: string = env.DB_NAME) {
+    super();
+    this.dbName = dbName;
+  }
+
+  get isCustomDb() {
+    return this.dbName !== env.DB_NAME;
+  }
 
   async init() {
-    this.db = Db;
+    this.db = new Database(this.dbName);
     this.umzug = new Umzug({
       migrations: {
         glob: ['../migrations/*.js', { cwd: __dirname }],
@@ -41,35 +52,47 @@ class TestServer extends Server {
       logger: undefined,
     });
 
-    this.createDb();
-
+    if (this.isCustomDb) {
+      await this.createDb();
+    }
     await this.db.connect();
-    await this.revertMigrations();
-    await this.runMigrations();
+    if (this.isCustomDb) {
+      await this.runMigrations();
+    }
 
     this.setMiddleware();
     this.setFakeAuth();
     this.setApiRoutes();
     this.setErrorHandlers();
-
-    const port = await getPort();
-    this.server = this.app.listen(port);
   }
 
-  createDb() {
-    try {
-      execSync(`docker-compose exec pg createdb -U ${env.DB_USER} ${env.DB_NAME}`, { stdio: 'ignore' });
-    } catch (err) {
-      // this will fail if the db already exists, which will be all the time after the first time it's run
+  async runDbCommands(commands: string[]) {
+    const client = new Client({
+      user: env.DB_USER,
+      host: env.DB_HOST,
+      password: env.DB_PASSWORD,
+      port: env.DB_PORT,
+    });
+    await client.connect();
+    for (const command of commands) {
+      await client.query(command);
     }
+    await client.end();
+  }
+
+  async createDb() {
+    await this.runDbCommands([
+      `DROP DATABASE IF EXISTS "${this.dbName}";`,
+      `CREATE DATABASE "${this.dbName}";`,
+    ]);
+  }
+
+  async dropDb() {
+    await this.runDbCommands([`DROP DATABASE IF EXISTS "${this.dbName}";`]);
   }
 
   async runMigrations() {
     await this.umzug.up();
-  }
-
-  async revertMigrations() {
-    await this.umzug.down({ to: 0 as const });
   }
 
   get exec() {
@@ -94,9 +117,10 @@ class TestServer extends Server {
   }
 
   async destroy() {
-    await this.revertMigrations();
     await this.db.sequelize.close();
-    await this.server?.close();
+    if (this.isCustomDb) {
+      await this.dropDb();
+    }
   }
 }
 

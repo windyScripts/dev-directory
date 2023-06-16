@@ -32,7 +32,7 @@ Cypress.Commands.add('createUsers', (count?: number) => {
 
 Cypress.Commands.add('login', (id?: number) => {
   const idStr = id !== undefined ? `/${id}` : '';
-  return cy.request('GET', `http://localhost:3000/api/dev/login${idStr}`);
+  return cy.request('GET', `/api/dev/login${idStr}`);
 });
 
 Cypress.Commands.add('truncateDatabase', () => {
@@ -40,7 +40,7 @@ Cypress.Commands.add('truncateDatabase', () => {
 });
 
 Cypress.Commands.add('runUtil', (method, ...args) => {
-  return cy.request('POST', 'http://localhost:3000/api/dev/run-util', { method, args });
+  return cy.request('POST', '/api/dev/run-util', { method, args });
 });
 
 export = {};

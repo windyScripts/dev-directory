@@ -9,6 +9,11 @@ export const reducer: AuthReducer = (state, action) => {
         draftState.authedUser = action.user;
       });
 
+    case 'SET_FLAGS':
+      return produce(state, draftState => {
+        draftState.flags = action.flags;
+      });
+
     default:
       return state;
   }

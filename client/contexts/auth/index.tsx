@@ -5,6 +5,7 @@ import { AuthDispatch, AuthReducer, AuthState } from './types';
 
 const defaultState: AuthState = {
   authedUser: null,
+  flags: [],
 };
 
 const AuthStateContext = React.createContext<AuthState>(defaultState);
