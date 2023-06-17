@@ -28,7 +28,7 @@ const nonProductionCreds = {
   dialectOptions,
 };
 
-const [username, password, host, port, database] = env.DATABASE_URL.replace(/[/:@]/g, ' ').split(' ').slice(3);
+const [username, password, host, port, database] = env.DATABASE_URL.split(/[/:@]/g).slice(3);
 
 const productionCreds = {
   username,
