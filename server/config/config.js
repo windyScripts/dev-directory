@@ -18,7 +18,7 @@ const dialectOptions = env.isProd ? {
   },
 } : undefined;
 
-const creds = {
+const nonProductionCreds = {
   username: env.DB_USER,
   password: env.DB_PASSWORD,
   host: env.DB_HOST,
@@ -28,8 +28,20 @@ const creds = {
   dialectOptions,
 };
 
+const [username, password, host, port, database] = env.DATABASE_URL.split(/[/:@]/g).slice(3);
+
+const productionCreds = {
+  username,
+  password,
+  host,
+  port,
+  database,
+  dialect: 'postgresql',
+  dialectOptions,
+};
+
 module.exports = {
-  development: creds,
-  test: creds,
-  production: creds,
+  development: nonProductionCreds,
+  test: nonProductionCreds,
+  production: productionCreds,
 };
