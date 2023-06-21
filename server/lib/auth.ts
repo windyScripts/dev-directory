@@ -51,7 +51,7 @@ export async function getDiscordUserAndGuilds(authCode: string) {
 export async function upsertUser(user: DiscordOauth2.User) {
   const result = await User.upsert({
     discord_user_id: user.id,
-    discord_name: user.discriminator === '0' ? user.username : `${user.username}#${user.discriminator}`,
+    discord_name: Number(user.discriminator) > 0 ? `${user.username}#${user.discriminator}` : user.username,
     email: user.email,
   });
 
