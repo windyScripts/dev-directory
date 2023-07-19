@@ -10,6 +10,7 @@ export interface ServerUser {
   website: string;
   created_at: Date;
   updated_at: Date;
+  discord_avatar: string;
 }
 
 export type UserProfile = Pick<ServerUser,
@@ -21,6 +22,7 @@ export type UserProfile = Pick<ServerUser,
   | 'linkedin_url'
   | 'github_username'
   | 'website'
+  | 'discord_avatar'
 >;
 
 export type ClientUser = Omit<ServerUser, 'email' | 'created_at' | 'updated_at'>;

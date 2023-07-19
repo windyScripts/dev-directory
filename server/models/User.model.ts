@@ -22,7 +22,7 @@ type UserCreationAttributes = Omit<UserAttributes, 'id' | 'created_at' | 'update
   timestamps: true,
 })
 class User extends Model<UserAttributes, UserCreationAttributes> {
-  @PrimaryKey
+@PrimaryKey
   @AutoIncrement
   @Column
   id: number;
@@ -71,6 +71,12 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   @Column
   website: string;
 
+  @AllowNull(false)
+  @Default('')
+  @Unique(true)
+  @Column
+  discord_avatar: string;
+
   @CreatedAt
   created_at: Date;
 
@@ -87,6 +93,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
       'linkedin_url',
       'github_username',
       'website',
+      'discord_avatar',
     ];
   }
 

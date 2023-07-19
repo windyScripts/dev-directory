@@ -89,11 +89,11 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
               return (
                 <ListItem
                   key={user.id}
-                  sx={{ height: '100px' }}
+                  /* sx={{ height: '100px' }} */
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  {user.discord_name}
+                  <Box sx={{}}>{user.discord_name + user.discord_avatar ?? 'no avatar available'}</Box>
                 </ListItem>
               );
             })}
