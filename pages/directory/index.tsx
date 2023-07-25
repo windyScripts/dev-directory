@@ -116,7 +116,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
                   Have to make sure svgs are working.
                   */}
                   <Card>
-                    <Box>
+                    <Box maxWidth="lg">
                       {user.discord_avatar ?
                         <Avatar alt={user.discord_name} src={user.discord_avatar} />
                         : <PersonIcon />}
