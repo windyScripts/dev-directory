@@ -1,4 +1,5 @@
-import { Box, Container, CircularProgress, List, ListItem, Typography } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import { Box, Container, CircularProgress, List, ListItem, Typography, Card, Avatar, Button } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
 import * as React from 'react';
@@ -6,6 +7,11 @@ import * as React from 'react';
 import ErrorToast from 'client/components/ErrorToast';
 import createAxiosInstance from 'client/lib/axios';
 import { ClientUser } from 'shared/User';
+
+import Githubicon from '../../public/GithubIcon';
+import LinkedinIcon from '../../public/LinkedinIcon';
+import Twittericon from '../../public/TwitterIcon';
+import Websiteicon from '../../public/WebsiteIcon';
 
 const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: string }> = props => {
   const { users, totalPages, error } = props;
@@ -75,6 +81,17 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     lastCardObserver.observe(lastCardRef.current);
   }, [userData]);
 
+  const getUserSocials = (user:ClientUser) => {
+    const socials =  [user.website, user.linkedin_url, user.github_username, user.twitter_username];
+    const socialsIcons = [Websiteicon(), LinkedinIcon(), Githubicon(), Twittericon()];
+    const twoRelevantSocials = [];
+    for (let i = 0; i < socials.length; i++) {
+      if (socials[i] && twoRelevantSocials.length < 2) {
+        twoRelevantSocials.push({ url: socials[i], icon: socialsIcons[i] });
+      }
+    }
+    return twoRelevantSocials;
+  };
   return (
     <Container maxWidth="lg" className="pt-4">
       <ErrorToast open={showError} setOpen={setShowError} message={errorMessage} />
@@ -89,11 +106,29 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
               return (
                 <ListItem
                   key={user.id}
-                  /* sx={{ height: '100px' }} */
+                  sx={{ height: '100px' }}
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  <Box sx={{}}>{user.discord_name + user.discord_avatar ?? 'no avatar available'}</Box>
+                  {user.discord_name}
+                  {/*
+                  Building the component here. Length of the bio and css for boxes have to be set up.
+                  Have to make sure svgs are working.
+                  */}
+                  <Card>
+                    <Box>
+                      {user.discord_avatar ?
+                        <Avatar alt={user.discord_name} src={user.discord_avatar} />
+                        : <PersonIcon />}
+                      <Box>
+                        <span>{user.discord_name}</span>
+                        <span>{user.bio.length > 30 ? user.bio.slice(0, 30) + '...' : user.bio }</span>
+                      </Box>
+                      <Box>
+                        {getUserSocials(user).map((social, i) => <Button key={i} variant="contained">{social}</Button>)}
+                      </Box>
+                    </Box>
+                  </Card>
                 </ListItem>
               );
             })}
