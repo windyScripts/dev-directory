@@ -3,17 +3,14 @@ import {
   AutoIncrement,
   Column,
   CreatedAt,
-  Default,
   Length,
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt,
 } from 'sequelize-typescript';
 
 interface SkillsAttributes {
-  id: number;
   skill_id: number;
   skill_name: string;
   created_at: Date;
@@ -26,12 +23,7 @@ interface SkillsAttributes {
 })
 
 class Skills extends Model<SkillsAttributes> implements SkillsAttributes {
-
   @PrimaryKey
-  @AutoIncrement
-  @Column
-  id: number;
-
   @AllowNull(false)
   @AutoIncrement
   @Column
@@ -39,7 +31,7 @@ class Skills extends Model<SkillsAttributes> implements SkillsAttributes {
 
   @AllowNull(false)
   @Length({ max: 100 })
-  @Column 
+  @Column
   skill_name: string;
 
   @CreatedAt
