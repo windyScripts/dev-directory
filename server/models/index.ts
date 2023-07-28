@@ -2,6 +2,7 @@ import Flag from './Flag.model';
 import Interests from './Interests.model';
 import Skills from './skills.model';
 import User from './User.model';
+import UserInterests from './UserInterests.model';
 import UserSkills from './UserSkills.model';
 
 export {
@@ -10,4 +11,5 @@ export {
   Skills,
   UserSkills,
   Interests,
+  UserInterests,
 };
