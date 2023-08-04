@@ -1,5 +1,5 @@
 import PersonIcon from '@mui/icons-material/Person';
-import { Box, Container, CircularProgress, List, ListItem, Typography, Card, Avatar, Button } from '@mui/material';
+import { Box, Container, CircularProgress, List, ListItem, Typography, Card, Avatar, Link } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
 import * as React from 'react';
@@ -41,12 +41,13 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
   }
 
   React.useEffect(() => {
+    if (!document.querySelector('#last-card')) return;
+
     const height = getElementHeight(document.querySelector('#last-card'));
 
     function getElementHeight(el: HTMLElement) {
       const rect = el.getBoundingClientRect();
       const { marginTop, marginBottom } = getComputedStyle(el);
-
       return rect.height + parseFloat(marginTop) + parseFloat(marginBottom);
     }
 
@@ -81,9 +82,18 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     lastCardObserver.observe(lastCardRef.current);
   }, [userData]);
 
+  const getShortenedBio = (bio:string, maxLength = 30) => {
+    if (bio.length < maxLength) return bio;
+    let i = maxLength;
+    while (bio[i] !== ' ' && i > 0) i--;
+    // if the first word is longer than the permissible length, what should be done?
+    if (i === 0) return bio.slice(0, maxLength) + '...';
+    else return bio.slice(0, i) + '...';
+  };
+
   const getUserSocials = (user:ClientUser) => {
     const socials =  [user.website, user.linkedin_url, user.github_username, user.twitter_username];
-    const socialsIcons = [Websiteicon(), LinkedinIcon(), Githubicon(), Twittericon()];
+    const socialsIcons = [<Websiteicon />, <LinkedinIcon />, <Githubicon />, <Twittericon />];
     const twoRelevantSocials = [];
     for (let i = 0; i < socials.length; i++) {
       if (socials[i] && twoRelevantSocials.length < 2) {
@@ -110,22 +120,21 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  {user.discord_name}
-                  {/*
-                  Building the component here. Length of the bio and css for boxes have to be set up.
-                  Have to make sure svgs are working.
-                  */}
                   <Card>
                     <Box maxWidth="lg">
-                      {user.discord_avatar ?
-                        <Avatar alt={user.discord_name} src={user.discord_avatar} />
-                        : <PersonIcon />}
                       <Box>
-                        <span>{user.discord_name}</span>
-                        <span>{user.bio.length > 30 ? user.bio.slice(0, 30) + '...' : user.bio }</span>
+                        {user.discord_avatar ?
+                          <Avatar alt={user.discord_name} src={user.discord_avatar} />
+                          : <PersonIcon />}
+                        <Box>
+                          {getUserSocials(user).map(social => <Link href={social.url} target='_blank'>
+                            {social.icon}
+                          </Link>)}
+                        </Box>
                       </Box>
                       <Box>
-                        {getUserSocials(user).map((social, i) => <Button key={i} variant="contained">{social}</Button>)}
+                        <Typography variant="body1">{user.discord_name}</Typography>
+                        <Typography variant="body1">{getShortenedBio(user.bio) }</Typography>
                       </Box>
                     </Box>
                   </Card>
