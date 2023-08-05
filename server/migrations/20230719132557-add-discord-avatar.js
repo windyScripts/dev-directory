@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.addColumn('users', 'discord_avatar', {
-      type: Sequelize.STRING(100),
+      type: Sequelize.STRING(500),
       allowNull: false,
       defaultValue: '',
     });

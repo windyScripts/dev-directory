@@ -1,4 +1,4 @@
-import PersonIcon from '@mui/icons-material/Person';
+import { Person, Twitter, LinkedIn, GitHub, Home as Website } from '@mui/icons-material';
 import { Box, Container, CircularProgress, List, ListItem, Typography, Card, Avatar, Link } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
@@ -7,11 +7,6 @@ import * as React from 'react';
 import ErrorToast from 'client/components/ErrorToast';
 import createAxiosInstance from 'client/lib/axios';
 import { ClientUser } from 'shared/User';
-
-import Githubicon from '../../public/GithubIcon';
-import LinkedinIcon from '../../public/LinkedinIcon';
-import Twittericon from '../../public/TwitterIcon';
-import Websiteicon from '../../public/WebsiteIcon';
 
 const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: string }> = props => {
   const { users, totalPages, error } = props;
@@ -82,7 +77,7 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     lastCardObserver.observe(lastCardRef.current);
   }, [userData]);
 
-  const getShortenedBio = (bio:string, maxLength = 30) => {
+  const getShortenedBio = (bio:string, maxLength = 200) => {
     if (bio.length < maxLength) return bio;
     let i = maxLength;
     while (bio[i] !== ' ' && i > 0) i--;
@@ -92,8 +87,13 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
   };
 
   const getUserSocials = (user:ClientUser) => {
+    const iconSettings = { fill: 'white', stroke: 'black', strokeWidth: '1px', fontSize: '2.5em' };
     const socials =  [user.website, user.linkedin_url, user.github_username, user.twitter_username];
-    const socialsIcons = [<Websiteicon />, <LinkedinIcon />, <Githubicon />, <Twittericon />];
+    const socialsIcons =
+    [<Website sx={iconSettings}/>,
+      <LinkedIn sx={iconSettings}/>,
+      <GitHub sx={iconSettings}/>,
+      <Twitter sx={iconSettings}/>];
     const twoRelevantSocials = [];
     for (let i = 0; i < socials.length; i++) {
       if (socials[i] && twoRelevantSocials.length < 2) {
@@ -111,30 +111,34 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
         </Typography>
         <Box>
           {error && <Typography>{error}</Typography>}
-          <List data-cy="user-container">
+          <List data-cy="user-container" sx={{}}>
             {userData.map((user, i) => {
               return (
                 <ListItem
                   key={user.id}
-                  sx={{ height: '100px' }}
+                  sx={{ minHeight: '100px' }}
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  <Card>
-                    <Box maxWidth="lg">
-                      <Box>
+                  <Card sx={{ margin: '0 auto' }}>
+                    <Box sx={{ maxWidth: '500px', width: '95vw', padding: '10px' }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
                         {user.discord_avatar ?
                           <Avatar alt={user.discord_name} src={user.discord_avatar} />
-                          : <PersonIcon />}
-                        <Box>
-                          {getUserSocials(user).map(social => <Link href={social.url} target='_blank'>
-                            {social.icon}
-                          </Link>)}
-                        </Box>
+                          : <Person sx={{ fontSize: '3em', fill: 'white' }}/>}
+                        { getUserSocials(user).length < 1 ? undefined : <Box>
+                          {getUserSocials(user).map(social =>
+                            <Link href={social.url} target='_blank' sx= {{ padding: '0 20px' }}>
+                              {social.icon}
+                            </Link>)}
+                        </Box> }
                       </Box>
-                      <Box>
-                        <Typography variant="body1">{user.discord_name}</Typography>
-                        <Typography variant="body1">{getShortenedBio(user.bio) }</Typography>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant="body1" sx={{ textAlign: 'center' }}>{user.discord_name}</Typography>
+                        <Typography variant="body1"
+                          sx={{ textAlign: 'center', maxWidth: '90%', margin: '0 auto' }}>
+                          {getShortenedBio(user.bio) }
+                        </Typography>
                       </Box>
                     </Box>
                   </Card>
