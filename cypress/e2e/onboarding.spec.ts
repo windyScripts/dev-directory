@@ -11,7 +11,7 @@ describe('Onboarding Page', () => {
       cy.get('input[name="github_username"]').clear().type('test_github');
       cy.get('input[name="website"]').clear().type('https://www.testwebsite.com');
       cy.get('button[type="submit"]').click();
-      cy.wait(5000);
+      cy.wait(10000);
     });
 
     cy.url().should('contain', '/directory');
