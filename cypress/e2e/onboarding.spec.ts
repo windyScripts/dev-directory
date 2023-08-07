@@ -5,15 +5,15 @@ describe('Onboarding Page', () => {
     cy.login();
     cy.visit('/onboarding');
     cy.get('form').within(() => {
-      cy.get('textarea[name="bio"]').type('Lorem ipsum dolor sit amet.');
-      cy.get('input[name="twitter_username"]').type('test_twitter');
-      cy.get('input[name="linkedin_url"]').type('https://www.linkedin.com/in/test_linkedin');
-      cy.get('input[name="github_username"]').type('test_github');
-      cy.get('input[name="website"]').type('https://www.testwebsite.com');
+      cy.get('textarea[name="bio"]').clear().type('Lorem ipsum dolor sit amet.');
+      cy.get('input[name="twitter_username"]').clear().type('test_twitter');
+      cy.get('input[name="linkedin_url"]').clear().type('https://www.linkedin.com/in/test_linkedin');
+      cy.get('input[name="github_username"]').clear().type('test_github');
+      cy.get('input[name="website"]').clear().type('https://www.testwebsite.com');
       cy.get('button[type="submit"]').click();
+      cy.wait(5000);
     });
 
-    cy.wait(2000);
     cy.url().should('contain', '/directory');
   });
 });
