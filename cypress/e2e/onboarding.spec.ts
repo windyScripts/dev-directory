@@ -13,6 +13,7 @@ describe('Onboarding Page', () => {
       cy.get('button[type="submit"]').click();
     });
 
+    cy.wait(2000);
     cy.url().should('contain', '/directory');
   });
 });

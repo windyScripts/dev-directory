@@ -50,7 +50,6 @@ export const login: RequestHandler<void, CurrentUserResponse, { code: string }> 
   }
 
   const user = await upsertUser(discordUser);
-  console.log(user);
   const token = createAuthToken(user);
 
   res.cookie(AUTH_COOKIE_NAME, token, { secure: env.isProd });
