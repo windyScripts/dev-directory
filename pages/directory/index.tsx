@@ -116,13 +116,13 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
               return (
                 <ListItem
                   key={user.id}
-                  sx={{ minHeight: '100px' }}
+                  sx={{ height: '250px' }}
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  <Card sx={{ margin: '0 auto' }}>
+                  <Card sx={{ margin: '0 auto', height: '225px' }}>
                     <Box sx={{ maxWidth: '500px', width: '95vw', padding: '10px' }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-around', padding: '12px' }}>
                         {user.discord_avatar ?
                           <Avatar alt={user.discord_name} src={user.discord_avatar} />
                           : <Person sx={{ fontSize: '3em', fill: 'white' }}/>}
