@@ -18,7 +18,7 @@ interface SkillsAttributes {
 }
 
 @Table({
-  tableName:'Skills',
+  tableName: 'Skills',
   timestamps: true,
 })
 
