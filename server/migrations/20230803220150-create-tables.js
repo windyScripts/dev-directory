@@ -25,8 +25,8 @@ module.exports = {
         },
       });
 
-      // Create UserSkills table
-      await queryInterface.createTable('UserSkills', {
+      // Create User_Skills table
+      await queryInterface.createTable('User_Skills', {
         user_id: {
           allowNull: false,
           type: Sequelize.INTEGER,
@@ -67,8 +67,8 @@ module.exports = {
         },
       });
 
-      // Create UserInterests table
-      await queryInterface.createTable('UserInterests', {
+      // Create User_Interests table
+      await queryInterface.createTable('User_Interests', {
         user_id: {
           allowNull: false,
           type: Sequelize.INTEGER,
@@ -90,14 +90,14 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    // Drop UserInterests table
-    await queryInterface.dropTable('UserInterests');
+    // Drop User_Interests table
+    await queryInterface.dropTable('User_Interests');
 
     // Drop Interests table
     await queryInterface.dropTable('Interests');
 
-    // Drop UserSkills table
-    await queryInterface.dropTable('UserSkills');
+    // Drop User_Skills table
+    await queryInterface.dropTable('User_Skills');
 
     // Drop Skills table
     await queryInterface.dropTable('Skills');

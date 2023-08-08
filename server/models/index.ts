@@ -2,14 +2,14 @@ import Flag from './Flag.model';
 import Interests from './Interests.model';
 import Skills from './skills.model';
 import User from './User.model';
-import UserInterests from './UserInterests.model';
-import UserSkills from './UserSkills.model';
+import User_Interests from './UserInterests.model';
+import User_Skills from './UserSkills.model';
 
 export {
   User,
   Flag,
   Skills,
-  UserSkills,
+  User_Skills,
   Interests,
-  UserInterests,
+  User_Interests,
 };

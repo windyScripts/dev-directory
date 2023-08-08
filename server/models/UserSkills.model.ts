@@ -8,7 +8,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-interface UserSkillsAttributes {
+interface User_SkillsAttributes {
   user_id: number;
   skill_id: number;
   created_at: Date;
@@ -19,11 +19,11 @@ import Skills from './skills.model';
 import User from './User.model';
 
 @Table({
-  tableName: 'UserSkills',
+  tableName: 'User_Skills',
   timestamps: true,
 })
 
-class UserSkills extends Model<UserSkillsAttributes> implements UserSkillsAttributes {
+class User_Skills extends Model<User_SkillsAttributes> implements User_SkillsAttributes {
     @ForeignKey(() => User)
     @Column
     user_id: number;
@@ -40,4 +40,4 @@ class UserSkills extends Model<UserSkillsAttributes> implements UserSkillsAttrib
     updated_at: Date;
 }
 
-export default UserSkills;
+export default User_Skills;
