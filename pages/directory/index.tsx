@@ -116,19 +116,18 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
               return (
                 <ListItem
                   key={user.id}
-                  sx={{ height: '250px' }}
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  <Card sx={{ margin: '0 auto', height: '225px' }}>
-                    <Box sx={{ maxWidth: '500px', width: '95vw', padding: '10px' }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-around', padding: '12px' }}>
+                  <Card sx={{ margin: '0 auto', maxWidth: '500px', width: '95vw', height: '20em' }}>
+                    <Box sx={{  padding: '2em' }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-around', padding: '2em' }}>
                         {user.discord_avatar ?
                           <Avatar alt={user.discord_name} src={user.discord_avatar} />
                           : <Person sx={{ fontSize: '3em', fill: 'white' }}/>}
-                        { getUserSocials(user).length < 1 ? undefined : <Box>
+                        { getUserSocials(user).length < 1 ? undefined : <Box sx={{ display: 'flex' }}>
                           {getUserSocials(user).map(social =>
-                            <Link href={social.url} target='_blank' sx= {{ padding: '0 20px' }}>
+                            <Link href={social.url} target='_blank' sx= {{ padding: '0 4em' }}>
                               {social.icon}
                             </Link>)}
                         </Box> }
