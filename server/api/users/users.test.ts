@@ -187,6 +187,7 @@ describe('user router', () => {
         linkedin_url: 'updated',
         github_username: 'gotUpdated',
         website: 'https://thiswasupdated.com/',
+        discord_avatar: 'https://thiswasupdated.com/avatar.png',
       };
 
       const res = await server.exec.patch(`/api/users/${user.id}`).send(fieldsToUpdate);
@@ -203,6 +204,7 @@ describe('user router', () => {
         linkedin_url: 'updated',
         github_username: 'gotUpdated',
         website: 'https://thiswasupdated.com/',
+        discord_avatar: 'https://thiswasupdated.com/avatar.png',
       });
     });
   });

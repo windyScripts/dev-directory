@@ -53,6 +53,7 @@ export async function upsertUser(user: DiscordOauth2.User) {
     discord_user_id: user.id,
     discord_name: Number(user.discriminator) > 0 ? `${user.username}#${user.discriminator}` : user.username,
     email: user.email,
+    discord_avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
   });
 
   return result[0];

@@ -57,6 +57,7 @@ const updateUserById: RequestHandler<{ id: string }, string, UpdatableFields> = 
     'linkedin_url',
     'github_username',
     'website',
+    'discord_avatar',
   ];
 
   const toUpdate = _.pick(req.body, fieldsToUpdate);

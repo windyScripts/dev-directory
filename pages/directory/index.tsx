@@ -1,4 +1,5 @@
-import { Box, Container, CircularProgress, List, ListItem, Typography } from '@mui/material';
+import { Person, Twitter, LinkedIn, GitHub, Home as Website } from '@mui/icons-material';
+import { Box, Container, CircularProgress, List, ListItem, Typography, Card, Avatar, Link } from '@mui/material';
 import axios from 'axios';
 import { NextPage } from 'next';
 import * as React from 'react';
@@ -35,12 +36,13 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
   }
 
   React.useEffect(() => {
+    if (!document.querySelector('#last-card')) return;
+
     const height = getElementHeight(document.querySelector('#last-card'));
 
     function getElementHeight(el: HTMLElement) {
       const rect = el.getBoundingClientRect();
       const { marginTop, marginBottom } = getComputedStyle(el);
-
       return rect.height + parseFloat(marginTop) + parseFloat(marginBottom);
     }
 
@@ -75,6 +77,31 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
     lastCardObserver.observe(lastCardRef.current);
   }, [userData]);
 
+  const getShortenedBio = (bio:string, maxLength = 200) => {
+    if (bio.length < maxLength) return bio;
+    let i = maxLength;
+    while (bio[i] !== ' ' && i > 0) i--;
+    // if the first word is longer than the permissible length, what should be done?
+    if (i === 0) return bio.slice(0, maxLength) + '...';
+    else return bio.slice(0, i) + '...';
+  };
+
+  const getUserSocials = (user:ClientUser) => {
+    const iconSettings = { fill: 'white', stroke: 'black', strokeWidth: '1px', fontSize: '2.5em' };
+    const socials =  [user.website, user.linkedin_url, user.github_username, user.twitter_username];
+    const socialsIcons =
+    [<Website sx={iconSettings}/>,
+      <LinkedIn sx={iconSettings}/>,
+      <GitHub sx={iconSettings}/>,
+      <Twitter sx={iconSettings}/>];
+    const twoRelevantSocials = [];
+    for (let i = 0; i < socials.length; i++) {
+      if (socials[i] && twoRelevantSocials.length < 2) {
+        twoRelevantSocials.push({ url: socials[i], icon: socialsIcons[i] });
+      }
+    }
+    return twoRelevantSocials;
+  };
   return (
     <Container maxWidth="lg" className="pt-4">
       <ErrorToast open={showError} setOpen={setShowError} message={errorMessage} />
@@ -84,16 +111,36 @@ const Directory: NextPage<{ users: ClientUser[]; totalPages: number; error: stri
         </Typography>
         <Box>
           {error && <Typography>{error}</Typography>}
-          <List data-cy="user-container">
+          <List data-cy="user-container" sx={{}}>
             {userData.map((user, i) => {
               return (
                 <ListItem
                   key={user.id}
-                  sx={{ height: '100px' }}
                   ref={i === userData.length - 1 ? lastCardRef : null}
                   id={i === userData.length - 1 ? 'last-card' : null}
                 >
-                  {user.discord_name}
+                  <Card sx={{ margin: '0 auto', maxWidth: '500px', width: '95vw', height: '20em' }}>
+                    <Box sx={{  padding: '2em' }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-around', padding: '2em' }}>
+                        {user.discord_avatar ?
+                          <Avatar alt={user.discord_name} src={user.discord_avatar} />
+                          : <Person sx={{ fontSize: '3em', fill: 'white' }}/>}
+                        { getUserSocials(user).length < 1 ? undefined : <Box sx={{ display: 'flex' }}>
+                          {getUserSocials(user).map(social =>
+                            <Link href={social.url} target='_blank' sx= {{ padding: '0 4em' }}>
+                              {social.icon}
+                            </Link>)}
+                        </Box> }
+                      </Box>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant="body1" sx={{ textAlign: 'center' }}>{user.discord_name}</Typography>
+                        <Typography variant="body1"
+                          sx={{ textAlign: 'center', maxWidth: '90%', margin: '0 auto' }}>
+                          {getShortenedBio(user.bio) }
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
                 </ListItem>
               );
             })}
