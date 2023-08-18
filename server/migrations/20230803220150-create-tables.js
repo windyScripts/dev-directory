@@ -4,8 +4,8 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     queryInterface.sequelize.transaction(async transaction => {
-      // Create Skills table
-      await queryInterface.createTable('Skills', {
+      // Create skills table
+      await queryInterface.createTable('skills', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -25,8 +25,8 @@ module.exports = {
         },
       });
 
-      // Create User_Skills table
-      await queryInterface.createTable('User_Skills', {
+      // Create user_skills table
+      await queryInterface.createTable('user_skills', {
         user_id: {
           allowNull: false,
           type: Sequelize.INTEGER,
@@ -45,8 +45,8 @@ module.exports = {
         },
       });
 
-      // Create Interests table
-      await queryInterface.createTable('Interests', {
+      // Create interests table
+      await queryInterface.createTable('interests', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -67,8 +67,8 @@ module.exports = {
         },
       });
 
-      // Create User_Interests table
-      await queryInterface.createTable('User_Interests', {
+      // Create user_interests table
+      await queryInterface.createTable('user_interests', {
         user_id: {
           allowNull: false,
           type: Sequelize.INTEGER,
@@ -90,16 +90,16 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    // Drop User_Interests table
-    await queryInterface.dropTable('User_Interests');
+    // Drop user_interests table
+    await queryInterface.dropTable('user_interests');
 
-    // Drop Interests table
-    await queryInterface.dropTable('Interests');
+    // Drop interests table
+    await queryInterface.dropTable('interests');
 
-    // Drop User_Skills table
-    await queryInterface.dropTable('User_Skills');
+    // Drop user_skills table
+    await queryInterface.dropTable('user_skills');
 
-    // Drop Skills table
-    await queryInterface.dropTable('Skills');
+    // Drop skills table
+    await queryInterface.dropTable('skills');
   },
 };
