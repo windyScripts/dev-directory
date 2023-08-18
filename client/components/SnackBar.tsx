@@ -22,7 +22,7 @@ export function useAlert() {
   const showError = (message: string, props?: OptionsWithExtraProps<'error'>) => {
     enqueueSnackbar(message, { ...errorOptions, ...props });
   };
-  
+
   return {
     showSuccess,
     showError,
